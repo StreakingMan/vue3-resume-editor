@@ -1,0 +1,35 @@
+// margin padding
+@for $index from 0 through 16 {
+    $offset-size: $index * 4;
+
+    @each $position in top, right, bottom, left, x, y, a {
+        @each $key, $val in (p: padding, m: margin) {
+            .#{$key}#{$position}-#{$index} {
+                @if $position == x {
+                    #{$val}-left: #{$offset-size}px !important;
+                    #{$val}-right: #{$offset-size}px !important;
+                } @else if $position == y {
+                    #{$val}-top: #{$offset-size}px !important;
+                    #{$val}-bottom: #{$offset-size}px !important;
+                } @else if $position == a {
+                    #{$val}: #{$offset-size}px !important;
+                } @else {
+                    #{$val}-#{$position}: #{$offset-size}px !important;
+                }
+            }
+            .#{$key}#{$position}-n#{$index} {
+                @if $position == x {
+                    #{$val}-left: #{-$offset-size}px !important;
+                    #{$val}-right: #{-$offset-size}px !important;
+                } @else if $position == y {
+                    #{$val}-top: #{-$offset-size}px !important;
+                    #{$val}-bottom: #{-$offset-size}px !important;
+                } @else if $position == a {
+                    #{$val}: #{-$offset-size}px !important;
+                } @else {
+                    #{$val}-#{$position}: #{-$offset-size}px !important;
+                }
+            }
+        }
+    }
+}
