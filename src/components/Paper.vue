@@ -1,7 +1,7 @@
 <template>
-    <div class="paper a4">
+    <div class="paper a4 ma-6">
         <div
-            v-for="item in items"
+            v-for="item in reverseItems"
             :key="item.id"
             class="item"
             :style="{ left: item.x + 'px', top: item.y + 'px' }"
@@ -14,12 +14,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref } from 'vue';
+import { defineComponent, inject, ref, computed } from 'vue';
+import { Item } from '../interface/Item';
 
 export default defineComponent({
     name: 'Paper',
     setup() {
-        const items = ref(inject('items'));
+        const items = ref<Item[]>(inject('items', []));
+        const reverseItems = computed(() => items.value.slice().reverse());
+
         const posInfo = {
             mouseStartX: 0,
             mouseStartY: 0,
@@ -27,14 +30,8 @@ export default defineComponent({
             itemStartY: 0,
         };
 
-        interface Item {
-            id: number;
-            x: number;
-            y: number;
-        }
-
-        let click = false;
-        let clickingItem: Item;
+        let click = false,
+            clickingItem: Item;
 
         const onMousemove = (evt: MouseEvent) => {
             if (!click) return;
@@ -44,7 +41,6 @@ export default defineComponent({
             clickingItem.x = posInfo.itemStartX + transX;
             clickingItem.y = posInfo.itemStartY + transY;
         };
-
         const onMousedown = (evt: MouseEvent, item: Item) => {
             click = true;
             const { clientX, clientY } = evt;
@@ -56,15 +52,14 @@ export default defineComponent({
             clickingItem = item;
             window.addEventListener('mousemove', onMousemove);
         };
-
         const onMouseup = () => {
             click = false;
             window.removeEventListener('mousemove', onMousemove);
         };
+
         return {
-            items,
+            reverseItems,
             onMousedown,
-            onMousemove,
             onMouseup,
         };
     },
@@ -90,5 +85,6 @@ export default defineComponent({
     border-radius: 2px;
     position: absolute;
     user-select: none;
+    background: lightgray;
 }
 </style>
