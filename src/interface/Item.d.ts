@@ -2,5 +2,7 @@ export interface Item {
     id: number;
     x: number;
     y: number;
-    groupName: string
+    w?: number;
+    h?: number;
+    groupName: string;
 }
