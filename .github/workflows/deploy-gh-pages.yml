@@ -1,0 +1,57 @@
+# This is a basic workflow to help you get started with Actions
+
+name: deploy-gh-pages
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    name: Build and deploy gh-pages
+  
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+      
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5
+        with: 
+          node-version: 14.x
+    
+      - name: Install 
+        run: npm ci
+        
+      - name: LintStaged
+        run: npm run lint-staged
+        
+      - name: Test
+        run: npm run test
+        
+      - name: Build
+        run: npm run build
+
+      - name: Commit
+        run: |
+          cd ./dist
+          git init
+          git config user.name githubaction
+          git config user.email githubaction@fake.com
+          git status
+          git remote add origin https://${{secrets.commit_token}}@github.com/StreakingMan/vue3-resume-editor.git
+          git checkout -b gh-pages
+          git add --all
+          git commit -m "chore: update gh-pages"
+          git push origin gh-pages -f
+          echo 🆗 deploy gh-pages complete.
