@@ -18,7 +18,7 @@ export default defineComponent({
     name: 'ItemContainer',
     props: {
         item: {
-            type: Object as Item,
+            type: Object,
             default: null,
             require: true,
         },
@@ -38,10 +38,11 @@ export default defineComponent({
             set: (v) => emit('update:item', v),
         });
 
-        let click = false;
+        let clicking = false;
 
         const onMousedown = (evt: MouseEvent) => {
-            click = true;
+            evt.stopPropagation();
+            clicking = true;
             const { clientX, clientY } = evt;
             const { x, y } = selfItem.value;
             posInfo.mouseStartX = clientX;
@@ -51,7 +52,7 @@ export default defineComponent({
             window.addEventListener('mousemove', onMousemove);
         };
         const onMousemove = (evt: MouseEvent) => {
-            if (!click) return;
+            if (!clicking) return;
             const { clientX, clientY } = evt;
             const transX = clientX - posInfo.mouseStartX;
             const transY = clientY - posInfo.mouseStartY;
@@ -59,7 +60,7 @@ export default defineComponent({
             selfItem.value.y = posInfo.itemStartY + transY;
         };
         const onMouseup = () => {
-            click = false;
+            clicking = false;
             window.removeEventListener('mousemove', onMousemove);
         };
         return {

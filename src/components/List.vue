@@ -1,24 +1,31 @@
 <template>
     <div class="list ma-6">
-        <div v-for="(item, index) in items" :key="item.id">
-            <ListVirtualGroup
-                :pre-item="items[index - 1]"
-                :cur-item="item"
-            ></ListVirtualGroup>
-
+        <transition-group name="list-complete">
             <div
-                class="item"
-                :style="{
-                    marginLeft: item.groupName.split('.').length * 24 + 'px',
-                }"
-                draggable="true"
-                @dragstart="onDragstart($event, item, index)"
-                @dragover="onDragover($event)"
-                @drop="onDrop($event, item, index)"
+                v-for="(item, index) in items"
+                :key="item.id"
+                class="list-complete-item"
             >
-                {{ item.id }}:{{ item.groupName }}
+                <ListVirtualGroup
+                    :pre-item="items[index - 1]"
+                    :cur-item="item"
+                ></ListVirtualGroup>
+
+                <div
+                    class="item"
+                    :style="{
+                        marginLeft:
+                            item.groupName.split('.').length * 24 + 'px',
+                    }"
+                    draggable="true"
+                    @dragstart="onDragstart($event, item, index)"
+                    @dragover="onDragover($event)"
+                    @drop="onDrop($event, item, index)"
+                >
+                    {{ item.id }}:{{ item.groupName }}
+                </div>
             </div>
-        </div>
+        </transition-group>
     </div>
 </template>
 
@@ -34,7 +41,7 @@ export default defineComponent({
         const items = ref<Item[]>(inject('items', []));
 
         const onDragstart = (evt: DragEvent, item: Item, dragIndex: number) => {
-            evt.dataTransfer.setData(
+            evt.dataTransfer?.setData(
                 'text/plain',
                 JSON.stringify({ item, dragIndex })
             );
@@ -42,6 +49,7 @@ export default defineComponent({
 
         const onDrop = (evt: DragEvent, item: Item, dropIndex: number) => {
             evt.preventDefault();
+            if (!evt.dataTransfer) return;
             try {
                 const { dragIndex } = JSON.parse(
                     evt.dataTransfer.getData('text')
@@ -70,6 +78,22 @@ export default defineComponent({
 });
 </script>
 
+<style>
+.list-complete-item {
+    transition: all 0.3s ease;
+    margin-right: 10px;
+}
+
+.list-complete-enter-from,
+.list-complete-leave-to {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.list-complete-leave-active {
+    position: absolute;
+}
+</style>
 <style lang="scss" scoped>
 .list {
     width: 300px;

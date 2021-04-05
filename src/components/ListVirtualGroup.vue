@@ -1,18 +1,19 @@
 <template v-if="groups.length">
-    <div
-        v-for="(group, idx) in groups"
-        :key="`group${group}`"
-        class="group"
-        draggable="true"
-        :style="{
-            marginLeft:
-                curItem.groupName.split('.').length * 24 -
-                (groups.length - idx) * 24 +
-                'px',
-        }"
-    >
-        {{ group }}
-    </div>
+    <template v-for="(group, idx) in groups" :key="`group${group}`">
+        <div
+            v-if="curItem.groupName.split('.').length > 1"
+            class="group"
+            draggable="true"
+            :style="{
+                marginLeft:
+                    curItem.groupName.split('.').length * 24 -
+                    (groups.length - idx) * 24 +
+                    'px',
+            }"
+        >
+            {{ group }}
+        </div>
+    </template>
 </template>
 
 <script lang="ts">
