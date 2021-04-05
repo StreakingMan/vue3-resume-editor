@@ -39,9 +39,6 @@ export default defineComponent({
 
         const store = useStore();
         console.log(store.state.activeItems);
-        console.log(store.state.count);
-        store.state.count++;
-        console.log(store.state.count);
 
         return { sourceData };
     },
