@@ -44,13 +44,11 @@ jobs:
 
       - name: Commit
         run: |
-          cd ./dist
-          git init
+          git clone -b gh-pages https://${{secrets.commit_token}}@github.com/StreakingMan/vue3-resume-editor.git
+          cp -r -f ./dist ./vue3-resume-editor
+          cd ./vue3-resume-editor
           git config user.name githubaction
           git config user.email githubaction@fake.com
-          git status
-          git remote add origin https://${{secrets.commit_token}}@github.com/StreakingMan/vue3-resume-editor.git
-          git checkout -b gh-pages
           git add --all
           git commit -m "chore: update gh-pages"
           git push origin gh-pages -f
