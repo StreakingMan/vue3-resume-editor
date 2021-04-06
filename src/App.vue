@@ -6,6 +6,11 @@
         原始数据
         <pre>{{ JSON.stringify(sourceData, null, 4) }}</pre>
     </div>
+    <NavContainer>
+        <TemplatePreviewCard></TemplatePreviewCard>
+        <TemplatePreviewCard></TemplatePreviewCard>
+        <TemplatePreviewCard></TemplatePreviewCard>
+    </NavContainer>
 </template>
 
 <script lang="ts">
@@ -15,10 +20,12 @@ import List from './components/List.vue';
 import Observer from './components/Observer.vue';
 import { sortByGroup } from './algorithms/group';
 import { useStore } from './stores';
+import NavContainer from './components/ui/NavContainer.vue';
+import TemplatePreviewCard from './components/templates/TemplatePreviewCard.vue';
 
 export default defineComponent({
     name: 'App',
-    components: { Observer, List, Paper },
+    components: { TemplatePreviewCard, NavContainer, Observer, List, Paper },
     provide: {},
     setup() {
         const sourceData = [
@@ -54,6 +61,7 @@ body {
 #app {
     padding: 24px;
     display: flex;
+    justify-content: center;
 }
 .source-pre {
     margin: 24px;
