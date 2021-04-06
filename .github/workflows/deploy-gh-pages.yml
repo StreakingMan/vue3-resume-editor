@@ -45,7 +45,7 @@ jobs:
       - name: Commit
         run: |
           git clone -b gh-pages https://${{secrets.commit_token}}@github.com/StreakingMan/vue3-resume-editor.git
-          cp -r -f ./dist ./vue3-resume-editor
+          cp -r -f ./dist/* ./vue3-resume-editor
           cd ./vue3-resume-editor
           git config user.name githubaction
           git config user.email githubaction@fake.com
