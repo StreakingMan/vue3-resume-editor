@@ -20,7 +20,9 @@ export default defineComponent({
     name: 'Selector',
     setup() {
         const items = ref<Item[]>(inject('items', []));
-        const paper = ref(inject('paper', null));
+        const paper = ref<HTMLElement>(
+            inject('paper', document.createElement('div'))
+        );
         const posInfo = ref({
             paperX: 0,
             paperY: 0,

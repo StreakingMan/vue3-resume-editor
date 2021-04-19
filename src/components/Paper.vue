@@ -29,7 +29,7 @@ export default defineComponent({
     setup() {
         const items = ref<Item[]>(inject('items', []));
         const reverseItems = computed(() => items.value.slice().reverse());
-        const paper = ref(null);
+        const paper = ref<HTMLDivElement>();
         const selectorInfo = ref({
             paperX: 0,
             paperY: 0,
@@ -40,6 +40,7 @@ export default defineComponent({
         });
 
         const onSelectStart = (info: MouseEvtInfo) => {
+            if (!paper.value) return;
             const { clientX, clientY } = info;
             const { x, y } = paper.value.getBoundingClientRect();
             selectorInfo.value.startX = clientX;
@@ -77,6 +78,7 @@ export default defineComponent({
         } = useMouseDrag(onSelectStart, onSelectDrag, onSelectFinish);
 
         onMounted(() => {
+            if (!paper.value) return;
             paper.value.addEventListener('mousedown', onMousedown);
             paper.value.addEventListener('mousemove', onMousemove);
             paper.value.addEventListener('mouseup', onMouseup);
@@ -84,6 +86,7 @@ export default defineComponent({
         });
 
         onUnmounted(() => {
+            if (!paper.value) return;
             paper.value.removeEventListener('mousedown', onMousedown);
             paper.value.removeEventListener('mousemove', onMousemove);
             paper.value.removeEventListener('mouseup', onMouseup);

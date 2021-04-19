@@ -1,11 +1,29 @@
 import { MouseEvtCb } from '../interface/mouseEvtCb';
-import { ref } from 'vue';
+import { ref, Ref } from 'vue';
+
+type MouseEvtName =
+    | 'onMousedown'
+    | 'onMousemove'
+    | 'onMouseup'
+    | 'onMouseleave';
+
+interface MouseDragCbs
+    extends Record<MouseEvtName, (this: HTMLElement, ev: MouseEvent) => void> {
+    clicking: Ref<boolean>;
+}
+
+interface MouseDragOptions {
+    finishWhenLeave: boolean;
+}
 
 export default function useMouseDrag(
     onStart: MouseEvtCb,
     onDrag: MouseEvtCb,
-    onFinish: MouseEvtCb
-): Record<string, unknown> {
+    onFinish: MouseEvtCb,
+    options: MouseDragOptions = {
+        finishWhenLeave: true,
+    }
+): MouseDragCbs {
     const clicking = ref(false);
 
     const onMousedown = (ev: MouseEvent) => {
@@ -27,9 +45,11 @@ export default function useMouseDrag(
     };
 
     const onMouseleave = (ev: MouseEvent) => {
-        clicking.value = false;
-        const { clientX, clientY } = ev;
-        onFinish({ clientX, clientY });
+        if (options.finishWhenLeave) {
+            clicking.value = false;
+            const { clientX, clientY } = ev;
+            onFinish({ clientX, clientY });
+        }
     };
 
     return {
