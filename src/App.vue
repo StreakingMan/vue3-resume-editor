@@ -1,5 +1,5 @@
 <template>
-    <List></List>
+    <!--    <List></List>
     <Paper></Paper>
     <Observer></Observer>
     <div class="source-pre">
@@ -10,7 +10,9 @@
         <TemplatePreviewCard></TemplatePreviewCard>
         <TemplatePreviewCard></TemplatePreviewCard>
         <TemplatePreviewCard></TemplatePreviewCard>
-    </NavContainer>
+    </NavContainer>-->
+    <Logo2LayoutTransfer></Logo2LayoutTransfer>
+    <h1 style="color: white">vue3 XXX editor</h1>
 </template>
 
 <script lang="ts">
@@ -22,10 +24,18 @@ import { sortByGroup } from './algorithms/group';
 import { useStore } from './stores';
 import NavContainer from './components/ui/NavContainer.vue';
 import TemplatePreviewCard from './components/templates/TemplatePreviewCard.vue';
+import Logo2LayoutTransfer from './components/Logo2LayoutTransfer.vue';
 
 export default defineComponent({
     name: 'App',
-    components: { TemplatePreviewCard, NavContainer, Observer, List, Paper },
+    components: {
+        Logo2LayoutTransfer,
+        /*TemplatePreviewCard,
+        NavContainer,
+        Observer,
+        List,
+        Paper,*/
+    },
     provide: {},
     setup() {
         const sourceData = [
@@ -54,9 +64,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import 'styles/colors';
 body {
     margin: 0;
     padding: 0;
+    background-color: $thirdly-color;
 }
 #app {
     padding: 24px;

@@ -1,3 +1,5 @@
+@import 'elevations';
+
 // margin padding
 @for $index from 0 through 16 {
     $offset-size: $index * 4;
@@ -31,5 +33,12 @@
                 }
             }
         }
+    }
+}
+
+// elevation
+@for $index from 0 through 24 {
+    .elevation-#{$index} {
+        @include elevation($index, $important: true);
     }
 }
