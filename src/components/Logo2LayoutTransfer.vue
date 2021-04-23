@@ -1,10 +1,9 @@
 <template>
-    <PaperContainer>
-        <ToolbarContainer></ToolbarContainer>
-        <ConfigContainer></ConfigContainer>
-        <TemplateContainer></TemplateContainer>
-        <MaterialContainer></MaterialContainer>
-    </PaperContainer>
+    <PaperContainer> </PaperContainer>
+    <ToolbarContainer></ToolbarContainer>
+    <ConfigContainer></ConfigContainer>
+    <TemplateContainer></TemplateContainer>
+    <MaterialContainer></MaterialContainer>
 </template>
 
 <script lang="ts">

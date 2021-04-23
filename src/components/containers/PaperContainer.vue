@@ -1,6 +1,5 @@
 <template>
     <div class="paper">
-        <div class="corner"></div>
         <slot name="default"></slot>
     </div>
 </template>
@@ -18,7 +17,7 @@ export default {
     border-radius: 12px;
     width: 248px;
     height: 348px;
-    background-color: $primary-color;
+    background-color: $primary-color-light;
     position: fixed;
     top: 15vh;
     @include elevationTransition();
@@ -26,7 +25,8 @@ export default {
     &:hover {
         @include elevation(14);
     }
-    .corner {
+    &::after {
+        content: '';
         position: absolute;
         right: 0;
         top: 0;

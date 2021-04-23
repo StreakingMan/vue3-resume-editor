@@ -12,7 +12,7 @@
         <TemplatePreviewCard></TemplatePreviewCard>
     </NavContainer>-->
     <Logo2LayoutTransfer></Logo2LayoutTransfer>
-    <h1 style="color: white">vue3 XXX editor</h1>
+    <Introduce></Introduce>
 </template>
 
 <script lang="ts">
@@ -25,10 +25,12 @@ import { useStore } from './stores';
 import NavContainer from './components/ui/NavContainer.vue';
 import TemplatePreviewCard from './components/templates/TemplatePreviewCard.vue';
 import Logo2LayoutTransfer from './components/Logo2LayoutTransfer.vue';
+import Introduce from './components/guides/introduce.vue';
 
 export default defineComponent({
     name: 'App',
     components: {
+        Introduce,
         Logo2LayoutTransfer,
         /*TemplatePreviewCard,
         NavContainer,
@@ -68,7 +70,7 @@ export default defineComponent({
 body {
     margin: 0;
     padding: 0;
-    background-color: $thirdly-color;
+    background-color: $primary-color;
 }
 #app {
     padding: 24px;
