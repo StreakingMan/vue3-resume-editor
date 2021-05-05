@@ -1,5 +1,7 @@
 <template>
-    <PaperContainer> </PaperContainer>
+    <PaperContainer>
+        <Paper></Paper>
+    </PaperContainer>
     <ToolbarContainer></ToolbarContainer>
     <ConfigContainer></ConfigContainer>
     <TemplateContainer></TemplateContainer>
@@ -13,10 +15,12 @@ import ToolbarContainer from './containers/ToolbarContainer.vue';
 import ConfigContainer from './containers/ConfigContainer.vue';
 import TemplateContainer from './containers/TemplateContainer.vue';
 import MaterialContainer from './containers/MaterialContainer.vue';
+import Paper from "./Paper.vue";
 
 export default defineComponent({
     name: 'Logo2LayoutTransfer',
     components: {
+        Paper,
         MaterialContainer,
         TemplateContainer,
         ConfigContainer,

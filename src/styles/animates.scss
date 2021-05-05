@@ -1,0 +1,58 @@
+@mixin transition($duration: 280ms) {
+    transition: all $duration cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes bottomFlyIn {
+    0% {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes topFlyIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes jump {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-50%);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes shapedJump {
+    0% {
+        transform-origin: center bottom;
+        transform: scaleX(1.1) scaleY(0.9) translateY(5%);
+    }
+
+    100% {
+        transform-origin: top center;
+        transform: scaleX(1) scaleY(1) translateY(-50%);
+    }
+}
+
+@keyframes twinkling {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

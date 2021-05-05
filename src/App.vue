@@ -13,6 +13,8 @@
     </NavContainer>-->
     <Logo2LayoutTransfer></Logo2LayoutTransfer>
     <Introduce></Introduce>
+    <GitHubIcon></GitHubIcon>
+    <PrintIcon></PrintIcon>
 </template>
 
 <script lang="ts">
@@ -25,11 +27,15 @@ import { useStore } from './stores';
 import NavContainer from './components/ui/NavContainer.vue';
 import TemplatePreviewCard from './components/templates/TemplatePreviewCard.vue';
 import Logo2LayoutTransfer from './components/Logo2LayoutTransfer.vue';
-import Introduce from './components/guides/introduce.vue';
+import Introduce from './components/guides/Introduce.vue';
+import GitHubIcon from './components/animate-icons/GitHubIcon.vue';
+import PrintIcon from './components/animate-icons/PrintIcon.vue';
 
 export default defineComponent({
     name: 'App',
     components: {
+        PrintIcon,
+        GitHubIcon,
         Introduce,
         Logo2LayoutTransfer,
         /*TemplatePreviewCard,

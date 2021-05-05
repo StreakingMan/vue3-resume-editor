@@ -1,5 +1,5 @@
 <template>
-    <div ref="paper" class="paper a4 ma-6">
+    <div ref="paper" class="paper a4">
         <ItemContainer
             v-for="(item, i) in reverseItems"
             :key="item.id"
@@ -128,9 +128,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .paper {
-    box-shadow: 0 2px 8px 0 rgb(0 0 0 / 10%);
-    border-radius: 2px;
-    border: 1px solid #dbdbdb;
     position: relative;
     &.a4 {
         width: 620px;

@@ -1,26 +1,48 @@
 <template>
-    <div class="toolbar"></div>
+    <div class="material" :class="`material--state-${guideState}`"></div>
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
     name: 'MaterialContainer',
-};
+    computed: {
+        guideState() {
+            return this.$store.state.guideState;
+        },
+    },
+});
 </script>
 
 <style scoped lang="scss">
 @import 'src/styles/colors';
 @import 'src/styles/elevations';
-.toolbar {
-    background-color: $secondary-color;
-    width: 200px;
-    height: 60px;
+@import 'src/styles/animates';
+.material {
     border-radius: 4px;
     position: fixed;
-    top: calc(15vh + 270px);
-    transition: 280ms cubic-bezier(0.4, 0, 0.2, 1);
-    &:hover {
-        transform: translateX(20px);
+    background-color: $secondary-color;
+    @include transition(540ms);
+
+    &--state- {
+        &0 {
+            top: calc(15vh + 270px);
+            left: calc(50vw - 100px);
+            width: 200px;
+            height: 60px;
+            &:hover {
+                transform: translateX(20px);
+                @include elevation(8);
+            }
+        }
+        &1 {
+            width: 200px;
+            height: calc(100vh - 126px);
+            left: 24px;
+            top: 102px;
+            @include elevation(2);
+        }
     }
 }
 </style>
