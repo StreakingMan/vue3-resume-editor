@@ -1,11 +1,15 @@
 <template>
     <div ref="paper" class="paper a4">
-        <ItemContainer
+        <MaterialInstance
             v-for="(item, i) in reverseItems"
             :key="item.id"
             v-model:item="reverseItems[i]"
-        ></ItemContainer>
-        <div v-if="selecting" class="select-box" :style="selectorStyle"></div>
+        ></MaterialInstance>
+        <div
+            v-if="selecting && !space"
+            class="select-box"
+            :style="selectorStyle"
+        ></div>
     </div>
 </template>
 
@@ -18,14 +22,15 @@ import {
     onMounted,
     onUnmounted,
 } from 'vue';
-import { Item } from '../interface/Item';
-import ItemContainer from './ItemContainer.vue';
-import { MouseEvtInfo } from '../interface/mouseEvtCb';
-import useMouseDrag from '../composables/useMouseDrag';
+import { Item } from '../../interface/Item';
+import { MouseEvtInfo } from '../../interface/mouseEvtCb';
+import useMouseDrag from '../../composables/useMouseDrag';
+import useKeyboardStatus from '../../composables/useKeyboardStatus';
+import MaterialInstance from './MaterialInstance.vue';
 
 export default defineComponent({
     name: 'Paper',
-    components: { ItemContainer },
+    components: { MaterialInstance },
     setup() {
         const items = ref<Item[]>(inject('items', []));
         const reverseItems = computed(() => items.value.slice().reverse());
@@ -116,12 +121,26 @@ export default defineComponent({
             };
         });
 
+        const { space } = useKeyboardStatus();
+
         return {
+            space,
             paper,
             selecting,
             selectorStyle,
             reverseItems,
         };
+    },
+    computed: {
+        guideState() {
+            return this.$store.state.guideState;
+        },
+        scale() {
+            return this.$store.state.scale;
+        },
+        paperSize() {
+            return this.$store.state.paperSize;
+        },
     },
 });
 </script>
@@ -129,6 +148,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .paper {
     position: relative;
+    background-color: white;
     &.a4 {
         width: 620px;
         height: 877px;

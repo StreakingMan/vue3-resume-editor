@@ -5,6 +5,11 @@
 <script>
 export default {
     name: 'TemplatePreviewCard',
+    computed: {
+        positionStyle() {
+            return '1';
+        },
+    },
 };
 </script>
 

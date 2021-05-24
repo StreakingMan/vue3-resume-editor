@@ -5,10 +5,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, inject } from 'vue';
 
 export default defineComponent({
     name: 'PaperContainer',
+    setup() {
+        console.log(inject('fuck'));
+    },
     computed: {
         guideState() {
             return this.$store.state.guideState;
@@ -39,7 +42,7 @@ export default defineComponent({
         border-left-color: $primary-color;
         border-bottom-color: $primary-color;
         transform-origin: right top;
-        @include transition(0.5s);
+        @include transition();
         @include elevation(2);
     }
 
@@ -61,7 +64,7 @@ export default defineComponent({
             top: 96px;
             background-color: white;
             border-radius: 4px;
-
+            transition-delay: 0.3s;
             &::after {
                 transform: scale(0);
             }

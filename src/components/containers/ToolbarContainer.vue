@@ -23,7 +23,7 @@ export default defineComponent({
     background-color: $secondary-color;
     border-radius: 4px;
     position: fixed;
-    @include transition(360ms);
+    @include transition();
 
     &--state- {
         &0 {
@@ -39,6 +39,7 @@ export default defineComponent({
             width: 600px;
             height: 54px;
             top: 24px;
+            transition-delay: 0.5s;
             @include elevation(2);
         }
     }

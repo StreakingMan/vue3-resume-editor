@@ -23,7 +23,7 @@ export default defineComponent({
     border-radius: 4px;
     position: fixed;
     background-color: $secondary-color;
-    @include transition(540ms);
+    @include transition();
 
     &--state- {
         &0 {
@@ -31,6 +31,7 @@ export default defineComponent({
             left: calc(50vw - 100px);
             width: 200px;
             height: 60px;
+
             &:hover {
                 transform: translateX(20px);
                 @include elevation(8);
@@ -41,6 +42,7 @@ export default defineComponent({
             height: calc(100vh - 126px);
             left: 24px;
             top: 102px;
+            transition-delay: 0.2s;
             @include elevation(2);
         }
     }

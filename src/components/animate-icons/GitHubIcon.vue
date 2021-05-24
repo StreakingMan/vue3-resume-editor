@@ -2,9 +2,9 @@
     <BaseAniIcon class="github-icon" @click="onIconClick">
         <template #default="hover">
             <div class="github-icon__content">
-                <span class="github-icon__label" :class="{ hover }"
-                    >STAR ME!</span
-                >
+                <span class="github-icon__label" :class="{ hover }">
+                    STAR ME!
+                </span>
                 <svg
                     aria-hidden="true"
                     focusable="false"

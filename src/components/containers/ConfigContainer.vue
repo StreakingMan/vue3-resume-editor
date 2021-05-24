@@ -21,26 +21,29 @@ export default defineComponent({
 @import 'src/styles/animates';
 .config {
     background-color: $secondary-color;
-    width: 80px;
-    height: 80px;
     border-radius: 40px;
     position: fixed;
-    top: calc(15vh + 100px);
-    @include transition(480ms);
+    @include transition();
 
     &--state- {
         &0 {
+            width: 80px;
+            height: 80px;
+            top: calc(15vh + 100px);
             right: calc(50vw - 100px);
+
             &:hover {
                 transform: translateX(20px);
+                @include elevation(8);
             }
         }
         &1 {
-            width: 400px;
+            width: 300px;
             height: calc(100vh - 172px);
             right: 24px;
             top: 148px;
             border-radius: 4px;
+            transition-delay: 0.1s;
             @include elevation(2);
         }
     }
