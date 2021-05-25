@@ -1,0 +1,27 @@
+$colorMap: (
+    'white': #fff,
+    'black': #000,
+    'danger': #ef6c00,
+    'warning': #fdd835,
+    'success': #7cb342,
+    'primary': #42a5f5,
+    'info': #607d8b,
+    'error': #b71c1c,
+);
+
+@mixin color($colorName) {
+    color: map-get($colorMap, $colorName) !important;
+}
+
+@mixin bgColor($colorName) {
+    background-color: map-get($colorMap, $colorName) !important;
+}
+
+@each $colorName, $colorValue in $colorMap {
+    .color-#{$colorName} {
+        color: $colorValue !important;
+    }
+    .bg-color-#{$colorName} {
+        background-color: $colorValue !important;
+    }
+}

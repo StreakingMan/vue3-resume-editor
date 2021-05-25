@@ -1,0 +1,42 @@
+*,
+*:before,
+*:after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+a {
+    /* color: $app-primary-color; */
+    text-decoration: none;
+
+    &:hover {
+        /* color: darken($app-primary-color, 5%); */
+    }
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border: 0;
+}

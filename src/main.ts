@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import './styles/common.scss';
+import './styles/index.scss';
 import { key, store } from './stores';
 import { i18n } from './i18n';
 

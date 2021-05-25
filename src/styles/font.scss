@@ -1,0 +1,5 @@
+@for $i from 0 through 120 {
+    .fz-#{10 + $i * 2} {
+        font-size: 10 + $i * 2 + px !important;
+    }
+}

@@ -1,0 +1,37 @@
+$borderMap: (
+    bdt: border-top,
+    bdr: border-right,
+    bdb: border-bottom,
+    bdl: border-left,
+    bdx: border-x,
+    bdy: border-y,
+    bda: border,
+);
+
+$borderColor: #ddd;
+
+@each $key, $val in $borderMap {
+    .#{$key} {
+        @if $val == border-x {
+            border-left: 1px solid $borderColor;
+            border-right: 1px solid $borderColor;
+        } @else if $val == border-y {
+            border-top: 1px solid $borderColor;
+            border-bottom: 1px solid $borderColor;
+        } @else {
+            #{$val}: 1px solid $borderColor;
+        }
+    }
+}
+
+$radius-step: 2;
+$radius-start: 0;
+$radius-end: 5;
+.bdrs- {
+    @for $index from 0 through 16 {
+        $offset-size: $index * 4;
+        &#{$offset-size} {
+            border-radius: #{$offset-size}px !important;
+        }
+    }
+}

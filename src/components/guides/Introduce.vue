@@ -27,6 +27,7 @@
             size="large"
             color="accent"
             type="blocked"
+            class="mt-4"
             @click="guideState++"
         >
             立即体验
