@@ -1,5 +1,5 @@
 <template>
-    <div class="introduce" :class="`introduce--state-${guideState}`">
+    <div class="introduce" :class="`state-${appState}`">
         <h1>
             <span
                 v-for="(s, index) in $t('message.appName')"
@@ -25,10 +25,10 @@
         </h2>
         <MyButton
             size="large"
-            color="accent"
+            color="dark"
             type="blocked"
             class="mt-4"
-            @click="guideState++"
+            @click="appState = 'running'"
         >
             立即体验
         </MyButton>
@@ -37,28 +37,25 @@
 
 <script lang="ts">
 import MyButton from '../ui/MyButton.vue';
-import { defineComponent } from 'vue';
+import { defineComponent, inject } from 'vue';
+import { AppState } from '../../classes/App';
 export default defineComponent({
     name: 'Introduce',
     components: { MyButton },
+    setup() {
+        const appState: AppState = inject('appState');
+        return {
+            appState,
+        };
+    },
     data: () => ({
         titleClick: false,
     }),
-    computed: {
-        guideState: {
-            set() {
-                this.$store.state.guideState++;
-            },
-            get(): number {
-                return this.$store.state.guideState;
-            },
-        },
-    },
 });
 </script>
 
 <style scoped lang="scss">
-@import 'src/styles/animates';
+@import '../../styles/animate';
 .introduce {
     position: fixed;
     top: calc(15vh + 400px);
@@ -86,7 +83,7 @@ export default defineComponent({
         }
     }
 
-    &--state-1 {
+    &.state-running {
         top: 100vh;
         opacity: 0;
     }

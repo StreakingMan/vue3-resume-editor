@@ -11,41 +11,34 @@ export default function useKeyboardStatus(): KeyboardStatus {
     const ctrl = ref(false);
     const alt = ref(false);
 
-    const onKeydown = (e: KeyboardEvent) => {
+    const captureMethod = (e: KeyboardEvent) => {
+        const pressed = e.type === 'keydown';
         switch (e.code) {
             case 'Space':
-                space.value = true;
+                // 防止干扰sketch滚动
+                // 考虑将这里的逻辑交给调用者实现
+                if (e.target === document.body) {
+                    e.preventDefault();
+                }
+                space.value = pressed;
                 break;
-            case 'Ctrl':
-                ctrl.value = true;
+            case 'ControlLeft':
+            case 'ControlRight':
+                ctrl.value = pressed;
                 break;
-            case 'Alt':
-                alt.value = true;
+            case 'AltLeft':
+            case 'AltRight':
+                alt.value = pressed;
                 break;
         }
     };
-
-    const onKeyup = (e: KeyboardEvent) => {
-        switch (e.code) {
-            case 'Space':
-                space.value = false;
-                break;
-            case 'Ctrl':
-                ctrl.value = false;
-                break;
-            case 'Alt':
-                alt.value = false;
-                break;
-        }
-    };
-
     onUnmounted(() => {
-        window.removeEventListener('keydown', onKeydown);
-        window.removeEventListener('keyup', onKeyup);
+        window.removeEventListener('keydown', captureMethod);
+        window.removeEventListener('keyup', captureMethod);
     });
 
-    window.addEventListener('keydown', onKeydown);
-    window.addEventListener('keyup', onKeyup);
+    window.addEventListener('keydown', captureMethod);
+    window.addEventListener('keyup', captureMethod);
 
     return {
         space,

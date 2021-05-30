@@ -1,59 +1,28 @@
 <template>
-    <div ref="paper" class="paper">
-        <MaterialInstance
-            v-for="(m, i) in materialList"
-            :key="m.id"
-            v-model:item="materialList[i]"
-        ></MaterialInstance>
-        <div
-            v-if="selecting && !space"
-            class="select-box"
-            :style="selectorStyle"
-        ></div>
-    </div>
+    <div
+        v-if="selecting && !space"
+        ref="selector"
+        class="select-box"
+        :style="selectorStyle"
+    ></div>
 </template>
 
 <script lang="ts">
-import {
-    defineComponent,
-    inject,
-    ref,
-    computed,
-    Ref,
-    watch,
-    onMounted,
-} from 'vue';
-
+import { computed, defineComponent, inject, onMounted, ref, Ref } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
-import MaterialInstance from './MaterialInstance.vue';
 
 export default defineComponent({
-    name: 'Paper',
-    components: { MaterialInstance },
+    name: 'Selector',
     setup() {
-        // 空格按键状态注入
         const space: Ref<boolean> = inject('keyboard:space');
-
         const paper = ref<HTMLDivElement>();
-
-        // Paper实例注入
-        const paperInstance = inject('paper');
-        const materialList = computed(() => paperInstance.materialList);
-        onMounted(() => {
-            paper.value.style.width = paperInstance.w + 'px';
-            paper.value.style.height = paperInstance.h + 'px';
-        });
-        watch(paperInstance, (v) => {
-            //
-        });
-
-        // 缩放值注入
         const scale: Ref<number> = inject('scale');
-        watch(scale, async (v) => {
-            paper.value.style.transform = `scale(${v})`;
+        const selector = ref(null);
+
+        onMounted(() => {
+            console.log(selector);
         });
 
-        // 选择框
         const selectorX = ref(0);
         const selectorY = ref(0);
         const selectorW = ref(0);
@@ -105,30 +74,21 @@ export default defineComponent({
         });
 
         return {
+            selector,
             space,
-            paper,
             selecting,
             selectorStyle,
-            materialList,
         };
     },
 });
 </script>
 
 <style lang="scss" scoped>
-@import 'src/styles/elevation';
-.paper {
-    position: relative;
-    background-color: white;
-    border-radius: 4px;
-    @include elevation(2);
-
-    .select-box {
-        position: absolute;
-        border: lightcoral;
-        background: lightblue;
-        opacity: 0.3;
-        z-index: 9;
-    }
+.select-box {
+    position: absolute;
+    border: lightcoral;
+    background: lightblue;
+    opacity: 0.3;
+    z-index: 9;
 }
 </style>

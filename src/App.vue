@@ -1,63 +1,77 @@
 <template>
-    <ToolbarContainer></ToolbarContainer>
-    <MaterialContainer></MaterialContainer>
-    <ConfigContainer></ConfigContainer>
-    <TemplateContainer></TemplateContainer>
-    <PaperContainer>
-        <Sketch></Sketch>
-    </PaperContainer>
+    <Sketch></Sketch>
     <Introduce></Introduce>
-    <GitHubIcon></GitHubIcon>
-    <PrintIcon></PrintIcon>
+    <ShortcutTip></ShortcutTip>
+    <MaterialPrototype></MaterialPrototype>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, provide } from 'vue';
-import { sortByGroup } from './algorithms/group';
-import { useStore } from './stores';
+import { defineComponent, ref, provide, reactive, inject, watch } from 'vue';
 import Sketch from './components/core/Sketch.vue';
-import PaperContainer from './components/containers/PaperContainer.vue';
 import Introduce from './components/guides/Introduce.vue';
-import ToolbarContainer from './components/containers/ToolbarContainer.vue';
-import MaterialContainer from './components/containers/MaterialContainer.vue';
-import ConfigContainer from './components/containers/ConfigContainer.vue';
-import TemplateContainer from './components/containers/TemplateContainer.vue';
-import GitHubIcon from './components/animate-icons/GitHubIcon.vue';
-import PrintIcon from './components/animate-icons/PrintIcon.vue';
+import { AppState } from './classes/App';
+import useKeyboardStatus from './composables/useKeyboardStatus';
+import useMouseWheel from './composables/useMouseWheel';
+import { Paper } from './classes/Paper';
+import ShortcutTip from './components/guides/ShortcutTip.vue';
+import MaterialPrototype from './components/core/MaterialPrototype.vue';
 
 export default defineComponent({
     name: 'App',
     components: {
-        PrintIcon,
-        GitHubIcon,
-        TemplateContainer,
-        ConfigContainer,
-        MaterialContainer,
-        ToolbarContainer,
+        MaterialPrototype,
+        ShortcutTip,
         Introduce,
-        PaperContainer,
         Sketch,
     },
-    provide: {},
+    setup() {
+        // 应用状态
+        const appState: AppState = ref('welcome');
+        provide('appState', appState);
+
+        // 键盘状态
+        const keyboardStatus = useKeyboardStatus();
+        for (const [key, value] of Object.entries(keyboardStatus)) {
+            provide(`keyboard:${key}`, value);
+        }
+
+        // 缩放值
+        const scale = ref(1);
+        useMouseWheel({
+            onWheel: (wheelDelta) => {
+                if (appState.value !== 'running') return;
+                const newScale = scale.value + wheelDelta;
+                // 缩放范围0.1~5
+                if (0.1 < newScale && newScale < 5) {
+                    scale.value += wheelDelta;
+                }
+            },
+        });
+        provide('scale', scale);
+
+        // Paper实例
+        const paper = reactive(new Paper());
+        provide('paper', paper);
+
+        return {
+            ctrl: keyboardStatus.ctrl,
+            space: keyboardStatus.space,
+        };
+    },
     methods: {},
 });
 </script>
 
 <style lang="scss">
-@import 'styles/colors';
+@import 'styles/color';
 body {
     margin: 0;
     padding: 0;
-    background-color: $primary-color;
+    @include bgColor('primary');
 }
 #app {
-    padding: 24px;
     display: flex;
     justify-content: center;
-}
-
-.sketch-container {
-    width: 80vw;
-    height: 80vh;
+    height: 100vh;
 }
 </style>

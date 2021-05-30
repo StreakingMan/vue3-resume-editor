@@ -28,7 +28,7 @@ export default defineComponent({
             type: String,
             default: 'default',
             validator: (value: string) =>
-                ['default', 'blocked'].includes(value),
+                ['default', 'blocked', 'pressed'].includes(value),
         },
         color: {
             type: String,
@@ -40,20 +40,21 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import 'src/styles/colors';
-@import 'src/styles/elevations';
+@import 'src/styles/color';
+@import 'src/styles/elevation';
 .my-btn {
     border-radius: 4px;
     user-select: none;
     cursor: pointer;
-    display: inline-flex;
+    display: inline-block;
     align-items: center;
     justify-content: center;
     border: none;
     padding: 12px 16px;
     font-weight: bold;
     min-width: 64px;
-    color: $primary-color-text;
+    color: white;
+    outline: none;
     @include elevation(2);
     @include elevationTransition();
 
@@ -78,23 +79,27 @@ export default defineComponent({
             display: block !important;
             width: 100%;
         }
+        &pressed {
+            @include elevation(0);
+            &:hover {
+                @include elevation(0);
+            }
+        }
     }
 
     &--color- {
         &default {
-            background-color: $primary-color;
+            @include bgColor('primary');
         }
         &light {
-            background-color: $primary-color-light;
+            @include bgColor('primary-light');
+        }
+        &dark {
+            @include bgColor('primary-dark');
         }
         &accent {
-            background-color: $accent-color;
+            @include bgColor('accent');
         }
-    }
-
-    &--state-1 {
-        width: 496px;
-        height: 696px;
     }
 }
 </style>

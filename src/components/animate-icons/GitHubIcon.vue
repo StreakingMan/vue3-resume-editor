@@ -45,7 +45,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 @import 'src/styles/colors';
-@import 'src/styles/animates';
+@import '../../styles/animate';
 
 .github-icon {
     background-color: $primary-color-dark;

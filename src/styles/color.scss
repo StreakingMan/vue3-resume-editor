@@ -4,9 +4,15 @@ $colorMap: (
     'danger': #ef6c00,
     'warning': #fdd835,
     'success': #7cb342,
-    'primary': #42a5f5,
+    'primary': #03a9f4,
+    'primary-light': #b3e5fc,
+    'primary-dark': #0288d1,
+    'primary-text': #212121,
+    'accent': #f44336,
     'info': #607d8b,
     'error': #b71c1c,
+    'secondary': #4fc3f7,
+    'thirdly': #4a92bd,
 );
 
 @mixin color($colorName) {

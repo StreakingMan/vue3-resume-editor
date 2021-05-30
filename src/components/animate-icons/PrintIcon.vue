@@ -22,7 +22,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 @import 'src/styles/colors';
-@import 'src/styles/animates';
+@import '../../styles/animate';
 .print-icon {
     background-color: $primary-color-dark;
     animation-name: topFlyIn;
