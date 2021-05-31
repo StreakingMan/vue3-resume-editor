@@ -1,6 +1,8 @@
 import { ref, Ref, onMounted, onUnmounted } from 'vue';
 
 interface MouseDragCbs {
+    onMousedown: (ev: MouseEvent) => void;
+    onMouseup: (ev: MouseEvent) => void;
     clicking: Ref<boolean>;
 }
 
@@ -8,7 +10,9 @@ interface MouseDragOptions {
     onStart: MouseEvtCb;
     onDrag: MouseEvtCb;
     onFinish: MouseEvtCb;
-    bindElementRef: Ref<HTMLElement> | Ref;
+    bindElementRef?: Ref<HTMLElement> | Ref;
+    stopPropagation?: boolean;
+    preventDefault?: boolean;
 }
 
 export interface MouseEvtInfo {
@@ -26,7 +30,13 @@ export interface MouseEvtCb {
 
 export default function useMouseDrag(options: MouseDragOptions): MouseDragCbs {
     const clicking = ref(false);
-    const { onStart, onDrag, onFinish } = options;
+    const {
+        onStart,
+        onDrag,
+        onFinish,
+        stopPropagation = true,
+        preventDefault = true,
+    } = options;
     let startX: number;
     let startY: number;
 
@@ -52,8 +62,10 @@ export default function useMouseDrag(options: MouseDragOptions): MouseDragCbs {
             startX = clientX;
             startY = clientY;
             clicking.value = true;
-            ev.stopPropagation();
+            if (stopPropagation) ev.stopPropagation();
+            if (preventDefault) ev.preventDefault();
             window.addEventListener('mousemove', onMousemove);
+            window.addEventListener('mouseup', onMouseup);
         }
     };
 
@@ -84,25 +96,26 @@ export default function useMouseDrag(options: MouseDragOptions): MouseDragCbs {
         });
         resetCache();
         window.removeEventListener('mousemove', onMousemove);
+        window.removeEventListener('mouseup', onMouseup);
     };
 
     onMounted(() => {
         const target =
-            options.bindElementRef.value.$el || options.bindElementRef.value;
+            options.bindElementRef?.value?.$el || options.bindElementRef?.value;
         if (!target) return;
         target.addEventListener('mousedown', onMousedown);
-        target.addEventListener('mouseup', onMouseup);
     });
 
     onUnmounted(() => {
         const target =
-            options.bindElementRef.value.$el || options.bindElementRef.value;
+            options.bindElementRef?.value?.$el || options.bindElementRef?.value;
         if (!target) return;
         target.removeEventListener('mousedown', onMousedown);
-        target.removeEventListener('mouseup', onMouseup);
     });
 
     return {
+        onMousedown,
+        onMouseup,
         clicking,
     };
 }

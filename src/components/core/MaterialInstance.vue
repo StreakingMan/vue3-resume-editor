@@ -3,15 +3,43 @@
         :key="selfItem.id"
         ref="itemRef"
         class="item"
-        :style="{ left: selfItem.x + 'px', top: selfItem.y + 'px' }"
+        :style="{
+            left: selfItem.x + 'px',
+            top: selfItem.y + 'px',
+            width: selfItem.w + 'px',
+            height: selfItem.h + 'px',
+        }"
+        @dblclick.prevent.stop="state = state === 'active' ? '' : 'active'"
     >
         {{ selfItem.id }}
+        <div
+            v-for="dot in dots"
+            v-show="state === 'active'"
+            :key="dot"
+            :style="`transform: scale(${1 / scale});${styleMap[dot]}`"
+            class="control-dot"
+            @mousedown.stop.prevent="
+                clickingDot = dot;
+                onDotMousedown($event);
+            "
+        ></div>
     </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, inject, Ref, ref, toRefs } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
+
+const styleMap = {
+    tl: `top: -10px;left: -10px;cursor: nw-resize;`,
+    tm: `top: -10px;left: 50%;margin-left: -5px;cursor: n-resize;`,
+    tr: `top: -10px;right: -10px;cursor: ne-resize;`,
+    mr: `top: 50%;margin-top: -5px;right: -10px;cursor: e-resize;`,
+    br: `bottom: -10px;right: -10px;cursor: se-resize;`,
+    bm: `bottom: -10px;left: 50%;margin-left: -5px;cursor: s-resize;`,
+    bl: `bottom: -10px;left: -10px;cursor: sw-resize;`,
+    ml: `top: 50%;margin-top: -5px;left: -10px;cursor: w-resize;`,
+};
 
 export default defineComponent({
     name: 'MaterialInstance',
@@ -24,46 +52,120 @@ export default defineComponent({
     },
     emits: ['update:item'],
     setup(props, { emit }) {
-        const posInfo = {
+        // 位置信息缓存
+        const posInfoCache = {
             itemStartX: 0,
             itemStartY: 0,
+            itemStartW: 0,
+            itemStartH: 0,
         };
 
+        // 数据源
         const { item } = toRefs(props);
         const selfItem = computed({
             get: () => item.value,
             set: (v) => emit('update:item', v),
         });
 
+        // 状态维护
+        const state: Ref<'active' | ''> = ref('');
+
         // 缩放值注入
-        const scale: Ref<number> = inject('scale');
+        const scale: Ref<number> = inject('scale', ref(1));
 
         const itemRef = ref(null);
         useMouseDrag({
             onStart() {
                 const { x, y } = selfItem.value;
-                posInfo.itemStartX = x;
-                posInfo.itemStartY = y;
+                posInfoCache.itemStartX = x;
+                posInfoCache.itemStartY = y;
             },
             onDrag({ transX, transY }: MouseEvtInfo) {
-                selfItem.value.x = posInfo.itemStartX + transX / scale.value;
-                selfItem.value.y = posInfo.itemStartY + transY / scale.value;
+                selfItem.value.x =
+                    posInfoCache.itemStartX + transX / scale.value;
+                selfItem.value.y =
+                    posInfoCache.itemStartY + transY / scale.value;
             },
             onFinish() {
-                //
+                posInfoCache.itemStartX = 0;
+                posInfoCache.itemStartY = 0;
             },
             bindElementRef: itemRef,
+        });
+
+        // 缩放控制点
+        const clickingDot = ref('');
+        const { onMousedown: onDotMousedown } = useMouseDrag({
+            onStart() {
+                if (state.value !== 'active') return;
+                const { x, y, w, h } = selfItem.value;
+                posInfoCache.itemStartX = x;
+                posInfoCache.itemStartY = y;
+                posInfoCache.itemStartW = w;
+                posInfoCache.itemStartH = h;
+            },
+            onDrag({ transX, transY }: MouseEvtInfo) {
+                // TODO 最小值控制，方向锁定，比例锁定，网格吸附
+                const {
+                    itemStartX,
+                    itemStartY,
+                    itemStartH,
+                    itemStartW,
+                } = posInfoCache;
+
+                let newX = itemStartX,
+                    newY = itemStartY,
+                    newW = itemStartW,
+                    newH = itemStartH;
+
+                if (clickingDot.value.includes('b')) {
+                    newH = itemStartH + transY / scale.value;
+                } else if (clickingDot.value.includes('t')) {
+                    newY = itemStartY + transY / scale.value;
+                    newH = itemStartH - transY / scale.value;
+                }
+
+                if (clickingDot.value.includes('r')) {
+                    newW = itemStartW + transX / scale.value;
+                } else if (clickingDot.value.includes('l')) {
+                    newX = itemStartX + transX / scale.value;
+                    newW = itemStartW - transX / scale.value;
+                }
+
+                if (newH < 10) newH = 10;
+                if (newW < 10) newW = 10;
+
+                selfItem.value.x = newX;
+                selfItem.value.y = newY;
+                selfItem.value.w = newW;
+                selfItem.value.h = newH;
+            },
+            onFinish() {
+                clickingDot.value = '';
+                posInfoCache.itemStartX = 0;
+                posInfoCache.itemStartY = 0;
+                posInfoCache.itemStartW = 0;
+                posInfoCache.itemStartH = 0;
+            },
         });
 
         return {
             itemRef,
             selfItem,
+            dots: ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'],
+            scale,
+            styleMap,
+            clickingDot,
+            onDotMousedown,
+            state,
         };
     },
 });
 </script>
 
 <style scoped lang="scss">
+@import 'src/styles/color';
+@import 'src/styles/elevation';
 .item {
     width: 100px;
     height: 100px;
@@ -72,5 +174,13 @@ export default defineComponent({
     position: absolute;
     user-select: none;
     background: lightgray;
+}
+.control-dot {
+    box-sizing: border-box;
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    @include bgColor('primary-light');
+    @include elevation(1);
 }
 </style>
