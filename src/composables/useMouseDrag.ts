@@ -2,7 +2,6 @@ import { ref, Ref, onMounted, onUnmounted } from 'vue';
 
 interface MouseDragCbs {
     onMousedown: (ev: MouseEvent) => void;
-    onMouseup: (ev: MouseEvent) => void;
     clicking: Ref<boolean>;
 }
 
@@ -115,7 +114,6 @@ export default function useMouseDrag(options: MouseDragOptions): MouseDragCbs {
 
     return {
         onMousedown,
-        onMouseup,
         clicking,
     };
 }

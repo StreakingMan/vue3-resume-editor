@@ -6,7 +6,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, provide, reactive, inject, watch } from 'vue';
+import {
+    defineComponent,
+    ref,
+    provide,
+    reactive,
+    inject,
+    watch,
+    Ref,
+} from 'vue';
 import Sketch from './components/core/Sketch.vue';
 import Introduce from './components/guides/Introduce.vue';
 import { AppState } from './classes/App';
@@ -26,7 +34,7 @@ export default defineComponent({
     },
     setup() {
         // 应用状态
-        const appState: AppState = ref('welcome');
+        const appState: Ref<AppState> = ref('welcome');
         provide('appState', appState);
 
         // 键盘状态
@@ -50,7 +58,7 @@ export default defineComponent({
         provide('scale', scale);
 
         // Paper实例
-        const paper = reactive(new Paper());
+        const paper = reactive(new Paper({}));
         provide('paper', paper);
 
         return {

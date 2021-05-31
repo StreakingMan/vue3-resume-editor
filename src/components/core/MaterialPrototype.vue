@@ -4,15 +4,18 @@
         :style="{ left: containerLeft }"
     >
         <MyIconButton
-            ref="Title"
-            icon="format-title"
-            :style="prototypeInfo.Title.style"
+            v-for="(proto, name) in prototypes"
+            :key="name"
+            :icon="proto.icon"
+            :style="proto.tempStyle"
+            @mousedown.prevent.stop="
+                draggingProtoType = name;
+                onProtoMousedown($event);
+            "
         >
-            标题
+            {{ proto.label }}
         </MyIconButton>
-        <MyIconButton icon="text-box-outline">文本</MyIconButton>
-        <MyIconButton icon="image">图像</MyIconButton>
-        <MyIconButton icon="format-list-bulleted-type">列表</MyIconButton>
+
         <div
             class="prototype-container__toggle bg-color-white cursor-pointer d-flex align-center justify-center"
             @click="containerHidden = !containerHidden"
@@ -28,25 +31,18 @@
 </template>
 
 <script lang="ts">
-import {
-    computed,
-    defineComponent,
-    inject,
-    onMounted,
-    reactive,
-    ref,
-    Ref,
-} from 'vue';
+import { computed, defineComponent, inject, reactive, ref, Ref } from 'vue';
 import MyIconButton from '../ui/MyIconButton.vue';
 import { Paper } from '../../classes/Paper';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
+import { AppState } from '../../classes/App';
 
 export default defineComponent({
     name: 'MaterialPrototype',
     components: { MyIconButton },
 
     setup() {
-        const appState = inject('appState');
+        const appState: Ref<AppState> = inject('appState', ref('welcome'));
         const containerHidden = ref(false);
         const containerLeft = computed(() =>
             appState.value === 'welcome'
@@ -57,39 +53,60 @@ export default defineComponent({
         );
 
         // Paper实例注入
-        const paperInstance = inject('paper');
+        const paperInstance: Paper = inject('paper');
 
         // 原型信息
-        const Title = ref(null);
-        const prototypeInfo = reactive({
+        const prototypes = reactive({
             Title: {
-                style: ``,
+                label: '标题',
+                icon: 'format-title',
+                tempStyle: '',
+            },
+            Text: {
+                label: '文本',
+                icon: 'text-box-outline',
+                tempStyle: '',
+            },
+            Image: {
+                label: '图像',
+                icon: 'image',
+                tempStyle: '',
+            },
+            List: {
+                label: '列表',
+                icon: 'format-list-bulleted-type',
+                tempStyle: '',
             },
         });
 
-        useMouseDrag({
+        const draggingProtoType: Ref<string> = ref('');
+        const { onMousedown: onProtoMousedown } = useMouseDrag({
             onStart() {
-                //
+                //console.log(draggingProtoType.value);
             },
             onDrag({ transX, transY }: MouseEvtInfo) {
-                prototypeInfo.Title.style = `transition: 0s;transform: translateX(${transX}px) translateY(${transY}px) !important`;
+                const proto = prototypes[draggingProtoType.value];
+                if (!proto) return;
+                proto.tempStyle = `transition: 0s;transform: translateX(${transX}px) translateY(${transY}px) !important`;
             },
             onFinish() {
-                prototypeInfo.Title.style = ``;
+                const proto = prototypes[draggingProtoType.value];
+                if (!proto) return;
+                proto.tempStyle = '';
                 paperInstance.addMaterial({
                     config: {
-                        type: 'Title',
+                        type: draggingProtoType,
                     },
                 });
             },
-            bindElementRef: Title,
         });
 
         return {
             containerLeft,
             containerHidden,
-            prototypeInfo,
-            Title,
+            prototypes,
+            onProtoMousedown,
+            draggingProtoType,
         };
     },
 });

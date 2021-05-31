@@ -1,9 +1,11 @@
 <template>
-    <div>MTitle</div>
+    <div>MText</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
+export const test = '123';
 
 export default defineComponent({
     name: 'MText',
