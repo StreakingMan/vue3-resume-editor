@@ -18,6 +18,7 @@
             :key="dot"
             :style="`transform: scale(${1 / scale});${styleMap[dot]}`"
             class="control-dot"
+            :class="{ active: clickingDot === dot }"
             @mousedown.stop.prevent="
                 clickingDot = dot;
                 onDotMousedown($event);
@@ -132,8 +133,16 @@ export default defineComponent({
                     newW = itemStartW - transX / scale.value;
                 }
 
-                if (newH < 10) newH = 10;
-                if (newW < 10) newW = 10;
+                const unit = 10;
+
+                if (newH < unit) newH = unit;
+                if (newW < unit) newW = unit;
+                if (newX + unit > itemStartX + itemStartW) {
+                    newX = itemStartX + itemStartW - unit;
+                }
+                if (newY + unit > itemStartY + itemStartH) {
+                    newY = itemStartY + itemStartH - unit;
+                }
 
                 selfItem.value.x = newX;
                 selfItem.value.y = newY;
@@ -180,7 +189,12 @@ export default defineComponent({
     position: absolute;
     width: 12px;
     height: 12px;
+    transition: background-color 0.5s;
     @include bgColor('primary-light');
     @include elevation(1);
+
+    &.active {
+        @include bgColor('accent');
+    }
 }
 </style>
