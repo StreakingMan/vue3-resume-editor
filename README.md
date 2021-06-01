@@ -1,4 +1,4 @@
-![resume-editor](http://media-bed.streakingman.com/resume-editor.gif)
+![resume-editor](https://media-bed.streakingman.com/resume-editor.gif)
 
 # Vue3 Resume Editor
 
