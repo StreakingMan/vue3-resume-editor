@@ -74,9 +74,13 @@ export default defineComponent({
         // 缩放值注入
         const scale: Ref<number> = inject('scale', ref(1));
 
+        // 空格键状态注入
+        const space: Ref<boolean> = inject('keyboard:space');
+
         const itemRef = ref(null);
         useMouseDrag({
             onStart() {
+                if (space.value) return false;
                 const { x, y } = selfItem.value;
                 posInfoCache.itemStartX = x;
                 posInfoCache.itemStartY = y;
