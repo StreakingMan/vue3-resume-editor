@@ -1,14 +1,11 @@
 import { uniqueString } from '../utils/uniqueString';
 
-type MaterialType = 'Title' | 'Text' | 'Image' | 'List';
-
 interface MaterialConfig {
-    type: MaterialType;
+    componentName: string;
     [key: string]: any;
 }
 
 export interface MaterialOptions {
-    id: string;
     x: number;
     y: number;
     w: number;

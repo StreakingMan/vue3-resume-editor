@@ -11,7 +11,7 @@
         }"
         @dblclick.prevent.stop="state = state === 'active' ? '' : 'active'"
     >
-        {{ selfItem.id }}
+        <component :is="selfItem.config.componentName"></component>
         <div
             v-for="dot in dots"
             v-show="state === 'active'"
@@ -30,6 +30,10 @@
 <script lang="ts">
 import { computed, defineComponent, inject, Ref, ref, toRefs } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
+import MTitle from '../materials/MTitle.vue';
+import MList from '../materials/MList.vue';
+import MImage from '../materials/MImage.vue';
+import MText from '../materials/MText.vue';
 
 const styleMap = {
     tl: `top: -10px;left: -10px;cursor: nw-resize;`,
@@ -44,6 +48,7 @@ const styleMap = {
 
 export default defineComponent({
     name: 'MaterialInstance',
+    components: { MTitle, MText, MImage, MList },
     props: {
         item: {
             type: Object,
@@ -75,7 +80,7 @@ export default defineComponent({
         const scale: Ref<number> = inject('scale', ref(1));
 
         // 空格键状态注入
-        const space: Ref<boolean> = inject('keyboard:space');
+        const space: Ref<boolean> = inject('keyboard:space', ref(false));
 
         const itemRef = ref(null);
         useMouseDrag({

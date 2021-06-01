@@ -36,6 +36,7 @@ import MyIconButton from '../ui/MyIconButton.vue';
 import { Paper } from '../../classes/Paper';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import { AppState } from '../../classes/App';
+import prototypeMap from '../materials/prototypes';
 
 export default defineComponent({
     name: 'MaterialPrototype',
@@ -53,37 +54,16 @@ export default defineComponent({
         );
 
         // Sketch组件注入
-        const sketch: Ref = inject('sketch');
+        const sketch: Ref = inject('sketch', ref({}));
 
         // 缩放值注入
-        const scale: Ref<number> = inject('scale');
+        const scale: Ref<number> = inject('scale', ref(1));
 
         // Paper实例注入
-        const paperInstance: Paper = inject('paper');
+        const paperInstance: Paper = inject('paper', new Paper({}));
 
         // 原型信息
-        const prototypes = reactive({
-            Title: {
-                label: '标题',
-                icon: 'format-title',
-                tempStyle: '',
-            },
-            Text: {
-                label: '文本',
-                icon: 'text-box-outline',
-                tempStyle: '',
-            },
-            Image: {
-                label: '图像',
-                icon: 'image',
-                tempStyle: '',
-            },
-            List: {
-                label: '列表',
-                icon: 'format-list-bulleted-type',
-                tempStyle: '',
-            },
-        });
+        const prototypes: Record<string, any> = reactive(prototypeMap);
 
         // 原型拖入paper
         const draggingProtoType: Ref<string> = ref('');
@@ -118,13 +98,8 @@ export default defineComponent({
                             scrollTop)) /
                     scale.value;
                 if (x < 0 || y < 0) return;
-                paperInstance.addMaterial({
-                    x,
-                    y,
-                    config: {
-                        type: draggingProtoType,
-                    },
-                });
+                if (!proto.creator) return;
+                paperInstance.addMaterial(proto.creator({ x, y }));
             },
         });
 

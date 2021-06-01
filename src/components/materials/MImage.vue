@@ -1,5 +1,5 @@
 <template>
-    <div>MText</div>
+    <div>MImage</div>
 </template>
 
 <script lang="ts">
@@ -7,7 +7,7 @@ import { defineComponent } from 'vue';
 import { Material, MaterialOptions } from '../../classes/Material';
 import { ProtoInfo } from './prototypes';
 
-const name = 'MText';
+const name = 'MImage';
 export default defineComponent({
     name,
     props: {
@@ -17,8 +17,8 @@ export default defineComponent({
         },
     },
     protoInfo: {
-        label: '文本',
-        icon: 'text-box-outline',
+        label: '图像',
+        icon: 'image',
         creator({ x, y }: Partial<MaterialOptions>): Material {
             return new Material({
                 x,

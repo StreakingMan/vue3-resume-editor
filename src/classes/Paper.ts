@@ -15,7 +15,7 @@ export class Paper {
     public readonly w: number;
     public readonly h: number;
     public materialList: Material[] = [];
-    private materialMap: Map<string, Material> = new Map<string, Material>();
+    private materialMap: Map<string, Material>;
     constructor(options: Partial<PaperOptions>) {
         const defaultOptions = {
             size: 'a4',
@@ -24,6 +24,7 @@ export class Paper {
         const { w, h } = paperSizeMap[size];
         this.w = w;
         this.h = h;
+        this.materialMap = new Map();
     }
     addMaterial(options: Partial<MaterialOptions>): Material[] {
         const newMaterial = new Material(options);
