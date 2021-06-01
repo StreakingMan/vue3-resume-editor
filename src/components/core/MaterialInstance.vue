@@ -2,7 +2,7 @@
     <div
         :key="selfItem.id"
         ref="itemRef"
-        class="item"
+        class="material-instance animate__animated animate__bounceIn"
         :style="{
             left: selfItem.x + 'px',
             top: selfItem.y + 'px',
@@ -28,7 +28,15 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, Ref, ref, toRefs } from 'vue';
+import {
+    computed,
+    defineComponent,
+    inject,
+    provide,
+    Ref,
+    ref,
+    toRefs,
+} from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import MTitle from '../materials/MTitle.vue';
 import MList from '../materials/MList.vue';
@@ -72,6 +80,7 @@ export default defineComponent({
             get: () => item.value,
             set: (v) => emit('update:item', v),
         });
+        provide('instance', selfItem);
 
         // 状态维护
         const state: Ref<'active' | ''> = ref('');
@@ -184,14 +193,13 @@ export default defineComponent({
 <style scoped lang="scss">
 @import 'src/styles/color';
 @import 'src/styles/elevation';
-.item {
-    width: 100px;
-    height: 100px;
-    border: 1px solid gray;
-    border-radius: 2px;
+.material-instance {
     position: absolute;
-    user-select: none;
-    background: lightgray;
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.02);
+        @include elevation(2);
+        @include elevationTransition();
+    }
 }
 .control-dot {
     box-sizing: border-box;

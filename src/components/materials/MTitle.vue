@@ -1,9 +1,9 @@
 <template>
-    <div>MTitle</div>
+    <div>{{ config.content }}</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, inject, Ref } from 'vue';
 import { Material, MaterialOptions } from '../../classes/Material';
 import { ProtoInfo } from './prototypes';
 
@@ -11,28 +11,30 @@ const name = 'MTitle';
 
 export default defineComponent({
     name,
-    props: {
-        config: {
-            type: Object,
-            default: () => ({}),
-        },
-    },
     protoInfo: {
         label: '标题',
         icon: 'format-title',
         creator({ x, y }: Partial<MaterialOptions>): Material {
             return new Material({
-                x,
-                y,
+                x: x - 100,
+                y: y - 50,
+                w: 200,
+                h: 100,
                 config: {
                     componentName: name,
+                    content: '123',
                 },
             });
         },
     } as ProtoInfo,
     emits: ['update:config'],
     setup() {
-        console.log('123');
+        const instance: Ref = inject('instance', {});
+        console.log(instance);
+
+        return {
+            config: instance.value.config,
+        };
     },
 });
 </script>
