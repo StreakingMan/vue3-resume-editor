@@ -99,6 +99,7 @@ export default defineComponent({
                 innerWidth: windowWidth,
                 innerHeight: windowHeight,
             } = window;
+            // 这里实际上时paperInstance的w h
             const {
                 clientWidth: paperInitWidth,
                 clientHeight: paperInitHeight,
@@ -108,12 +109,12 @@ export default defineComponent({
                 height: paperHeight,
             } = paperDiv.value.getBoundingClientRect();
 
-            paddingX.value =
-                Math.floor(windowWidth * 0.8) +
-                (paperWidth - paperInitWidth) / 2;
-            paddingY.value =
-                Math.floor(windowHeight * 0.8) +
-                (paperHeight - paperInitHeight) / 2;
+            paddingX.value = Math.floor(
+                windowWidth * 0.8 + (paperWidth - paperInitWidth) / 2
+            );
+            paddingY.value = Math.floor(
+                windowHeight * 0.8 + (paperHeight - paperInitHeight) / 2
+            );
         });
 
         return {

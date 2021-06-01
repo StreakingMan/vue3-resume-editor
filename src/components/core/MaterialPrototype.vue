@@ -52,6 +52,12 @@ export default defineComponent({
                 : '16px'
         );
 
+        // Sketch组件注入
+        const sketch: Ref = inject('sketch');
+
+        // 缩放值注入
+        const scale: Ref<number> = inject('scale');
+
         // Paper实例注入
         const paperInstance: Paper = inject('paper');
 
@@ -79,6 +85,7 @@ export default defineComponent({
             },
         });
 
+        // 原型拖入paper
         const draggingProtoType: Ref<string> = ref('');
         const { onMousedown: onProtoMousedown } = useMouseDrag({
             onStart() {
@@ -89,11 +96,31 @@ export default defineComponent({
                 if (!proto) return;
                 proto.tempStyle = `transition: 0s;transform: translateX(${transX}px) translateY(${transY}px) !important`;
             },
-            onFinish() {
+            onFinish({ currentX, currentY }: MouseEvtInfo) {
                 const proto = prototypes[draggingProtoType.value];
                 if (!proto) return;
                 proto.tempStyle = '';
+
+                // 计算释放时相对于paper的位置
+                if (!sketch.value) return;
+                const { paddingX, paddingY, wrapper } = sketch.value;
+                const { scrollLeft, scrollTop } = wrapper;
+                const x =
+                    (currentX -
+                        (paddingX -
+                            (paperInstance.w * (scale.value - 1)) / 2 -
+                            scrollLeft)) /
+                    scale.value;
+                const y =
+                    (currentY -
+                        (paddingY -
+                            (paperInstance.h * (scale.value - 1)) / 2 -
+                            scrollTop)) /
+                    scale.value;
+                if (x < 0 || y < 0) return;
                 paperInstance.addMaterial({
+                    x,
+                    y,
                     config: {
                         type: draggingProtoType,
                     },

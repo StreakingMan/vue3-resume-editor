@@ -1,5 +1,5 @@
 <template>
-    <Sketch></Sketch>
+    <Sketch ref="sketch"></Sketch>
     <Introduce></Introduce>
     <ShortcutTip></ShortcutTip>
     <MaterialPrototype></MaterialPrototype>
@@ -61,9 +61,14 @@ export default defineComponent({
         const paper = reactive(new Paper({}));
         provide('paper', paper);
 
+        // Sketch组件
+        const sketch = ref(null);
+        provide('sketch', sketch);
+
         return {
             ctrl: keyboardStatus.ctrl,
             space: keyboardStatus.space,
+            sketch,
         };
     },
     methods: {},
