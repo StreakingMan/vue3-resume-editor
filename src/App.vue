@@ -3,7 +3,25 @@
     <Introduce></Introduce>
     <ShortcutTip></ShortcutTip>
     <MaterialPrototype></MaterialPrototype>
-    <PrintIcon></PrintIcon>
+    <MaterialConfig></MaterialConfig>
+    <MyIconButton
+        v-if="appState === 'running'"
+        icon="printer"
+        style="position: fixed; top: 16px; right: 96px"
+        class="animate__animated animate__flipInX elevation-3"
+        rounded
+    >
+        打印
+    </MyIconButton>
+    <MyIconButton
+        v-if="appState === 'running'"
+        icon="github"
+        style="position: fixed; top: 16px; right: 16px"
+        class="animate__animated animate__flipInX elevation-3 animate__delay-1s"
+        rounded
+    >
+        GitHub
+    </MyIconButton>
 </template>
 
 <script lang="ts">
@@ -24,12 +42,14 @@ import useMouseWheel from './composables/useMouseWheel';
 import { Paper } from './classes/Paper';
 import ShortcutTip from './components/guides/ShortcutTip.vue';
 import MaterialPrototype from './components/core/MaterialPrototype.vue';
-import PrintIcon from './components/animate-icons/PrintIcon.vue';
+import MyIconButton from './components/ui/MyIconButton.vue';
+import MaterialConfig from './components/core/MaterialConfig.vue';
 
 export default defineComponent({
     name: 'App',
     components: {
-        PrintIcon,
+        MaterialConfig,
+        MyIconButton,
         MaterialPrototype,
         ShortcutTip,
         Introduce,
@@ -38,7 +58,7 @@ export default defineComponent({
     setup() {
         // 应用状态
         const appState: Ref<AppState> = ref('welcome');
-        provide('appState', appState);
+        provide('app:state', appState);
 
         // 键盘状态
         const keyboardStatus = useKeyboardStatus();
@@ -68,9 +88,14 @@ export default defineComponent({
         const sketch = ref(null);
         provide('sketch', sketch);
 
+        // 当前操作
+        const focusMaterial = ref(null);
+        provide('focus:material', focusMaterial);
+
         return {
             ctrl: keyboardStatus.ctrl,
             space: keyboardStatus.space,
+            appState,
             sketch,
         };
     },

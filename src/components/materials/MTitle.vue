@@ -1,23 +1,26 @@
 <template>
-    <div>{{ config.content }}</div>
-    <ConfigPanel>
-        <p>字号</p>
-        <p>字重</p>
-        <p>颜色</p>
-    </ConfigPanel>
+    <div
+        :style="{
+            padding: instance.config.padding + 'px',
+            borderStyle: instance.config.borderStyle,
+            borderWidth: instance.config.borderWidth + 'px',
+            borderColor: instance.config.borderColor,
+            borderRadius: instance.config.borderRadius + 'px',
+            backgroundColor: instance.config.backgroundColor,
+        }"
+    >
+        {{ instance.config.content }}
+    </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, Ref } from 'vue';
+import { defineComponent, inject, ref, Ref, watch } from 'vue';
 import { Material, MaterialOptions } from '../../classes/Material';
 import { ProtoInfo } from './prototypes';
-import ConfigPanel from './ConfigPanel.vue';
-
 const name = 'MTitle';
 
 export default defineComponent({
     name,
-    components: { ConfigPanel },
     protoInfo: {
         label: '标题',
         icon: 'format-title',
@@ -29,18 +32,20 @@ export default defineComponent({
                 h: 100,
                 config: {
                     componentName: name,
-                    content: '123',
+                    content: 'Material Title',
                 },
             });
         },
     } as ProtoInfo,
     emits: ['update:config'],
     setup() {
-        const instance: Ref = inject('instance', {});
-        console.log(instance);
+        const instance: Material = inject('instance', {});
+        watch(instance, (v) => {
+            //console.log(v);
+        });
 
         return {
-            config: instance.value.config,
+            instance,
         };
     },
 });

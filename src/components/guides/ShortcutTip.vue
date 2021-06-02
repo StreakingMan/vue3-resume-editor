@@ -1,10 +1,10 @@
 <template>
     <div class="shortcut-tip" :class="`state-${appState}`">
-        <MyButton type="pressed" :color="ctrl ? 'accent' : 'dark'">
+        <MyButton type="pressed" :color="ctrl ? 'accent' : 'dark'" class="elevation-3">
             CTRL+WHEEL for scale
         </MyButton>
         <MyButton
-            class="ml-3"
+            class="ml-3 elevation-3"
             :color="space ? 'accent' : 'dark'"
             type="pressed"
         >
@@ -22,7 +22,7 @@ export default defineComponent({
     components: { MyButton },
     setup() {
         return {
-            appState: inject('appState'),
+            appState: inject('app:state'),
             space: inject('keyboard:space'),
             ctrl: inject('keyboard:ctrl'),
         };

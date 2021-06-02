@@ -43,7 +43,7 @@ export default defineComponent({
     components: { MyIconButton },
 
     setup() {
-        const appState: Ref<AppState> = inject('appState', ref('welcome'));
+        const appState: Ref<AppState> = inject('app:state', ref('welcome'));
         const containerHidden = ref(false);
         const containerLeft = computed(() =>
             appState.value === 'welcome'
@@ -134,7 +134,7 @@ export default defineComponent({
         border-top-right-radius: 24px;
         border-bottom-right-radius: 24px;
         transition: 0.3s;
-        @include elevation(2);
+        @include elevation(3);
 
         i {
             transition: 0.4s;

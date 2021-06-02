@@ -9,21 +9,19 @@
             width: selfItem.w + 'px',
             height: selfItem.h + 'px',
         }"
-        @dblclick.prevent.stop="state = state === 'active' ? '' : 'active'"
+        @click.prevent.stop="onClick"
     >
         <component :is="selfItem.config.componentName"></component>
-        <i
-            class="setting-icon mdi mdi-tune fz-24"
-            :style="`transform: scale(${1 / scale});`"
-            @click.prevent.stop="state = state === 'active' ? '' : 'active'"
-        ></i>
         <div
             v-for="dot in dots"
-            v-show="state === 'active'"
+            v-show="active"
             :key="dot"
             :style="`transform: scale(${1 / scale});${styleMap[dot]}`"
             class="control-dot"
-            :class="{ active: clickingDot === dot }"
+            :class="{
+                active: clickingDot === dot,
+                hide: clickingDot && clickingDot !== dot,
+            }"
             @mousedown.stop.prevent="
                 clickingDot = dot;
                 onDotMousedown($event);
@@ -86,11 +84,16 @@ export default defineComponent({
             get: () => item.value,
             set: (v) => emit('update:item', v),
         });
-        provide('instance', selfItem);
+        provide('instance', props.item);
 
         // 状态维护
-        const state: Ref<'active' | ''> = ref('');
-        provide('state', state);
+        const focusMaterial: Ref = inject('focus:material');
+        const onClick = () => {
+            focusMaterial.value = item.value;
+        };
+        const active = computed(() => {
+            return focusMaterial.value === item.value;
+        });
 
         // 缩放值注入
         const scale: Ref<number> = inject('scale', ref(1));
@@ -123,7 +126,7 @@ export default defineComponent({
         const clickingDot = ref('');
         const { onMousedown: onDotMousedown } = useMouseDrag({
             onStart() {
-                if (state.value !== 'active') return;
+                if (!active.value) return;
                 const { x, y, w, h } = selfItem.value;
                 posInfoCache.itemStartX = x;
                 posInfoCache.itemStartY = y;
@@ -191,7 +194,8 @@ export default defineComponent({
             styleMap,
             clickingDot,
             onDotMousedown,
-            state,
+            active,
+            onClick,
         };
     },
 });
@@ -202,6 +206,7 @@ export default defineComponent({
 @import 'src/styles/elevation';
 .material-instance {
     position: absolute;
+    @include elevationTransition();
 
     .setting-icon {
         position: absolute;
@@ -217,17 +222,20 @@ export default defineComponent({
         position: absolute;
         width: 12px;
         height: 12px;
-        transition: background-color 0.5s;
+        transition: background-color 0.5s, opacity 0.5s;
         @include bgColor('primary-light');
         @include elevation(1);
 
         &.active {
             @include bgColor('accent');
         }
+
+        &.hide {
+            opacity: 0;
+        }
     }
 
     &:hover {
-        backdrop-filter: blur(5px);
         @include elevation(2);
 
         .setting-icon {

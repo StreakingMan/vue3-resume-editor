@@ -1,7 +1,8 @@
 <template>
     <div
         ref="button"
-        class="my-nav-item cursor-pointer ma-1 bg-color-primary-dark hover-elevation-4 d-flex flex-column align-center justify-center color-white"
+        class="my-nav-item cursor-pointer ma-1 bg-color-primary-dark hover-elevation-6 d-flex flex-column align-center justify-center color-white"
+        :class="{ rounded }"
     >
         <i
             class="my-nav-item__icon mdi fz-24"
@@ -20,6 +21,10 @@ export default {
         icon: {
             type: String,
             default: '',
+        },
+        rounded: {
+            type: Boolean,
+            default: false,
         },
     },
 };
@@ -58,6 +63,9 @@ export default {
                 transform: translateY(0);
             }
         }
+    }
+    &.rounded {
+        border-radius: 32px;
     }
 }
 </style>

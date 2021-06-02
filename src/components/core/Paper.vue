@@ -1,5 +1,5 @@
 <template>
-    <div ref="paper" class="paper">
+    <div id="paper" ref="paper" class="paper" @click="onClick">
         <MaterialInstance
             v-for="(m, i) in materialList"
             :key="m.id"
@@ -44,7 +44,7 @@ export default defineComponent({
             paper.value.style.height = paperInstance.h + 'px';
         });
         watch(paperInstance, (v) => {
-            //
+            //console.log(v)
         });
 
         // 缩放值注入
@@ -104,12 +104,19 @@ export default defineComponent({
             };
         });
 
+        const focusMaterial: Ref = inject('focus:material');
+
+        const onClick = () => {
+            focusMaterial.value = null;
+        };
+
         return {
             space,
             paper,
             selecting,
             selectorStyle,
             materialList,
+            onClick,
         };
     },
 });

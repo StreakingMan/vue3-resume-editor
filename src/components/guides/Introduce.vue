@@ -43,7 +43,7 @@ export default defineComponent({
     name: 'Introduce',
     components: { MyButton },
     setup() {
-        const appState: AppState = inject('appState');
+        const appState: AppState = inject('app:state');
         return {
             appState,
         };

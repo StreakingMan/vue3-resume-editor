@@ -64,7 +64,7 @@ export default defineComponent({
             window.removeEventListener('resize', adjustSketch);
         });
 
-        const appState: AppState = inject('appState');
+        const appState: AppState = inject('app:state');
         watch(appState, async (v) => {
             if (v === 'running') {
                 await nextTick();
@@ -177,7 +177,8 @@ export default defineComponent({
                 }
                 &::-webkit-scrollbar-thumb {
                     border-radius: 6px;
-                    @include bgColor('primary-dark');
+                    background-color: transparent;
+                    //@include bgColor('primary-dark');
                 }
             }
         }

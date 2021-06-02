@@ -1,11 +1,9 @@
 <template>
     <label>
-        <input
+        <textarea
             v-model="value"
-            type="color"
             @input="$emit('update:modelValue', value)"
         />
-        {{ modelValue }}
     </label>
 </template>
 
@@ -13,7 +11,7 @@
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
-    name: 'MyColorPicker',
+    name: 'MyTextFiled',
     props: {
         modelValue: {
             type: String,
