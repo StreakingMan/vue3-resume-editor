@@ -1,5 +1,9 @@
 <template>
-    <BaseAniIcon class="print-icon">
+    <BaseAniIcon
+        v-if="appState === 'running'"
+        class="print-icon animate__animated animate__flipInX"
+        @click="print"
+    >
         <div class="container">
             <div class="outer1"></div>
             <div class="outer2"></div>
@@ -10,27 +14,36 @@
     </BaseAniIcon>
 </template>
 
-<script>
-import { defineComponent } from 'vue';
+<script lang="ts">
+import { defineComponent, inject } from 'vue';
 import BaseAniIcon from './BaseAniIcon.vue';
 
 export default defineComponent({
     name: 'PrintIcon',
     components: { BaseAniIcon },
+    setup() {
+        const print = () => {
+            // TODO print
+            // window.print();
+        };
+
+        return {
+            appState: inject('appState', ''),
+            print,
+        };
+    },
 });
 </script>
 
 <style scoped lang="scss">
-@import 'src/styles/colors';
-@import '../../styles/animate';
+@import 'src/styles/color';
+@import 'src/styles/animate';
 .print-icon {
-    background-color: $primary-color-dark;
-    animation-name: topFlyIn;
-    animation-duration: 1.2s;
     position: fixed;
     right: 140px;
     top: 24px;
     color: white;
+    @include bgColor('primary-dark');
 
     .container {
         position: relative;
@@ -60,14 +73,14 @@ export default defineComponent({
             position: absolute;
             right: 4px;
             top: 24px;
-            background-color: $primary-color-dark;
+            @include bgColor('primary-dark');
         }
         .paper {
             width: 40px;
             height: 4px;
-            background-color: $primary-color-dark;
             position: absolute;
             top: 40px;
+            @include bgColor('primary-dark');
             @include transition();
         }
     }

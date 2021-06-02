@@ -3,6 +3,7 @@
     <Introduce></Introduce>
     <ShortcutTip></ShortcutTip>
     <MaterialPrototype></MaterialPrototype>
+    <PrintIcon></PrintIcon>
 </template>
 
 <script lang="ts">
@@ -23,10 +24,12 @@ import useMouseWheel from './composables/useMouseWheel';
 import { Paper } from './classes/Paper';
 import ShortcutTip from './components/guides/ShortcutTip.vue';
 import MaterialPrototype from './components/core/MaterialPrototype.vue';
+import PrintIcon from './components/animate-icons/PrintIcon.vue';
 
 export default defineComponent({
     name: 'App',
     components: {
+        PrintIcon,
         MaterialPrototype,
         ShortcutTip,
         Introduce,
