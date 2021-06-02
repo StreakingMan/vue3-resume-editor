@@ -12,6 +12,11 @@
         @dblclick.prevent.stop="state = state === 'active' ? '' : 'active'"
     >
         <component :is="selfItem.config.componentName"></component>
+        <i
+            class="setting-icon mdi mdi-tune fz-24"
+            :style="`transform: scale(${1 / scale});`"
+            @click.prevent.stop="state = state === 'active' ? '' : 'active'"
+        ></i>
         <div
             v-for="dot in dots"
             v-show="state === 'active'"
@@ -36,6 +41,7 @@ import {
     Ref,
     ref,
     toRefs,
+    watch,
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import MTitle from '../materials/MTitle.vue';
@@ -84,6 +90,7 @@ export default defineComponent({
 
         // 状态维护
         const state: Ref<'active' | ''> = ref('');
+        provide('state', state);
 
         // 缩放值注入
         const scale: Ref<number> = inject('scale', ref(1));
@@ -195,23 +202,37 @@ export default defineComponent({
 @import 'src/styles/elevation';
 .material-instance {
     position: absolute;
-    &:hover {
-        background-color: rgba(0, 0, 0, 0.02);
-        @include elevation(2);
-        @include elevationTransition();
-    }
-}
-.control-dot {
-    box-sizing: border-box;
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    transition: background-color 0.5s;
-    @include bgColor('primary-light');
-    @include elevation(1);
 
-    &.active {
-        @include bgColor('accent');
+    .setting-icon {
+        position: absolute;
+        right: 4px;
+        top: 4px;
+        transition: 0.16s;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .control-dot {
+        box-sizing: border-box;
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        transition: background-color 0.5s;
+        @include bgColor('primary-light');
+        @include elevation(1);
+
+        &.active {
+            @include bgColor('accent');
+        }
+    }
+
+    &:hover {
+        backdrop-filter: blur(5px);
+        @include elevation(2);
+
+        .setting-icon {
+            opacity: 1;
+        }
     }
 }
 </style>

@@ -1,16 +1,23 @@
 <template>
     <div>{{ config.content }}</div>
+    <ConfigPanel>
+        <p>字号</p>
+        <p>字重</p>
+        <p>颜色</p>
+    </ConfigPanel>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, Ref } from 'vue';
+import { defineComponent, inject, ref, Ref } from 'vue';
 import { Material, MaterialOptions } from '../../classes/Material';
 import { ProtoInfo } from './prototypes';
+import ConfigPanel from './ConfigPanel.vue';
 
 const name = 'MTitle';
 
 export default defineComponent({
     name,
+    components: { ConfigPanel },
     protoInfo: {
         label: '标题',
         icon: 'format-title',
