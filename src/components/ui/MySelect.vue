@@ -1,6 +1,9 @@
 <template>
     <label>
-        <select v-model="value" @input="$emit('update:modelValue', value)">
+        <span class="mr-2">
+            <slot></slot>
+        </span>
+        <select v-model="value" @change="$emit('update:modelValue', value)">
             <option v-for="op in options" :key="op.value" :value="op.value">
                 {{ op.label || op.value }}
             </option>

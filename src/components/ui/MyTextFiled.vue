@@ -1,9 +1,9 @@
 <template>
     <label>
-        <textarea
-            v-model="value"
-            @input="$emit('update:modelValue', value)"
-        />
+        <span class="mr-2">
+            <slot></slot>
+        </span>
+        <textarea v-model="value" @input="$emit('update:modelValue', value)" />
     </label>
 </template>
 

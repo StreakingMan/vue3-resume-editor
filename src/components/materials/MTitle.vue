@@ -1,12 +1,8 @@
 <template>
     <div
+        class="m-title"
         :style="{
-            padding: instance.config.padding + 'px',
-            borderStyle: instance.config.borderStyle,
-            borderWidth: instance.config.borderWidth + 'px',
-            borderColor: instance.config.borderColor,
-            borderRadius: instance.config.borderRadius + 'px',
-            backgroundColor: instance.config.backgroundColor,
+            fontSize: instance.config.fontSize + 'px',
         }"
     >
         {{ instance.config.content }}
@@ -33,8 +29,19 @@ export default defineComponent({
                 config: {
                     componentName: name,
                     content: 'Material Title',
+                    fontSize: 18,
                 },
             });
+        },
+        configOptions: {
+            content: {
+                type: 'text',
+            },
+            fontSize: {
+                type: 'number',
+                min: 12,
+                max: 100,
+            },
         },
     } as ProtoInfo,
     emits: ['update:config'],
@@ -52,5 +59,8 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-//
+.m-title {
+    height: 100%;
+    white-space: pre-wrap;
+}
 </style>

@@ -3,6 +3,7 @@
     <div
         class="config-container pa-4 bg-color-white elevation-3 hover-elevation-12 bdrs-8"
         :style="{ right: containerRight }"
+        @keydown.stop
     >
         <template v-if="focusMaterial">
             <!--基础配置-->
@@ -34,6 +35,27 @@
                 <MyRangeInput
                     v-model="focusMaterial.config.borderRadius"
                 ></MyRangeInput>
+            </template>
+            <template v-if="configOptions">
+                <template
+                    v-for="(
+                        { type, label, ...attr }, propName
+                    ) in configOptions"
+                    :key="propName"
+                >
+                    <component
+                        :is="
+                            {
+                                text: 'MyTextFiled',
+                                number: 'MyRangeInput',
+                            }[type]
+                        "
+                        v-bind="attr"
+                        v-model="focusMaterial.config[propName]"
+                    >
+                        {{ label || propName }}
+                    </component>
+                </template>
             </template>
         </template>
 
@@ -68,10 +90,12 @@ import MyColorPicker from '../ui/MyColorPicker.vue';
 import MyRangeInput from '../ui/MyRangeInput.vue';
 import { Material } from '../../classes/Material';
 import MySelect from '../ui/MySelect.vue';
+import prototypeMap from '../materials/prototypes';
+import MyTextFiled from '../ui/MyTextFiled.vue';
 
 export default defineComponent({
     name: 'MaterialConfig',
-    components: { MySelect, MyRangeInput, MyColorPicker },
+    components: { MyTextFiled, MySelect, MyRangeInput, MyColorPicker },
     setup() {
         const appState: Ref<AppState> = inject('app:state', ref('welcome'));
         const containerHidden = ref(true);
@@ -94,14 +118,20 @@ export default defineComponent({
 
         // 当前操作
         const focusMaterial: Material | void = inject('focus:material');
+        const configOptions = ref(null);
         watch(focusMaterial, (v) => {
             containerHidden.value = !v;
+            configOptions.value =
+                prototypeMap[focusMaterial?.value?.config?.componentName]
+                    ?.configOptions || null;
+            console.log(configOptions);
         });
 
         return {
             containerRight,
             containerHidden,
             focusMaterial,
+            configOptions,
         };
     },
 });

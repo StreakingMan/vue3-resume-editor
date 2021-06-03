@@ -8,6 +8,12 @@
             top: selfItem.y + 'px',
             width: selfItem.w + 'px',
             height: selfItem.h + 'px',
+            padding: selfItem.config.padding + 'px',
+            borderStyle: selfItem.config.borderStyle,
+            borderWidth: selfItem.config.borderWidth + 'px',
+            borderColor: selfItem.config.borderColor,
+            borderRadius: selfItem.config.borderRadius + 'px',
+            backgroundColor: selfItem.config.backgroundColor,
         }"
         @click.prevent.stop="onClick"
     >

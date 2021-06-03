@@ -10,6 +10,7 @@ export interface ProtoInfo {
     creator: (options: Partial<MaterialOptions>) => Material;
     label: string;
     icon: string;
+    configOptions?: Record<string, string | number>;
 }
 
 interface MaterialComponent extends Record<any, any> {
@@ -19,12 +20,13 @@ interface MaterialComponent extends Record<any, any> {
 
 const appendPrototype = ({ name, protoInfo }: MaterialComponent) => {
     if (!name || !protoInfo) return;
-    const { creator, label, icon } = protoInfo;
+    const { creator, label, icon, configOptions } = protoInfo;
     prototypeMap.set(name, {
         label,
         icon,
         tempStyle: '',
         creator,
+        configOptions,
     });
 };
 

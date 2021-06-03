@@ -1,5 +1,8 @@
 <template>
     <label>
+        <span class="mr-2">
+            <slot></slot>
+        </span>
         <input
             v-model.number="value"
             type="range"

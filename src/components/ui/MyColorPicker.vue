@@ -1,5 +1,8 @@
 <template>
     <label>
+        <span class="mr-2">
+            <slot></slot>
+        </span>
         <input
             v-model="value"
             type="color"
