@@ -3,7 +3,7 @@
         ref="wrapper"
         class="sketch__wrapper"
         :style="{
-            cursor: space ? (grabbing ? 'grabbing' : 'grab') : 'default',
+            cursor,
         }"
     >
         <div
@@ -28,6 +28,7 @@ import {
     inject,
     Ref,
     onMounted,
+    computed,
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import { UnwrapNestedRefs } from '@vue/reactivity';
@@ -77,6 +78,7 @@ export default defineComponent({
         });
 
         const space: Ref<boolean> = inject('keyboard:space') as Ref<boolean>;
+        const ctrl: Ref<boolean> = inject('keyboard:ctrl') as Ref<boolean>;
         let scrollTopCache: number, scrollLeftCache: number;
         useMouseDrag({
             onStart: () => {
@@ -146,13 +148,22 @@ export default defineComponent({
             }
         });
 
+        const cursor = computed(() => {
+            if (space.value) {
+                return grabbing.value ? 'grabbing' : 'grab';
+            }
+            if (ctrl.value) {
+                return 'zoom-in';
+            }
+            return 'default';
+        });
+
         return {
             paddingX,
             paddingY,
             paper,
             wrapper,
-            space,
-            grabbing,
+            cursor,
         };
     },
 });

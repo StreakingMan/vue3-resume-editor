@@ -33,8 +33,9 @@ export default defineComponent({
     name: 'Paper',
     components: { MaterialInstance },
     setup() {
-        // 空格按键状态注入
+        // 按键状态注入
         const space: Ref<boolean> = inject('keyboard:space') as Ref<boolean>;
+        const ctrl: Ref<boolean> = inject('keyboard:ctrl') as Ref<boolean>;
         const paper = ref<HTMLDivElement>();
 
         // Paper实例注入
@@ -67,7 +68,7 @@ export default defineComponent({
             selectorW.value = 0;
             selectorH.value = 0;
             if (!paper.value) return false;
-            if (space.value) return false;
+            if (space.value || ctrl.value) return false;
             const { startX, startY } = info;
             const { x, y } = paper.value.getBoundingClientRect();
             selectorX.value = (startX - x) / scale.value;
