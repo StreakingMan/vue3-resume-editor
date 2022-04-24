@@ -7,56 +7,9 @@
     >
         <template v-if="focusMaterial">
             <!--基础配置-->
-            <p>padding:</p>
-            <MyRangeInput v-model="focusMaterial.config.padding"></MyRangeInput>
-            <p>backgroundColor:</p>
-            <MyColorPicker
-                v-model="focusMaterial.config.backgroundColor"
-            ></MyColorPicker>
-            <p>borderStyle:</p>
-            <MySelect
-                v-model="focusMaterial.config.borderStyle"
-                :options="[
-                    { value: 'none' },
-                    { value: 'solid' },
-                    { value: 'dashed' },
-                ]"
-            ></MySelect>
             <template v-if="focusMaterial.config.borderStyle !== 'none'">
-                <p>borderWidth:</p>
-                <MyRangeInput
-                    v-model="focusMaterial.config.borderWidth"
-                ></MyRangeInput>
-                <p>borderColor:</p>
-                <MyColorPicker
-                    v-model="focusMaterial.config.borderColor"
-                ></MyColorPicker>
-                <p>borderRadius:</p>
-                <MyRangeInput
-                    v-model="focusMaterial.config.borderRadius"
-                ></MyRangeInput>
             </template>
-            <template v-if="configOptions">
-                <template
-                    v-for="(
-                        { type, label, ...attr }, propName
-                    ) in configOptions"
-                    :key="propName"
-                >
-                    <component
-                        :is="
-                            {
-                                text: 'MyTextFiled',
-                                number: 'MyRangeInput',
-                            }[type]
-                        "
-                        v-bind="attr"
-                        v-model="focusMaterial.config[propName]"
-                    >
-                        {{ label || propName }}
-                    </component>
-                </template>
-            </template>
+            <template v-if="configOptions"> </template>
         </template>
 
         <div
@@ -75,27 +28,15 @@
 </template>
 
 <script lang="ts">
-import {
-    computed,
-    defineComponent,
-    inject,
-    reactive,
-    ref,
-    Ref,
-    watch,
-} from 'vue';
+import { computed, defineComponent, inject, ref, Ref, watch } from 'vue';
 import { Paper } from '../../classes/Paper';
 import { AppState } from '../../classes/App';
-import MyColorPicker from '../ui/MyColorPicker.vue';
-import MyRangeInput from '../ui/MyRangeInput.vue';
 import { Material } from '../../classes/Material';
-import MySelect from '../ui/MySelect.vue';
 import prototypeMap from '../materials/prototypes';
-import MyTextFiled from '../ui/MyTextFiled.vue';
 
 export default defineComponent({
     name: 'MaterialConfig',
-    components: { MyTextFiled, MySelect, MyRangeInput, MyColorPicker },
+    components: {},
     setup() {
         const appState: Ref<AppState> = inject('app:state', ref('welcome'));
         const containerHidden = ref(true);
@@ -117,7 +58,7 @@ export default defineComponent({
         const paperInstance: Paper = inject('paper', new Paper({}));
 
         // 当前操作
-        const focusMaterial: Material | void = inject('focus:material');
+        const focusMaterial: Ref = inject('focus:material') as Ref;
         const configOptions = ref(null);
         watch(focusMaterial, (v) => {
             containerHidden.value = !v;
@@ -138,7 +79,6 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import 'src/styles/elevation';
 .config-container {
     position: fixed;
     transition: 0.3s;
@@ -147,6 +87,7 @@ export default defineComponent({
     top: 50vh;
     transform: translateY(-50%);
     flex-direction: column;
+
     &__toggle {
         position: absolute;
         right: 348px;
@@ -157,7 +98,7 @@ export default defineComponent({
         border-top-left-radius: 24px;
         border-bottom-left-radius: 24px;
         transition: 0.3s;
-        @include elevation(3);
+        //
 
         i {
             transition: 0.4s;
@@ -166,7 +107,7 @@ export default defineComponent({
 
     &:hover {
         .config-container__toggle {
-            @include elevation(12);
+            //
         }
     }
 }

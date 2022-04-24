@@ -26,20 +26,24 @@ import {
 
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import MaterialInstance from './MaterialInstance.vue';
+import { UnwrapNestedRefs } from '@vue/reactivity';
+import { Paper } from '../../classes/Paper';
 
 export default defineComponent({
     name: 'Paper',
     components: { MaterialInstance },
     setup() {
         // 空格按键状态注入
-        const space: Ref<boolean> = inject('keyboard:space');
-
+        const space: Ref<boolean> = inject('keyboard:space') as Ref<boolean>;
         const paper = ref<HTMLDivElement>();
 
         // Paper实例注入
-        const paperInstance = inject('paper');
+        const paperInstance: UnwrapNestedRefs<Paper> = inject(
+            'paper'
+        ) as UnwrapNestedRefs<Paper>;
         const materialList = computed(() => paperInstance.materialList);
         onMounted(() => {
+            if (!paper.value) return;
             paper.value.style.width = paperInstance.w + 'px';
             paper.value.style.height = paperInstance.h + 'px';
         });
@@ -48,8 +52,9 @@ export default defineComponent({
         });
 
         // 缩放值注入
-        const scale: Ref<number> = inject('scale');
+        const scale = inject('scale') as Ref<number>;
         watch(scale, async (v) => {
+            if (!paper.value) return;
             paper.value.style.transform = `scale(${v})`;
         });
 
@@ -104,7 +109,7 @@ export default defineComponent({
             };
         });
 
-        const focusMaterial: Ref = inject('focus:material');
+        const focusMaterial: Ref = inject('focus:material') as Ref;
 
         const onClick = () => {
             focusMaterial.value = null;
@@ -123,12 +128,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import 'src/styles/elevation';
 .paper {
     position: relative;
     background-color: white;
     border-radius: 4px;
-    @include elevation(2);
+    //
 
     .select-box {
         position: absolute;

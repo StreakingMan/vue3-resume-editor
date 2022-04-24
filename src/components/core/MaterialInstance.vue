@@ -17,7 +17,6 @@
         }"
         @click.prevent.stop="onClick"
     >
-        <component :is="selfItem.config.componentName"></component>
         <div
             v-for="dot in dots"
             v-show="active"
@@ -66,7 +65,7 @@ const styleMap = {
 
 export default defineComponent({
     name: 'MaterialInstance',
-    components: { MTitle, MText, MImage, MList },
+    components: {},
     props: {
         item: {
             type: Object,
@@ -93,7 +92,7 @@ export default defineComponent({
         provide('instance', props.item);
 
         // 状态维护
-        const focusMaterial: Ref = inject('focus:material');
+        const focusMaterial: Ref = inject('focus:material') as Ref;
         const onClick = () => {
             focusMaterial.value = item.value;
         };
@@ -208,11 +207,9 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import 'src/styles/color';
-@import 'src/styles/elevation';
 .material-instance {
     position: absolute;
-    @include elevationTransition();
+    //
 
     .setting-icon {
         position: absolute;
@@ -229,11 +226,9 @@ export default defineComponent({
         width: 12px;
         height: 12px;
         transition: background-color 0.5s, opacity 0.5s;
-        @include bgColor('primary-light');
-        @include elevation(1);
 
         &.active {
-            @include bgColor('accent');
+            //
         }
 
         &.hide {
@@ -242,7 +237,7 @@ export default defineComponent({
     }
 
     &:hover {
-        @include elevation(2);
+        //
 
         .setting-icon {
             opacity: 1;

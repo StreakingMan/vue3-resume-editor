@@ -3,7 +3,7 @@
         class="prototype-container pa-1 bg-color-white elevation-2 hover-elevation-12 d-flex bdrs-8 align-center justify-center"
         :style="{ left: containerLeft }"
     >
-        <MyIconButton
+        <v-btn
             v-for="(proto, name) in prototypes"
             :key="name"
             :icon="proto.icon"
@@ -14,7 +14,7 @@
             "
         >
             {{ proto.label }}
-        </MyIconButton>
+        </v-btn>
 
         <div
             class="prototype-container__toggle bg-color-white cursor-pointer d-flex align-center justify-center"
@@ -32,7 +32,6 @@
 
 <script lang="ts">
 import { computed, defineComponent, inject, reactive, ref, Ref } from 'vue';
-import MyIconButton from '../ui/MyIconButton.vue';
 import { Paper } from '../../classes/Paper';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import { AppState } from '../../classes/App';
@@ -40,7 +39,7 @@ import prototypeMap from '../materials/prototypes';
 
 export default defineComponent({
     name: 'MaterialPrototype',
-    components: { MyIconButton },
+    components: {},
 
     setup() {
         const appState: Ref<AppState> = inject('app:state', ref('welcome'));
@@ -115,7 +114,6 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import 'src/styles/elevation';
 .prototype-container {
     position: fixed;
     transition: 0.3s;
@@ -134,7 +132,7 @@ export default defineComponent({
         border-top-right-radius: 24px;
         border-bottom-right-radius: 24px;
         transition: 0.3s;
-        @include elevation(3);
+        //
 
         i {
             transition: 0.4s;
@@ -143,7 +141,7 @@ export default defineComponent({
 
     &:hover {
         .prototype-container__toggle {
-            @include elevation(12);
+            //
         }
     }
 }
