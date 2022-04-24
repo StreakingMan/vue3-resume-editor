@@ -58,16 +58,20 @@ export default defineComponent({
 
         // 缩放值
         const scale = ref(1);
+        const scalePosition = reactive({ x: 0, y: 0 });
         useMouseWheel({
-            onWheel: (wheelDelta) => {
+            onWheel: (wheelDelta, { x, y }) => {
                 const newScale = scale.value + wheelDelta;
                 // 缩放范围0.1~5
                 if (0.1 < newScale && newScale < 5) {
                     scale.value += wheelDelta;
+                    scalePosition.x = x;
+                    scalePosition.y = y;
                 }
             },
         });
         provide('scale', scale);
+        provide('scale:position', scalePosition);
 
         // Paper实例
         const paper = reactive(new Paper({}));

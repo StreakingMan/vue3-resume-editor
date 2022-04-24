@@ -2,7 +2,7 @@ import { onMounted, onUnmounted, Ref } from 'vue';
 
 interface MouseWheelOptions {
     onWheel: {
-        (delta: number): void;
+        (delta: number, mousePosition: { x: number; y: number }): void;
     };
 }
 
@@ -12,7 +12,7 @@ export default function useMouseWheel(options: MouseWheelOptions): void {
             // 阻止冒泡默认考虑交给调用者去做
             e.stopPropagation();
             e.preventDefault();
-            options.onWheel(-e.deltaY / 4000);
+            options.onWheel(-e.deltaY / 4000, { x: e.clientX, y: e.clientY });
         }
     };
 

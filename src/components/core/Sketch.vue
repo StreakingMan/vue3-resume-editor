@@ -30,6 +30,7 @@ import {
     onMounted,
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
+import { UnwrapNestedRefs } from '@vue/reactivity';
 export default defineComponent({
     name: 'Sketch',
     components: { Paper },
@@ -96,7 +97,14 @@ export default defineComponent({
         });
 
         const scale: Ref<number> = inject('scale') as Ref<number>;
-        watch(scale, async () => {
+        const scalePosition: UnwrapNestedRefs<{
+            x: number;
+            y: number;
+        }> = inject('scale:position') as UnwrapNestedRefs<{
+            x: number;
+            y: number;
+        }>;
+        watch(scale, async (newScale, oldScale) => {
             // 缩放后，调整边距
             const {
                 innerWidth: windowWidth,
@@ -110,6 +118,8 @@ export default defineComponent({
             const {
                 width: paperWidth,
                 height: paperHeight,
+                x: paperX,
+                y: paperY,
             } = (paperDiv.value as HTMLDivElement).getBoundingClientRect();
 
             paddingX.value = Math.floor(
@@ -118,6 +128,22 @@ export default defineComponent({
             paddingY.value = Math.floor(
                 windowHeight * 0.8 + (paperHeight - paperInitHeight) / 2
             );
+
+            // 以鼠标为中心进行缩放
+            if (wrapper.value) {
+                const oldWidth = (paperWidth * oldScale) / newScale;
+                const oldHeight = (paperHeight * oldScale) / newScale;
+                const transWidth =
+                    paperWidth * ((newScale - oldScale) / newScale);
+                const transHeight =
+                    paperHeight * ((newScale - oldScale) / newScale);
+                const offsetX =
+                    (transWidth * (scalePosition.x - paperX)) / oldWidth;
+                const offsetY =
+                    (transHeight * (scalePosition.y - paperY)) / oldHeight;
+                wrapper.value.scrollLeft += offsetX;
+                wrapper.value.scrollTop += offsetY;
+            }
         });
 
         return {

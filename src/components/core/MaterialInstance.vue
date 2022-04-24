@@ -44,13 +44,8 @@ import {
     Ref,
     ref,
     toRefs,
-    watch,
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
-import MTitle from '../materials/MTitle.vue';
-import MList from '../materials/MList.vue';
-import MImage from '../materials/MImage.vue';
-import MText from '../materials/MText.vue';
 
 const styleMap = {
     tl: `top: -10px;left: -10px;cursor: nw-resize;`,
