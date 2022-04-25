@@ -2,7 +2,7 @@
     <div
         :key="selfItem.id"
         ref="itemRef"
-        class="material-instance animate__animated animate__bounceIn"
+        class="material-instance"
         :style="{
             left: selfItem.x + 'px',
             top: selfItem.y + 'px',
@@ -17,6 +17,7 @@
         }"
         @click.prevent.stop="onClick"
     >
+        <component :is="selfItem.config.componentName"></component>
         <div
             v-for="dot in dots"
             v-show="active"
@@ -46,6 +47,10 @@ import {
     toRefs,
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
+import MImage from '../materials/MImage.vue';
+import MList from '../materials/MList.vue';
+import MTitle from '../materials/MTitle.vue';
+import MText from '../materials/MText.vue';
 
 const styleMap = {
     tl: `top: -10px;left: -10px;cursor: nw-resize;`,
@@ -60,7 +65,7 @@ const styleMap = {
 
 export default defineComponent({
     name: 'MaterialInstance',
-    components: {},
+    components: { MTitle, MText, MImage, MList },
     props: {
         item: {
             type: Object,
@@ -204,7 +209,6 @@ export default defineComponent({
 <style scoped lang="scss">
 .material-instance {
     position: absolute;
-    //
 
     .setting-icon {
         position: absolute;
@@ -216,6 +220,7 @@ export default defineComponent({
     }
 
     .control-dot {
+        background-color: red;
         box-sizing: border-box;
         position: absolute;
         width: 12px;

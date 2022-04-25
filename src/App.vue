@@ -20,11 +20,11 @@
                 <v-icon>mdi-dots-vertical</v-icon>
             </v-btn>
         </v-app-bar>
-        <v-navigation-drawer v-model="drawer" temporary app>
-            widgets
+        <v-navigation-drawer v-model="drawer" width="300" temporary app>
+            <MaterialPrototype />
         </v-navigation-drawer>
         <v-main>
-            <Sketch />
+            <Sketch ref="sketch" />
             <Beian />
         </v-main>
     </v-app>
@@ -38,10 +38,12 @@ import useMouseWheel from './composables/useMouseWheel';
 import { Paper } from './classes/Paper';
 import Beian from './components/Beian.vue';
 import Sketch from './components/core/Sketch.vue';
+import MaterialPrototype from './components/core/MaterialPrototype.vue';
 
 export default defineComponent({
     name: 'App',
     components: {
+        MaterialPrototype,
         Sketch,
         Beian,
     },
@@ -104,5 +106,8 @@ body {
 }
 #app {
     //
+}
+.v-navigation-drawer__content {
+    overflow: visible !important;
 }
 </style>

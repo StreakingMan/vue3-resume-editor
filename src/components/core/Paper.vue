@@ -49,7 +49,7 @@ export default defineComponent({
             paper.value.style.height = paperInstance.h + 'px';
         });
         watch(paperInstance, (v) => {
-            //console.log(v)
+            console.log('paper update', v);
         });
 
         // 缩放值注入

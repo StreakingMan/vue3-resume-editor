@@ -2501,7 +2501,7 @@
     find-cache-dir "^3.3.2"
     upath "^2.0.1"
 
-"@vuetify/vite-plugin@^1.0.0-alpha.3":
+"@vuetify/vite-plugin@^1.0.0-alpha.10":
   version "1.0.0-alpha.10"
   resolved "https://registry.npmmirror.com/@vuetify/vite-plugin/-/vite-plugin-1.0.0-alpha.10.tgz#68ad93f2c64bb357c762cee27f01f14282a9bbcb"
   integrity sha512-+McI76gXccCi3Ci/Z5YfG81eIW8IJpXKk5G/ljfIoHdez2f+NRqzoPz+v/8K7QCrC6HqfwxJ9ygI9yrvqNpsdw==
@@ -10345,10 +10345,10 @@ vite@^2.8.0:
   optionalDependencies:
     fsevents "~2.3.2"
 
-vue-cli-plugin-vuetify@~2.4.5:
-  version "2.4.5"
-  resolved "https://registry.npmmirror.com/vue-cli-plugin-vuetify/-/vue-cli-plugin-vuetify-2.4.5.tgz#5dfae4d78c717c400530731f0b75c0350c3b6add"
-  integrity sha512-CnCVzG6iZAsMMqTkijZ0gRkPB6s4zHPWyFX1VpBBKVyxZESayQhUoMCZRZUOZNjvvZpq1LPgviq+8zcliSu73g==
+vue-cli-plugin-vuetify@^2.4.8:
+  version "2.4.8"
+  resolved "https://registry.npmmirror.com/vue-cli-plugin-vuetify/-/vue-cli-plugin-vuetify-2.4.8.tgz#f731768b247fb0faf71c0de79752a939e6829cbd"
+  integrity sha512-1e8tVbJNQPLpdJgx8tlsCrFVSKrohLe5axWwolOuMr9k++X1pg95jiqBxYZdhh7tIl9bNh4wzVPPGQzTIpoS+Q==
   dependencies:
     null-loader "^4.0.1"
     semver "^7.1.2"
@@ -10415,7 +10415,7 @@ vue@^3.2.31:
     "@vue/server-renderer" "3.2.31"
     "@vue/shared" "3.2.31"
 
-vuetify-loader@^2.0.0-alpha.0:
+vuetify-loader@^2.0.0-alpha.9:
   version "2.0.0-alpha.9"
   resolved "https://registry.npmmirror.com/vuetify-loader/-/vuetify-loader-2.0.0-alpha.9.tgz#0a108b1ac11fc8af63046b16321505b444c04746"
   integrity sha512-M4u2XX9coe1U51jLKek54eJTo7wnroNfglh6sQplRTslhQRKQM3k84oh87D0VHqTzoTzlKPHP0sIWdpklwaEEQ==
@@ -10429,10 +10429,10 @@ vuetify-loader@^2.0.0-alpha.0:
     querystring "^0.2.1"
     upath "^2.0.1"
 
-vuetify@^3.0.0-alpha.0:
-  version "3.0.0-alpha.12"
-  resolved "https://registry.npmmirror.com/vuetify/-/vuetify-3.0.0-alpha.12.tgz#c781ebf16a9bb89dd8dfd27c1848efd534545336"
-  integrity sha512-F9TwV3Xk6J/bSH422kATrKeIiumGRkzGJPsvM0/8vPwYF0HWh7dHRhhYsIKkfhl5UJl/LYdeGNm1L8+jtldA0w==
+vuetify@^3.0.0-beta.1:
+  version "3.0.0-beta.1"
+  resolved "https://registry.npmmirror.com/vuetify/-/vuetify-3.0.0-beta.1.tgz#8e3e4e41e00f1f6e00cb0a22b6a8f528581ca3f1"
+  integrity sha512-698CB/Xlvxku2Tm4AsFrmQ7LzMXOjleX7A5tbyQTnhPyt0NI1OTkf5zJUoXL3TNi2TN7DglN+adI6AE69e6CeQ==
 
 w3c-hr-time@^1.0.2:
   version "1.0.2"

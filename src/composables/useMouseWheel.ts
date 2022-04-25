@@ -17,13 +17,11 @@ export default function useMouseWheel(options: MouseWheelOptions): void {
     };
 
     onMounted(() => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         window.addEventListener('mousewheel', onMousewheel, { passive: false });
     });
 
     onUnmounted(() => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         window.removeEventListener('mousewheel', onMousewheel, {
             passive: false,
