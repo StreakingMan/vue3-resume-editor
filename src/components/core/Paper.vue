@@ -1,15 +1,17 @@
 <template>
     <div id="paper" ref="paper" class="paper" @click="onClick">
-        <MaterialInstance
-            v-for="(m, i) in materialList"
-            :key="m.id"
-            v-model:item="materialList[i]"
-        ></MaterialInstance>
-        <div
-            v-if="selecting && !space"
-            class="select-box"
-            :style="selectorStyle"
-        ></div>
+        <v-theme-provider theme="light" with-background="">
+            <MaterialInstance
+                v-for="(m, i) in materialList"
+                :key="m.id"
+                v-model:item="materialList[i]"
+            ></MaterialInstance>
+            <div
+                v-if="selecting && !space"
+                class="select-box"
+                :style="selectorStyle"
+            ></div>
+        </v-theme-provider>
     </div>
 </template>
 

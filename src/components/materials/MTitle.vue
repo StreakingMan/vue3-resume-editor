@@ -1,18 +1,26 @@
 <template>
     <div
-        class="m-title"
+        ref="eleRef"
+        class="m-title text-h6"
         :style="{
             fontSize: instance.config.fontSize + 'px',
         }"
     >
         {{ instance.config.content }}
+        <textarea
+            v-model="instance.config.content"
+            class="text-h6"
+            wrap="hard"
+        />
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, Ref, watch } from 'vue';
+import { defineComponent, inject, nextTick, ref, Ref, watch } from 'vue';
 import { Material, MaterialOptions } from '../../classes/Material';
 import { ProtoInfo } from './prototypes';
+import { CTRL_DOT_SIZE } from '../core/config';
+
 const name = 'MTitle';
 
 export default defineComponent({
@@ -20,7 +28,7 @@ export default defineComponent({
     protoInfo: {
         label: '标题',
         icon: 'format-title',
-        creator({ x, y }: Partial<MaterialOptions>): Material {
+        creator({ x, y }: MaterialOptions): Material {
             return new Material({
                 x: x - 100,
                 y: y - 50,
@@ -45,14 +53,20 @@ export default defineComponent({
         },
     } as ProtoInfo,
     emits: ['update:config'],
+
     setup() {
-        const instance: Material = inject('instance', {});
-        watch(instance, (v) => {
-            //console.log(v);
+        const instance: Material = inject('m-instance', {}) as Material;
+        const eleRef = ref<HTMLDivElement | null>(null);
+        watch(instance, async () => {
+            if (eleRef.value) {
+                await nextTick();
+                instance.h = eleRef.value.clientHeight + CTRL_DOT_SIZE * 2;
+            }
         });
 
         return {
             instance,
+            eleRef,
         };
     },
 });
@@ -60,7 +74,18 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .m-title {
-    height: 100%;
+    position: relative;
     white-space: pre-wrap;
+    word-break: break-word;
+    textarea {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        white-space: pre-wrap;
+        top: 0;
+        left: 0;
+        resize: none;
+        word-break: break-word;
+    }
 }
 </style>

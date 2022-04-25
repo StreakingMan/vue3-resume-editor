@@ -8,22 +8,39 @@
             top: selfItem.y + 'px',
             width: selfItem.w + 'px',
             height: selfItem.h + 'px',
-            padding: selfItem.config.padding + 'px',
-            borderStyle: selfItem.config.borderStyle,
-            borderWidth: selfItem.config.borderWidth + 'px',
-            borderColor: selfItem.config.borderColor,
-            borderRadius: selfItem.config.borderRadius + 'px',
-            backgroundColor: selfItem.config.backgroundColor,
+            padding: CTRL_DOT_SIZE + 'px',
+        }"
+        :class="{
+            border: active,
         }"
         @click.prevent.stop="onClick"
     >
-        <component :is="selfItem.config.componentName"></component>
+        <div
+            class="w-100 h-100"
+            :style="{
+                padding: selfItem.config.padding || 0 + 'px',
+                borderStyle: selfItem.config.borderStyle,
+                borderWidth: selfItem.config.borderWidth || 0 + 'px',
+                borderColor: selfItem.config.borderColor,
+                borderRadius: selfItem.config.borderRadius || 0 + 'px',
+                backgroundColor: selfItem.config.backgroundColor,
+            }"
+        >
+            <component :is="selfItem.config.componentName"></component>
+        </div>
+
         <div
             v-for="dot in dots"
             v-show="active"
             :key="dot"
-            :style="`transform: scale(${1 / scale});${styleMap[dot]}`"
-            class="control-dot"
+            :style="[
+                `transform: scale(${1 / scale});${styleMap[dot]}`,
+                {
+                    width: CTRL_DOT_SIZE + 'px',
+                    height: CTRL_DOT_SIZE + 'px',
+                },
+            ]"
+            class="control-dot bg-grey-darken-1"
             :class="{
                 active: clickingDot === dot,
                 hide: clickingDot && clickingDot !== dot,
@@ -51,16 +68,25 @@ import MImage from '../materials/MImage.vue';
 import MList from '../materials/MList.vue';
 import MTitle from '../materials/MTitle.vue';
 import MText from '../materials/MText.vue';
+import { CTRL_DOT_SIZE } from './config';
 
 const styleMap = {
-    tl: `top: -10px;left: -10px;cursor: nw-resize;`,
-    tm: `top: -10px;left: 50%;margin-left: -5px;cursor: n-resize;`,
-    tr: `top: -10px;right: -10px;cursor: ne-resize;`,
-    mr: `top: 50%;margin-top: -5px;right: -10px;cursor: e-resize;`,
-    br: `bottom: -10px;right: -10px;cursor: se-resize;`,
-    bm: `bottom: -10px;left: 50%;margin-left: -5px;cursor: s-resize;`,
-    bl: `bottom: -10px;left: -10px;cursor: sw-resize;`,
-    ml: `top: 50%;margin-top: -5px;left: -10px;cursor: w-resize;`,
+    tl: `top: 0px;left: 0px;cursor: nw-resize;transform-origin: top left;`,
+    tm: `top: 0px;left: 50%;margin-left: -${
+        CTRL_DOT_SIZE / 2
+    }px;cursor: n-resize;transform-origin: top center;`,
+    tr: `top: 0px;right: 0px;cursor: ne-resize;transform-origin: top right;`,
+    mr: `top: 50%;margin-top: -${
+        CTRL_DOT_SIZE / 2
+    }px;right: 0px;cursor: e-resize;transform-origin: center right;`,
+    br: `bottom: 0px;right: 0px;cursor: se-resize;transform-origin: bottom right;`,
+    bm: `bottom: 0px;left: 50%;margin-left: -${
+        CTRL_DOT_SIZE / 2
+    }px;cursor: s-resize;transform-origin: bottom center;`,
+    bl: `bottom: 0px;left: 0px;cursor: sw-resize;transform-origin: bottom left;`,
+    ml: `top: 50%;margin-top: -${
+        CTRL_DOT_SIZE / 2
+    }px;left: 0px;cursor: w-resize;transform-origin: center left;`,
 };
 
 export default defineComponent({
@@ -89,7 +115,7 @@ export default defineComponent({
             get: () => item.value,
             set: (v) => emit('update:item', v),
         });
-        provide('instance', props.item);
+        provide('m-instance', props.item);
 
         // 状态维护
         const focusMaterial: Ref = inject('focus:material') as Ref;
@@ -125,6 +151,7 @@ export default defineComponent({
                 posInfoCache.itemStartY = 0;
             },
             bindElementRef: itemRef,
+            preventDefault: false,
         });
 
         // 缩放控制点
@@ -191,6 +218,8 @@ export default defineComponent({
             },
         });
 
+        console.log(CTRL_DOT_SIZE);
+
         return {
             itemRef,
             selfItem,
@@ -201,6 +230,7 @@ export default defineComponent({
             onDotMousedown,
             active,
             onClick,
+            CTRL_DOT_SIZE,
         };
     },
 });
@@ -209,22 +239,11 @@ export default defineComponent({
 <style scoped lang="scss">
 .material-instance {
     position: absolute;
-
-    .setting-icon {
-        position: absolute;
-        right: 4px;
-        top: 4px;
-        transition: 0.16s;
-        opacity: 0;
-        cursor: pointer;
-    }
+    border: 1px solid transparent;
 
     .control-dot {
-        background-color: red;
         box-sizing: border-box;
         position: absolute;
-        width: 12px;
-        height: 12px;
         transition: background-color 0.5s, opacity 0.5s;
 
         &.active {
@@ -233,14 +252,6 @@ export default defineComponent({
 
         &.hide {
             opacity: 0;
-        }
-    }
-
-    &:hover {
-        //
-
-        .setting-icon {
-            opacity: 1;
         }
     }
 }

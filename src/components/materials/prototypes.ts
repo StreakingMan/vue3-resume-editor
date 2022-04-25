@@ -10,7 +10,7 @@ export interface ProtoInfo {
     creator: (options: Partial<MaterialOptions>) => Material;
     label: string;
     icon: string;
-    configOptions?: Record<string, string | number>;
+    configOptions?: any;
 }
 
 interface MaterialComponent extends Record<any, any> {

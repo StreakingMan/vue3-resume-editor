@@ -110,4 +110,7 @@ body {
 .v-navigation-drawer__content {
     overflow: visible !important;
 }
+:focus-visible {
+    outline: none;
+}
 </style>
