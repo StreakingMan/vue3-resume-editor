@@ -1,5 +1,4 @@
 import { Material, MaterialOptions } from '../../classes/Material';
-import MTitle from './MTitle.vue';
 import MText from './MText.vue';
 import MImage from './MImage.vue';
 import MList from './MList.vue';
@@ -30,7 +29,6 @@ const appendPrototype = ({ name, protoInfo }: MaterialComponent) => {
     });
 };
 
-appendPrototype(MTitle);
 appendPrototype(MText);
 appendPrototype(MImage);
 appendPrototype(MList);

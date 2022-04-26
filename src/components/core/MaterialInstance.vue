@@ -1,7 +1,6 @@
 <template>
     <div
         :key="selfItem.id"
-        ref="itemRef"
         class="material-instance"
         :style="{
             left: selfItem.x + 'px',
@@ -13,7 +12,9 @@
         :class="{
             border: active,
         }"
-        @click.prevent.stop="onClick"
+        @mouseenter.prevent.stop="focus"
+        @mouseleave.prevent.stop="blur"
+        @click.stop="focus"
     >
         <div
             class="w-100 h-100"
@@ -29,13 +30,27 @@
             <component :is="selfItem.config.componentName"></component>
         </div>
 
+        <MaterialConfig :active="active" :item="selfItem">
+            <v-btn
+                ref="moveHandlerRef"
+                variant="outlined"
+                color="grey-darken-1"
+                size="x-small"
+                :disabled="!active"
+                icon="mdi-arrow-all"
+                class="border-r-0"
+                :rounded="0"
+            >
+            </v-btn>
+        </MaterialConfig>
+
         <div
             v-for="dot in dots"
-            v-show="active"
             :key="dot"
             :style="[
                 `transform: scale(${1 / scale});${styleMap[dot]}`,
                 {
+                    opacity: active ? 1 : 0,
                     width: CTRL_DOT_SIZE + 'px',
                     height: CTRL_DOT_SIZE + 'px',
                 },
@@ -66,9 +81,9 @@ import {
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import MImage from '../materials/MImage.vue';
 import MList from '../materials/MList.vue';
-import MTitle from '../materials/MTitle.vue';
 import MText from '../materials/MText.vue';
-import { CTRL_DOT_SIZE } from './config';
+import { CTRL_DOT_SIZE, UNIT_SIZE } from './config';
+import MaterialConfig from './MaterialConfig.vue';
 
 const styleMap = {
     tl: `top: 0px;left: 0px;cursor: nw-resize;transform-origin: top left;`,
@@ -91,7 +106,7 @@ const styleMap = {
 
 export default defineComponent({
     name: 'MaterialInstance',
-    components: { MTitle, MText, MImage, MList },
+    components: { MaterialConfig, MText, MImage, MList },
     props: {
         item: {
             type: Object,
@@ -119,8 +134,11 @@ export default defineComponent({
 
         // 状态维护
         const focusMaterial: Ref = inject('focus:material') as Ref;
-        const onClick = () => {
+        const focus = () => {
             focusMaterial.value = item.value;
+        };
+        const blur = () => {
+            focusMaterial.value = null;
         };
         const active = computed(() => {
             return focusMaterial.value === item.value;
@@ -132,7 +150,7 @@ export default defineComponent({
         // 空格键状态注入
         const space: Ref<boolean> = inject('keyboard:space', ref(false));
 
-        const itemRef = ref(null);
+        const moveHandlerRef = ref(null);
         useMouseDrag({
             onStart() {
                 if (space.value) return false;
@@ -150,8 +168,7 @@ export default defineComponent({
                 posInfoCache.itemStartX = 0;
                 posInfoCache.itemStartY = 0;
             },
-            bindElementRef: itemRef,
-            preventDefault: false,
+            bindElementRef: moveHandlerRef,
         });
 
         // 缩放控制点
@@ -193,15 +210,13 @@ export default defineComponent({
                     newW = itemStartW - transX / scale.value;
                 }
 
-                const unit = 10;
-
-                if (newH < unit) newH = unit;
-                if (newW < unit) newW = unit;
-                if (newX + unit > itemStartX + itemStartW) {
-                    newX = itemStartX + itemStartW - unit;
+                if (newH < UNIT_SIZE) newH = UNIT_SIZE;
+                if (newW < UNIT_SIZE) newW = UNIT_SIZE;
+                if (newX + UNIT_SIZE > itemStartX + itemStartW) {
+                    newX = itemStartX + itemStartW - UNIT_SIZE;
                 }
-                if (newY + unit > itemStartY + itemStartH) {
-                    newY = itemStartY + itemStartH - unit;
+                if (newY + UNIT_SIZE > itemStartY + itemStartH) {
+                    newY = itemStartY + itemStartH - UNIT_SIZE;
                 }
 
                 selfItem.value.x = newX;
@@ -218,10 +233,8 @@ export default defineComponent({
             },
         });
 
-        console.log(CTRL_DOT_SIZE);
-
         return {
-            itemRef,
+            moveHandlerRef,
             selfItem,
             dots: ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'],
             scale,
@@ -229,7 +242,8 @@ export default defineComponent({
             clickingDot,
             onDotMousedown,
             active,
-            onClick,
+            focus,
+            blur,
             CTRL_DOT_SIZE,
         };
     },
@@ -240,6 +254,7 @@ export default defineComponent({
 .material-instance {
     position: absolute;
     border: 1px solid transparent;
+    box-sizing: content-box;
 
     .control-dot {
         box-sizing: border-box;
@@ -247,7 +262,7 @@ export default defineComponent({
         transition: background-color 0.5s, opacity 0.5s;
 
         &.active {
-            //
+            opacity: 1;
         }
 
         &.hide {

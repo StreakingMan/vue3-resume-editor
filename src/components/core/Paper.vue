@@ -90,6 +90,7 @@ export default defineComponent({
             onDrag: onSelectDrag,
             onFinish: onSelectFinish,
             bindElementRef: paper,
+            preventDefault: false,
         });
         const selectorStyle = computed(() => {
             let left = selectorX.value,

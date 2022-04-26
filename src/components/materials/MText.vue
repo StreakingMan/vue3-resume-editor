@@ -1,16 +1,31 @@
 <template>
     <div
         ref="eleRef"
-        class="m-title text-h6"
-        :style="{
-            fontSize: instance.config.fontSize + 'px',
-        }"
+        class="m-text"
+        :class="
+            {
+                0: 'text-h1',
+                1: 'text-h2',
+                2: 'text-h3',
+                3: 'text-h4',
+                4: 'text-h5',
+            }[instance.config.typo] || 'text-h6'
+        "
     >
         {{ instance.config.content }}
         <textarea
             v-model="instance.config.content"
-            class="text-h6"
+            :class="
+                {
+                    0: 'text-h1',
+                    1: 'text-h2',
+                    2: 'text-h3',
+                    3: 'text-h4',
+                    4: 'text-h5',
+                }[instance.config.typo] || 'text-h6'
+            "
             wrap="hard"
+            @mousedown.stop
         />
     </div>
 </template>
@@ -19,14 +34,13 @@
 import { defineComponent, inject, nextTick, ref, watch } from 'vue';
 import { Material, MaterialOptions } from '../../classes/Material';
 import { ProtoInfo } from './prototypes';
-import { CTRL_DOT_SIZE } from '../core/config';
 
 const name = 'MText';
 
 export default defineComponent({
     name,
     protoInfo: {
-        label: '标题',
+        label: '文本',
         icon: 'format-title',
         creator({ x, y }: MaterialOptions): Material {
             return new Material({
@@ -36,7 +50,7 @@ export default defineComponent({
                 h: 100,
                 config: {
                     componentName: name,
-                    content: 'Material Title',
+                    content: 'Material Text',
                     fontSize: 18,
                 },
             });
@@ -60,7 +74,7 @@ export default defineComponent({
         watch(instance, async () => {
             if (eleRef.value) {
                 await nextTick();
-                instance.h = eleRef.value.clientHeight + CTRL_DOT_SIZE * 2;
+                instance.h = eleRef.value.clientHeight;
             }
         });
 
@@ -77,9 +91,10 @@ export default defineComponent({
     position: relative;
     white-space: pre-wrap;
     word-break: break-word;
+    color: transparent;
     textarea {
         width: 100%;
-        height: 100%;
+        height: calc(100% + 12px);
         position: absolute;
         white-space: pre-wrap;
         top: 0;

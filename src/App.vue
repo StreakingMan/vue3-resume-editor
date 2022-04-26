@@ -23,7 +23,7 @@
         <v-navigation-drawer v-model="drawer" width="300" temporary app>
             <MaterialPrototype />
         </v-navigation-drawer>
-        <v-main>
+        <v-main class="bg-grey-darken-4">
             <Sketch ref="sketch" />
             <Beian />
         </v-main>

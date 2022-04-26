@@ -1,30 +1,51 @@
 <template>
-    <!-- TODO  拷贝的MaterialPrototype布局，待封装-->
-    <div
-        class="config-container pa-4 bg-color-white elevation-3 hover-elevation-12 bdrs-8"
-        :style="{ right: containerRight }"
-        @keydown.stop
-    >
-        <template v-if="focusMaterial">
-            <!--基础配置-->
-            <template v-if="focusMaterial.config.borderStyle !== 'none'">
-            </template>
-            <template v-if="configOptions"> </template>
-        </template>
-
-        <div
-            class="config-container__toggle bg-color-white cursor-pointer d-flex align-center justify-center"
-            @click="containerHidden = focusMaterial ? !containerHidden : true"
-        >
-            <i
-                class="mdi mdi-arrow-right-bold color-info fz-18"
-                :class="focusMaterial ? 'mdi-cog' : 'mdi-cog-off'"
+    <v-menu v-model="visible" anchor="end">
+        <template #activator="{ props }">
+            <div
+                class="activator"
                 :style="{
-                    transform: `rotate(${containerHidden ? 360 : 0}deg)`,
+                    transform: `translateY(-100%) scale(${1 / scale})`,
+                    opacity: active ? 1 : 0,
                 }"
-            ></i>
-        </div>
-    </div>
+            >
+                <slot></slot>
+                <v-btn
+                    v-bind="props"
+                    variant="outlined"
+                    color="grey-darken-1"
+                    size="x-small"
+                    :disabled="!active"
+                    icon="mdi-cog"
+                    :rounded="0"
+                >
+                </v-btn>
+            </div>
+        </template>
+        <v-sheet rounded width="300" class="pa-6">
+            <div class="text-caption">Typography</div>
+            <v-slider
+                v-model="instance.config.typo"
+                :max="3"
+                thumb-label
+                step="1"
+                tick-size="4"
+            >
+                <template #thumb-label="{ modelValue }">
+                    <div class="text-no-wrap">
+                        {{
+                            {
+                                0: 'text-h1',
+                                1: 'text-h2',
+                                2: 'text-h3',
+                                3: 'text-h4',
+                                4: 'text-h5',
+                            }[modelValue]
+                        }}
+                    </div>
+                </template>
+            </v-slider>
+        </v-sheet>
+    </v-menu>
 </template>
 
 <script lang="ts">
@@ -33,10 +54,18 @@ import { Paper } from '../../classes/Paper';
 import { AppState } from '../../classes/App';
 import { Material } from '../../classes/Material';
 import prototypeMap from '../materials/prototypes';
+import { CTRL_DOT_SIZE } from './config';
 
 export default defineComponent({
     name: 'MaterialConfig',
     components: {},
+    props: {
+        active: {
+            type: Boolean,
+            default: false,
+            require: true,
+        },
+    },
     setup() {
         const appState: Ref<AppState> = inject('app:state', ref('welcome'));
         const containerHidden = ref(true);
@@ -68,47 +97,32 @@ export default defineComponent({
             console.log(configOptions);
         });
 
+        // 元素实例
+        const instance: Material = inject('m-instance', {}) as Material;
+
         return {
             containerRight,
             containerHidden,
             focusMaterial,
             configOptions,
+            scale,
+            instance,
         };
     },
+    data: () => ({
+        CTRL_DOT_SIZE,
+        visible: false,
+    }),
 });
 </script>
 
 <style scoped lang="scss">
-.config-container {
-    position: fixed;
+.activator {
+    position: absolute;
+    right: 0;
+    top: 0;
     transition: 0.3s;
-    width: 300px;
-    height: auto;
-    top: 50vh;
-    transform: translateY(-50%);
-    flex-direction: column;
-
-    &__toggle {
-        position: absolute;
-        right: 348px;
-        top: 50%;
-        transform: translateX(100%) translateY(-50%);
-        width: 48px;
-        height: 48px;
-        border-top-left-radius: 24px;
-        border-bottom-left-radius: 24px;
-        transition: 0.3s;
-        //
-
-        i {
-            transition: 0.4s;
-        }
-    }
-
-    &:hover {
-        .config-container__toggle {
-            //
-        }
-    }
+    transform: translateY(-100%);
+    transform-origin: right bottom;
 }
 </style>
