@@ -27,22 +27,22 @@
                 backgroundColor: selfItem.config.backgroundColor,
             }"
         >
-            <component :is="selfItem.config.componentName"></component>
+            <component :is="selfItem.config.componentName">
+                <template #activator>
+                    <v-btn
+                        ref="moveHandlerRef"
+                        variant="outlined"
+                        color="primary"
+                        size="x-small"
+                        :disabled="!active"
+                        icon="mdi-arrow-all"
+                        class="border-r-0"
+                        :rounded="0"
+                    >
+                    </v-btn>
+                </template>
+            </component>
         </div>
-
-        <MaterialConfig :active="active" :item="selfItem">
-            <v-btn
-                ref="moveHandlerRef"
-                variant="outlined"
-                color="grey-darken-1"
-                size="x-small"
-                :disabled="!active"
-                icon="mdi-arrow-all"
-                class="border-r-0"
-                :rounded="0"
-            >
-            </v-btn>
-        </MaterialConfig>
 
         <div
             v-for="dot in dots"
@@ -55,7 +55,7 @@
                     height: CTRL_DOT_SIZE + 'px',
                 },
             ]"
-            class="control-dot bg-grey-darken-1"
+            class="control-dot bg-primary"
             :class="{
                 active: clickingDot === dot,
                 hide: clickingDot && clickingDot !== dot,
@@ -83,7 +83,7 @@ import MImage from '../materials/MImage.vue';
 import MList from '../materials/MList.vue';
 import MText from '../materials/MText.vue';
 import { CTRL_DOT_SIZE, UNIT_SIZE } from './config';
-import MaterialConfig from './MaterialConfig.vue';
+import MaterialConfig from './MaterialConfigPopover.vue';
 
 const styleMap = {
     tl: `top: 0px;left: 0px;cursor: nw-resize;transform-origin: top left;`,
@@ -143,6 +143,7 @@ export default defineComponent({
         const active = computed(() => {
             return focusMaterial.value === item.value;
         });
+        provide('m-instance:active', active);
 
         // 缩放值注入
         const scale: Ref<number> = inject('scale', ref(1));

@@ -1,31 +1,28 @@
 import { uniqueString } from '../utils/uniqueString';
 
-interface MaterialConfig {
-    componentName: string;
-    [key: string]: any;
-}
+type MaterialConfig<T> = T & { componentName: string };
 
-export interface MaterialOptions {
+export interface MaterialOptions<T> {
     x: number;
     y: number;
     w: number;
     h: number;
     groupName?: string;
-    config: MaterialConfig;
+    config?: MaterialConfig<T>;
 }
 
-export class Material {
+export class Material<T> {
     public readonly id: string;
     public x: number;
     public y: number;
     public w: number;
     public h: number;
     public groupName: string | undefined;
-    public config: MaterialConfig;
+    public config: MaterialConfig<T>;
 
-    constructor(options: Partial<MaterialOptions>) {
+    constructor(options: Partial<MaterialOptions<T>>) {
         this.id = uniqueString();
-        const defaultOptions = {
+        const defaultOptions: MaterialOptions<any> = {
             x: 0,
             y: 0,
             w: 100,
