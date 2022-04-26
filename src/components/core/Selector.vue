@@ -14,9 +14,9 @@ import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 export default defineComponent({
     name: 'Selector',
     setup() {
-        const space: Ref<boolean> = inject('keyboard:space');
+        const space: Ref<boolean> = inject('keyboard:space') as Ref<boolean>;
         const paper = ref<HTMLDivElement>();
-        const scale: Ref<number> = inject('scale');
+        const scale: Ref<number> = inject('scale') as Ref<number>;
         const selector = ref(null);
 
         onMounted(() => {

@@ -108,11 +108,11 @@
 
 <script lang="ts">
 import { computed, defineComponent, inject, nextTick, ref, watch } from 'vue';
-import { Material, MaterialOptions } from '../../classes/Material';
+import { Material } from '../../classes/Material';
 import { ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
+import { M_TEXT_NAME } from './config';
 
-const name = 'MText';
 const typographyClass = [
     'text-h1',
     'text-h2',
@@ -164,19 +164,20 @@ interface MTextConfig {
 }
 
 export default defineComponent({
-    name,
+    name: M_TEXT_NAME,
     components: { MaterialConfigPopover },
     protoInfo: {
         label: '文本',
         icon: 'format-text',
-        creator({ x, y }: MaterialOptions<MTextConfig>): Material<MTextConfig> {
+        dragHandlers: ['ml', 'mr'],
+        creator({ x, y }) {
             return new Material({
-                x: x - 100,
-                y: y - 16,
+                x: x! - 100,
+                y: y! - 16,
                 w: 200,
                 h: 32,
                 config: {
-                    componentName: name,
+                    componentName: M_TEXT_NAME,
                     content: '这是一段文本',
                     typo: 5,
                     fontWeight: 3,
@@ -187,7 +188,6 @@ export default defineComponent({
         },
     } as ProtoInfo,
     setup() {
-        const active = inject('m-instance:active');
         const instance: Material<MTextConfig> = inject('m-instance', {
             config: {},
         }) as Material<MTextConfig>;
@@ -208,7 +208,6 @@ export default defineComponent({
         });
         return {
             classNames,
-            active,
             instance,
             eleRef,
         };

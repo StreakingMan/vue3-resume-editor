@@ -1,12 +1,12 @@
 <template>
     <div
-        :key="selfItem.id"
+        :key="instance.id"
         class="material-instance"
         :style="{
-            left: selfItem.x + 'px',
-            top: selfItem.y + 'px',
-            width: selfItem.w + 'px',
-            height: selfItem.h + 'px',
+            left: instance.x + 'px',
+            top: instance.y + 'px',
+            width: instance.w + 'px',
+            height: instance.h + 'px',
             padding: CTRL_DOT_SIZE + 'px',
         }"
         :class="{
@@ -19,15 +19,15 @@
         <div
             class="w-100 h-100"
             :style="{
-                padding: selfItem.config.padding || 0 + 'px',
-                borderStyle: selfItem.config.borderStyle,
-                borderWidth: selfItem.config.borderWidth || 0 + 'px',
-                borderColor: selfItem.config.borderColor,
-                borderRadius: selfItem.config.borderRadius || 0 + 'px',
-                backgroundColor: selfItem.config.backgroundColor,
+                padding: instance.config.padding || 0 + 'px',
+                borderStyle: instance.config.borderStyle,
+                borderWidth: instance.config.borderWidth || 0 + 'px',
+                borderColor: instance.config.borderColor,
+                borderRadius: instance.config.borderRadius || 0 + 'px',
+                backgroundColor: instance.config.backgroundColor,
             }"
         >
-            <component :is="selfItem.config.componentName">
+            <component :is="instance.config.componentName">
                 <template #activator>
                     <v-btn
                         ref="moveHandlerRef"
@@ -49,20 +49,23 @@
             :key="dot"
             :style="[
                 `transform: scale(${1 / scale});${styleMap[dot]}`,
+                !ableCtrlDots.includes(dot) ? 'cursor: not-allowed;' : '',
                 {
-                    opacity: active ? 1 : 0,
+                    opacity:
+                        (clickingDot && clickingDot !== dot) || !active
+                            ? 0
+                            : ableCtrlDots.includes(dot)
+                            ? 1
+                            : 0.3,
                     width: CTRL_DOT_SIZE + 'px',
                     height: CTRL_DOT_SIZE + 'px',
                 },
             ]"
             class="control-dot bg-primary"
-            :class="{
-                active: clickingDot === dot,
-                hide: clickingDot && clickingDot !== dot,
-            }"
             @mousedown.stop.prevent="
-                clickingDot = dot;
-                onDotMousedown($event);
+                ableCtrlDots.includes(dot) &&
+                    (clickingDot = dot) &&
+                    onDotMousedown($event)
             "
         ></div>
     </div>
@@ -84,8 +87,20 @@ import MList from '../materials/MList.vue';
 import MText from '../materials/MText.vue';
 import { CTRL_DOT_SIZE, UNIT_SIZE } from './config';
 import MaterialConfig from './MaterialConfigPopover.vue';
+import { CtrlDotType, prototypeMap } from '../materials/prototypes';
+import { Material } from '../../classes/Material';
 
-const styleMap = {
+const ctrlDots: CtrlDotType[] = [
+    'tl',
+    'tm',
+    'tr',
+    'mr',
+    'br',
+    'bm',
+    'bl',
+    'ml',
+];
+const styleMap: Record<CtrlDotType, string> = {
     tl: `top: 0px;left: 0px;cursor: nw-resize;transform-origin: top left;`,
     tm: `top: 0px;left: 50%;margin-left: -${
         CTRL_DOT_SIZE / 2
@@ -126,7 +141,7 @@ export default defineComponent({
 
         // 数据源
         const { item } = toRefs(props);
-        const selfItem = computed({
+        const instance = computed({
             get: () => item.value,
             set: (v) => emit('update:item', v),
         });
@@ -155,14 +170,14 @@ export default defineComponent({
         useMouseDrag({
             onStart() {
                 if (space.value) return false;
-                const { x, y } = selfItem.value;
+                const { x, y } = instance.value;
                 posInfoCache.itemStartX = x;
                 posInfoCache.itemStartY = y;
             },
             onDrag({ transX, transY }: MouseEvtInfo) {
-                selfItem.value.x =
+                instance.value.x =
                     posInfoCache.itemStartX + transX / scale.value;
-                selfItem.value.y =
+                instance.value.y =
                     posInfoCache.itemStartY + transY / scale.value;
             },
             onFinish() {
@@ -173,17 +188,19 @@ export default defineComponent({
         });
 
         // 缩放控制点
-        const clickingDot = ref('');
+        const clickingDot = ref<CtrlDotType | null>(null);
         const { onMousedown: onDotMousedown } = useMouseDrag({
             onStart() {
                 if (!active.value) return;
-                const { x, y, w, h } = selfItem.value;
+                const { x, y, w, h } = instance.value;
                 posInfoCache.itemStartX = x;
                 posInfoCache.itemStartY = y;
                 posInfoCache.itemStartW = w;
                 posInfoCache.itemStartH = h;
             },
             onDrag({ transX, transY }: MouseEvtInfo) {
+                if (!clickingDot.value) return;
+
                 // TODO 最小值控制，方向锁定，比例锁定，网格吸附
                 const {
                     itemStartX,
@@ -220,13 +237,13 @@ export default defineComponent({
                     newY = itemStartY + itemStartH - UNIT_SIZE;
                 }
 
-                selfItem.value.x = newX;
-                selfItem.value.y = newY;
-                selfItem.value.w = newW;
-                selfItem.value.h = newH;
+                instance.value.x = newX;
+                instance.value.y = newY;
+                instance.value.w = newW;
+                instance.value.h = newH;
             },
             onFinish() {
-                clickingDot.value = '';
+                clickingDot.value = null;
                 posInfoCache.itemStartX = 0;
                 posInfoCache.itemStartY = 0;
                 posInfoCache.itemStartW = 0;
@@ -234,10 +251,17 @@ export default defineComponent({
             },
         });
 
+        // 可用控制点
+        const ableCtrlDots = computed(() => {
+            return prototypeMap[instance.value.config.componentName]
+                .dragHandlers;
+        });
+
         return {
             moveHandlerRef,
-            selfItem,
-            dots: ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'],
+            instance,
+            dots: ctrlDots,
+            ableCtrlDots,
             scale,
             styleMap,
             clickingDot,
@@ -261,14 +285,6 @@ export default defineComponent({
         box-sizing: border-box;
         position: absolute;
         transition: background-color 0.5s, opacity 0.5s;
-
-        &.active {
-            opacity: 1;
-        }
-
-        &.hide {
-            opacity: 0;
-        }
     }
 }
 </style>

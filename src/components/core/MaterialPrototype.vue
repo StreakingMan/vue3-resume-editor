@@ -26,7 +26,8 @@
 import { defineComponent, inject, reactive, ref, Ref } from 'vue';
 import { Paper } from '../../classes/Paper';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
-import prototypeMap from '../materials/prototypes';
+import { prototypeMap } from '../materials/prototypes';
+import { PrototypeComponentName } from '../materials/config';
 
 export default defineComponent({
     name: 'MaterialPrototype',
@@ -42,20 +43,22 @@ export default defineComponent({
         const paperInstance: Paper = inject('paper', new Paper({}));
 
         // 原型信息
-        const prototypes: Record<string, any> = reactive(prototypeMap);
+        const prototypes = reactive(prototypeMap);
 
         // 原型拖入paper
-        const draggingProtoType: Ref<string> = ref('');
+        const draggingProtoType: Ref<PrototypeComponentName | null> = ref(null);
         const { onMousedown: onProtoMousedown } = useMouseDrag({
             onStart({ startX, startY }) {
                 //console.log(draggingProtoType.value);
             },
             onDrag({ transX, transY }: MouseEvtInfo) {
+                if (!draggingProtoType.value) return;
                 const proto = prototypes[draggingProtoType.value];
                 if (!proto) return;
                 proto.tempStyle = `transition: 0s;transform: translateX(${transX}px) translateY(${transY}px) !important`;
             },
             onFinish({ currentX, currentY }: MouseEvtInfo) {
+                if (!draggingProtoType.value) return;
                 const proto = prototypes[draggingProtoType.value];
                 if (!proto) return;
                 proto.tempStyle = '';

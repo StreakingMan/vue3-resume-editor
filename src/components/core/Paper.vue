@@ -81,7 +81,7 @@ export default defineComponent({
             selectorW.value = transX / scale.value;
             selectorH.value = transY / scale.value;
         };
-        const onSelectFinish = (info: MouseEvtInfo) => {
+        const onSelectFinish = (/*info: MouseEvtInfo*/) => {
             selectorW.value = 0;
             selectorH.value = 0;
         };

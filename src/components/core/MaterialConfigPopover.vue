@@ -36,7 +36,7 @@ import { Material } from '../../classes/Material';
 import { CTRL_DOT_SIZE } from './config';
 
 export default defineComponent({
-    name: 'MaterialConfig',
+    name: 'MaterialConfigPopover',
     components: {},
     setup() {
         // Sketch组件注入
