@@ -62,22 +62,24 @@
 
             <div class="d-flex align-center">
                 <div class="text-subtitle-2">对齐：</div>
-                <template
-                    v-for="{ icon, value } of textAlignOptions"
-                    :key="value"
+                <v-btn-toggle
+                    v-model="instance.config.align"
+                    color="primary"
+                    class="border mx-2"
+                    divided
                 >
-                    <v-btn
-                        variant="text"
-                        :icon="icon"
-                        size="small"
-                        :color="
-                            value === instance.config.align
-                                ? 'primary'
-                                : undefined
-                        "
-                        @click="() => (instance.config.align = value)"
-                    ></v-btn>
-                </template>
+                    <template
+                        v-for="{ icon, value } of textAlignOptions"
+                        :key="value"
+                    >
+                        <v-btn
+                            :value="value"
+                            variant="text"
+                            :icon="icon"
+                            size="small"
+                        ></v-btn>
+                    </template>
+                </v-btn-toggle>
             </div>
 
             <div class="d-flex align-center">
@@ -96,6 +98,7 @@
                     </template>
                     <v-color-picker
                         v-model="instance.config.color"
+                        show-swatches
                     ></v-color-picker>
                 </v-menu>
             </div>
