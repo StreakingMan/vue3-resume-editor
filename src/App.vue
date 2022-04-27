@@ -24,7 +24,12 @@
             </v-btn>
         </v-app-bar>
         <v-navigation-drawer v-model="drawer" width="300" temporary app>
-            <MaterialPrototype />
+            <div class="w-100 h-100 d-flex flex-column">
+                <MaterialPrototype class="flex-grow-0" />
+                <div class="flex-grow-1 overflow-y-auto">
+                    <!--                    something-->
+                </div>
+            </div>
         </v-navigation-drawer>
         <v-main class="bg-grey-darken-4">
             <Sketch ref="sketch" />
@@ -112,6 +117,13 @@ body {
 }
 .v-navigation-drawer__content {
     overflow: visible !important;
+}
+::-webkit-scrollbar {
+    background-color: transparent;
+    width: 8px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
 }
 :focus-visible {
     outline: none;

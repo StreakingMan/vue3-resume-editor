@@ -24,6 +24,7 @@ import {
     Ref,
     watch,
     onMounted,
+    toRefs,
 } from 'vue';
 
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
@@ -44,15 +45,18 @@ export default defineComponent({
         const paperInstance: UnwrapNestedRefs<Paper> = inject(
             'paper'
         ) as UnwrapNestedRefs<Paper>;
-        const materialList = computed(() => paperInstance.materialList);
+        const { materialList } = toRefs(paperInstance);
         onMounted(() => {
             if (!paper.value) return;
             paper.value.style.width = paperInstance.w + 'px';
             paper.value.style.height = paperInstance.h + 'px';
         });
-        watch(paperInstance, (v) => {
-            console.log('paper update', v);
-        });
+        watch(
+            () => materialList.value.length,
+            (v) => {
+                console.log(v);
+            }
+        );
 
         // 缩放值注入
         const scale = inject('scale') as Ref<number>;

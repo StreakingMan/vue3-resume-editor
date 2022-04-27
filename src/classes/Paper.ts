@@ -44,12 +44,11 @@ export class Paper {
         this._materialMap.set(materialInstance.id, materialInstance);
         return this.materialList;
     }
-    removeMaterial(id: string): boolean {
+    removeMaterial(id: string): void {
         const findIdx = this.materialList.findIndex((m) => m.id === id);
-        if (findIdx) {
+        if (findIdx !== -1) {
             this.materialList.splice(findIdx, 1);
             this._materialMap.delete(id);
         }
-        return findIdx !== -1;
     }
 }

@@ -17,6 +17,7 @@
                     :disabled="!active"
                     icon="mdi-cog"
                     :rounded="0"
+                    title="配置面板"
                 >
                 </v-btn>
             </div>

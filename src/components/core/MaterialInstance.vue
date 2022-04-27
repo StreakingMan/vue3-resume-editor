@@ -38,6 +38,19 @@
                         icon="mdi-arrow-all"
                         class="border-r-0"
                         :rounded="0"
+                        title="移动元素"
+                    >
+                    </v-btn>
+                    <v-btn
+                        variant="outlined"
+                        color="error"
+                        size="x-small"
+                        :disabled="!active"
+                        icon="mdi-trash-can"
+                        class="border-r-0"
+                        :rounded="0"
+                        title="双击删除"
+                        @dblclick="removeMaterialInstance"
                     >
                     </v-btn>
                 </template>
@@ -90,6 +103,7 @@ import MaterialConfig from './MaterialConfigPopover.vue';
 import { prototypeMap } from '../materials/prototypes';
 import { CtrlDotType } from '../materials/config';
 import { Material } from '../../classes/Material';
+import { Paper } from '../../classes/Paper';
 
 const ctrlDots: CtrlDotType[] = [
     'tl',
@@ -131,7 +145,7 @@ export default defineComponent({
         },
     },
     emits: ['update:item'],
-    setup(props, { emit }) {
+    setup(props) {
         // 位置信息缓存
         const posInfoCache = {
             itemStartX: 0,
@@ -261,6 +275,12 @@ export default defineComponent({
             }
         });
 
+        // Paper实例注入
+        const paperInstance: Paper = inject('paper') as Paper;
+        const removeMaterialInstance = () => {
+            paperInstance.removeMaterial(instance.value.id);
+        };
+
         return {
             moveHandlerRef,
             instance,
@@ -274,6 +294,7 @@ export default defineComponent({
             focus,
             blur,
             CTRL_DOT_SIZE,
+            removeMaterialInstance,
         };
     },
 });
