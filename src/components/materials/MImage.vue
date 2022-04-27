@@ -100,30 +100,34 @@ interface MImageConfig {
     type: 'local' | 'web';
     cut: boolean;
 }
+
+const protoInfo: ProtoInfo<MImageConfig> = {
+    label: '图像',
+    icon: 'image',
+    dragHandlers: (config) =>
+        config.cut
+            ? ['tl', 'tr', 'tm', 'ml', 'mr', 'bl', 'bm', 'br']
+            : ['br', 'mr', 'bl', 'ml'],
+    genInitOptions: ({ x, y }) => ({
+        componentName: M_IMAGE_NAME,
+        x: x - 50,
+        y: y - 50,
+        w: 100,
+        h: 100,
+        z: '123',
+        config: {
+            url: `https://avatars.dicebear.com/v2/avataaars/12e951b855470f70b2f3051992f61f26.svg`,
+            type: 'web',
+            aspectRatio: 1,
+            cut: false,
+        },
+    }),
+};
+
 export default defineComponent({
     name: M_IMAGE_NAME,
     components: { MaterialConfigPopover },
-    protoInfo: {
-        label: '图像',
-        icon: 'image',
-        dragHandlers: (config) =>
-            config.cut
-                ? ['tl', 'tr', 'tm', 'ml', 'mr', 'bl', 'bm', 'br']
-                : ['br', 'mr', 'bl', 'ml'],
-        genInitOptions: ({ x, y }) => ({
-            componentName: M_IMAGE_NAME,
-            x: x - 50,
-            y: y - 50,
-            w: 100,
-            h: 100,
-            config: {
-                url: `https://avatars.dicebear.com/v2/avataaars/12e951b855470f70b2f3051992f61f26.svg`,
-                type: 'web',
-                aspectRatio: 1,
-                cut: false,
-            },
-        }),
-    } as ProtoInfo<MImageConfig>,
+    protoInfo,
     setup() {
         const instance: Material<MImageConfig> = inject('m-instance', {
             config: {},

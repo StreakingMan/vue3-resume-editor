@@ -165,28 +165,30 @@ interface MTextConfig {
     color: string;
 }
 
+const protoInfo: ProtoInfo<MTextConfig> = {
+    label: '文本',
+    icon: 'format-text',
+    dragHandlers: ['ml', 'mr'],
+    genInitOptions: ({ x, y }) => ({
+        x: x - 100,
+        y: y - 16,
+        w: 200,
+        h: 32,
+        componentName: M_TEXT_NAME,
+        config: {
+            content: '这是一段文本',
+            typo: 5,
+            fontWeight: 3,
+            align: 'left',
+            color: '#000',
+        },
+    }),
+};
+
 export default defineComponent({
     name: M_TEXT_NAME,
     components: { MaterialConfigPopover },
-    protoInfo: {
-        label: '文本',
-        icon: 'format-text',
-        dragHandlers: ['ml', 'mr'],
-        genInitOptions: ({ x, y }) => ({
-            x: x - 100,
-            y: y - 16,
-            w: 200,
-            h: 32,
-            componentName: M_TEXT_NAME,
-            config: {
-                content: '这是一段文本',
-                typo: 5,
-                fontWeight: 3,
-                align: 'left',
-                color: '#000',
-            },
-        }),
-    } as ProtoInfo<MTextConfig>,
+    protoInfo,
     setup() {
         const instance: Material<MTextConfig> = inject('m-instance', {
             config: {},
