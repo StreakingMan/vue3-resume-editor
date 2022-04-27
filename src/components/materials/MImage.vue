@@ -110,35 +110,40 @@ export default defineComponent({
             config.cut
                 ? ['tl', 'tr', 'tm', 'ml', 'mr', 'bl', 'bm', 'br']
                 : ['br', 'mr', 'bl', 'ml'],
-        creator({ x, y }) {
-            return new Material({
-                x: x! - 50,
-                y: y! - 50,
-                w: 100,
-                h: 100,
-                config: {
-                    componentName: M_IMAGE_NAME,
-                    url: `https://avatars.dicebear.com/v2/avataaars/12e951b855470f70b2f3051992f61f26.svg`,
-                    type: 'web',
-                    aspectRatio: 1,
-                    cut: false,
-                },
-            });
-        },
+        genInitOptions: ({ x, y }) => ({
+            componentName: M_IMAGE_NAME,
+            x: x - 50,
+            y: y - 50,
+            w: 100,
+            h: 100,
+            config: {
+                url: `https://avatars.dicebear.com/v2/avataaars/12e951b855470f70b2f3051992f61f26.svg`,
+                type: 'web',
+                aspectRatio: 1,
+                cut: false,
+            },
+        }),
     } as ProtoInfo<MImageConfig>,
     setup() {
         const instance: Material<MImageConfig> = inject('m-instance', {
             config: {},
         }) as Material<MImageConfig>;
 
-        watch(instance, async () => {
-            await nextTick();
-            // 保持长宽比
-            const { aspectRatio, cut } = instance.config;
-            if (aspectRatio && !cut) {
-                instance.h = instance.w / aspectRatio;
+        watch(
+            () => ({
+                w: instance.w,
+                url: instance.config.url,
+                cut: instance.config.cut,
+            }),
+            async () => {
+                await nextTick();
+                // 保持长宽比
+                const { aspectRatio, cut } = instance.config;
+                if (aspectRatio && !cut) {
+                    instance.h = instance.w / aspectRatio;
+                }
             }
-        });
+        );
 
         const onUrlChange = async () => {
             try {

@@ -79,7 +79,7 @@ export default defineComponent({
         provide('scale:position', scalePosition);
 
         // Paper实例
-        const paper = reactive(new Paper({}));
+        const paper = reactive(new Paper({ cellSize: 1 }));
         provide('paper', paper);
 
         // Sketch组件

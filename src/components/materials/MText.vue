@@ -6,6 +6,7 @@
             :class="classNames"
             :style="{ color: instance.config.color }"
             wrap="hard"
+            placeholder="请输入文本"
             @mousedown.stop
         />
     </div>
@@ -171,22 +172,20 @@ export default defineComponent({
         label: '文本',
         icon: 'format-text',
         dragHandlers: ['ml', 'mr'],
-        creator({ x, y }) {
-            return new Material({
-                x: x! - 100,
-                y: y! - 16,
-                w: 200,
-                h: 32,
-                config: {
-                    componentName: M_TEXT_NAME,
-                    content: '这是一段文本',
-                    typo: 5,
-                    fontWeight: 3,
-                    align: 'left',
-                    color: '#000',
-                },
-            });
-        },
+        genInitOptions: ({ x, y }) => ({
+            x: x - 100,
+            y: y - 16,
+            w: 200,
+            h: 32,
+            componentName: M_TEXT_NAME,
+            config: {
+                content: '这是一段文本',
+                typo: 5,
+                fontWeight: 3,
+                align: 'left',
+                color: '#000',
+            },
+        }),
     } as ProtoInfo<MTextConfig>,
     setup() {
         const instance: Material<MTextConfig> = inject('m-instance', {
@@ -200,13 +199,21 @@ export default defineComponent({
                 'text-' + instance.config.align,
             ];
         });
-        watch(instance, async () => {
-            if (eleRef.value) {
+        watch(
+            () => ({
+                w: instance.w,
+                content: instance.config.content,
+                typo: instance.config.typo,
+                fontWeight: instance.config.fontWeight,
+            }),
+            async () => {
                 await nextTick();
-                // 自适应内容高度
-                instance.h = eleRef.value.clientHeight;
+                if (eleRef.value) {
+                    // 自适应内容高度
+                    instance.h = eleRef.value.clientHeight;
+                }
             }
-        });
+        );
         return {
             classNames,
             instance,

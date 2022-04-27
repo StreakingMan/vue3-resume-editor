@@ -25,6 +25,14 @@
             <slot name="config"></slot>
             <v-divider class="my-3 mx-n6"></v-divider>
             <div class="text-subtitle-2">通用配置</div>
+            <div class="d-flex align-center">
+                <div class="text-subtitle-2">width:</div>
+                <input v-model="instance.w" type="number" />
+            </div>
+            <div class="d-flex align-center">
+                <div class="text-subtitle-2">height:</div>
+                <input v-model="instance.h" type="number" />
+            </div>
         </v-sheet>
     </v-menu>
 </template>
@@ -45,7 +53,7 @@ export default defineComponent({
         const scale: Ref<number> = inject('scale', ref(1));
 
         // Paper实例注入
-        const paperInstance: Paper = inject('paper', new Paper({}));
+        const paperInstance: Paper = inject('paper') as Paper;
 
         // 当前操作
         const focusMaterial: Ref = inject('focus:material') as Ref;
@@ -79,5 +87,6 @@ export default defineComponent({
     transform: translateY(-100%);
     transform-origin: right bottom;
     min-width: max-content;
+    background-color: rgba(255, 255, 255, 0.6);
 }
 </style>

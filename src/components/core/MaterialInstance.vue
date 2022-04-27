@@ -27,7 +27,7 @@
                 backgroundColor: instance.config.backgroundColor,
             }"
         >
-            <component :is="instance.config.componentName">
+            <component :is="instance.componentName">
                 <template #activator>
                     <v-btn
                         ref="moveHandlerRef"
@@ -80,7 +80,6 @@ import {
     Ref,
     ref,
     toRefs,
-    WritableComputedOptions,
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import MImage from '../materials/MImage.vue';
@@ -88,9 +87,9 @@ import MList from '../materials/MList.vue';
 import MText from '../materials/MText.vue';
 import { CTRL_DOT_SIZE, UNIT_SIZE } from './config';
 import MaterialConfig from './MaterialConfigPopover.vue';
-import { CtrlDotType, prototypeMap } from '../materials/prototypes';
+import { prototypeMap } from '../materials/prototypes';
+import { CtrlDotType } from '../materials/config';
 import { Material } from '../../classes/Material';
-import { PrototypeComponentName } from '../materials/config';
 
 const ctrlDots: CtrlDotType[] = [
     'tl',
@@ -142,23 +141,21 @@ export default defineComponent({
         };
 
         // 数据源
-        const { item } = toRefs(props);
-        const instance = computed({
-            get: () => item.value,
-            set: (v) => emit('update:item', v),
-        });
+        const { item: instance } = toRefs<{ item: Material<any> }>(
+            props as any
+        );
         provide('m-instance', props.item);
 
         // 状态维护
         const focusMaterial: Ref = inject('focus:material') as Ref;
         const focus = () => {
-            focusMaterial.value = item.value;
+            focusMaterial.value = instance.value;
         };
         const blur = () => {
             focusMaterial.value = null;
         };
         const active = computed(() => {
-            return focusMaterial.value === item.value;
+            return focusMaterial.value === instance.value;
         });
         provide('m-instance:active', active);
 
@@ -256,10 +253,7 @@ export default defineComponent({
         // 可用控制点
         const ableCtrlDots = computed(() => {
             const dragHandlers =
-                prototypeMap[
-                    instance.value.config
-                        .componentName as PrototypeComponentName
-                ].dragHandlers;
+                prototypeMap[instance.value.componentName].dragHandlers;
             if (dragHandlers instanceof Function) {
                 return dragHandlers(instance.value.config);
             } else {

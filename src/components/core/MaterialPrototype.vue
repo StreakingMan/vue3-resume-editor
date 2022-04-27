@@ -27,7 +27,7 @@ import { defineComponent, inject, reactive, ref, Ref } from 'vue';
 import { Paper } from '../../classes/Paper';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import { prototypeMap } from '../materials/prototypes';
-import { PrototypeComponentName } from '../materials/config';
+import { MaterialComponentNameType } from '../materials/config';
 
 export default defineComponent({
     name: 'MaterialPrototype',
@@ -40,13 +40,15 @@ export default defineComponent({
         const scale: Ref<number> = inject('scale', ref(1));
 
         // Paper实例注入
-        const paperInstance: Paper = inject('paper', new Paper({}));
+        const paperInstance: Paper = inject('paper') as Paper;
 
         // 原型信息
         const prototypes = reactive(prototypeMap);
 
         // 原型拖入paper
-        const draggingProtoType: Ref<PrototypeComponentName | null> = ref(null);
+        const draggingProtoType: Ref<MaterialComponentNameType | null> = ref(
+            null
+        );
         const { onMousedown: onProtoMousedown } = useMouseDrag({
             onStart({ startX, startY }) {
                 //console.log(draggingProtoType.value);
@@ -80,8 +82,7 @@ export default defineComponent({
                             scrollTop)) /
                     scale.value;
                 if (x < 0 || y < 0) return;
-                if (!proto.creator) return;
-                paperInstance.addMaterial(proto.creator({ x, y }));
+                paperInstance.addMaterial(proto.genInitOptions({ x, y }));
             },
         });
 

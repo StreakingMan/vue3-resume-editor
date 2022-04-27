@@ -1,27 +1,26 @@
-import { Material, MaterialOptions } from '../../classes/Material';
+import { MaterialOptions } from '../../classes/Material';
 import MText from './MText.vue';
 import MImage from './MImage.vue';
 import MList from './MList.vue';
 import {
+    CtrlDotFunction,
+    CtrlDotType,
     M_IMAGE_NAME,
     M_LIST_NAME,
     M_TEXT_NAME,
-    PrototypeComponentName,
+    MaterialComponentNameType,
 } from './config';
 
-export type CtrlDotType = 'tl' | 'tm' | 'tr' | 'mr' | 'br' | 'bm' | 'bl' | 'ml';
-export type CtrlDotFunction<T> = (config: T) => CtrlDotType[];
-
 export interface ProtoInfo<T> {
-    creator: (options: Partial<MaterialOptions<T>>) => Material<T>;
-    dragHandlers: CtrlDotType[] | CtrlDotFunction<T>;
     label: string;
     icon: string;
+    dragHandlers: CtrlDotType[] | CtrlDotFunction<T>;
+    genInitOptions: (options: { x: number; y: number }) => MaterialOptions<T>;
 }
 
 export type PrototypeMap = Record<
-    PrototypeComponentName,
-    ProtoInfo<{ [key: string]: any }> & { tempStyle: string }
+    MaterialComponentNameType,
+    ProtoInfo<any> & { tempStyle: string }
 >;
 
 export const prototypeMap: PrototypeMap = {

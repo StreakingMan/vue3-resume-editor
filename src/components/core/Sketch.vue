@@ -55,6 +55,7 @@ export default defineComponent({
             paddingY.value = Math.floor(windowHeight * 0.8);
 
             // 更改padding值，视图更新后再调整scroll值
+            // TODO 这里有时候走不下去，待查明
             await nextTick();
             const {
                 width: paperWidth,
