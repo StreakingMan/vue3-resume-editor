@@ -66,6 +66,7 @@
                     v-model="instance.config.align"
                     color="primary"
                     class="border mx-2"
+                    style="height: 36px"
                     divided
                 >
                     <template
@@ -186,7 +187,7 @@ export default defineComponent({
                 },
             });
         },
-    } as ProtoInfo,
+    } as ProtoInfo<MTextConfig>,
     setup() {
         const instance: Material<MTextConfig> = inject('m-instance', {
             config: {},

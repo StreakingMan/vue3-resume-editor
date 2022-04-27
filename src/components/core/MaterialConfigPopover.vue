@@ -33,7 +33,6 @@
 import { defineComponent, inject, ref, Ref } from 'vue';
 import { Paper } from '../../classes/Paper';
 import { Material } from '../../classes/Material';
-import { CTRL_DOT_SIZE } from './config';
 
 export default defineComponent({
     name: 'MaterialConfigPopover',
@@ -66,7 +65,6 @@ export default defineComponent({
         };
     },
     data: () => ({
-        CTRL_DOT_SIZE,
         visible: false,
     }),
 });
@@ -80,5 +78,6 @@ export default defineComponent({
     transition: 0.3s;
     transform: translateY(-100%);
     transform-origin: right bottom;
+    min-width: max-content;
 }
 </style>

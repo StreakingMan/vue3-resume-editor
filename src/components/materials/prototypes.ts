@@ -10,17 +10,18 @@ import {
 } from './config';
 
 export type CtrlDotType = 'tl' | 'tm' | 'tr' | 'mr' | 'br' | 'bm' | 'bl' | 'ml';
+export type CtrlDotFunction<T> = (config: T) => CtrlDotType[];
 
-export interface ProtoInfo {
-    creator: (options: Partial<MaterialOptions<any>>) => Material<any>;
-    dragHandlers: CtrlDotType[];
+export interface ProtoInfo<T> {
+    creator: (options: Partial<MaterialOptions<T>>) => Material<T>;
+    dragHandlers: CtrlDotType[] | CtrlDotFunction<T>;
     label: string;
     icon: string;
 }
 
 export type PrototypeMap = Record<
     PrototypeComponentName,
-    ProtoInfo & { tempStyle: string }
+    ProtoInfo<{ [key: string]: any }> & { tempStyle: string }
 >;
 
 export const prototypeMap: PrototypeMap = {

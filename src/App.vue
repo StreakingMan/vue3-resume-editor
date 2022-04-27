@@ -5,7 +5,10 @@
                 icon="mdi-widgets"
                 @click.stop="drawer = !drawer"
             />
-            <v-app-bar-title>Vue3 Resume Editor</v-app-bar-title>
+            <v-app-bar-title>
+                <span class="font-weight-black">Vue3简历编辑器</span>
+                <span class="text-subtitle-1 ml-2">轻松制作一份精美简历</span>
+            </v-app-bar-title>
             <v-spacer />
             <v-btn icon>
                 <v-icon>mdi-github</v-icon>

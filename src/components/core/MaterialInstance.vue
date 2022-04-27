@@ -7,7 +7,7 @@
             top: instance.y + 'px',
             width: instance.w + 'px',
             height: instance.h + 'px',
-            padding: CTRL_DOT_SIZE + 'px',
+            padding: CTRL_DOT_SIZE / scale + 'px',
         }"
         :class="{
             border: active,
@@ -80,6 +80,7 @@ import {
     Ref,
     ref,
     toRefs,
+    WritableComputedOptions,
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import MImage from '../materials/MImage.vue';
@@ -89,6 +90,7 @@ import { CTRL_DOT_SIZE, UNIT_SIZE } from './config';
 import MaterialConfig from './MaterialConfigPopover.vue';
 import { CtrlDotType, prototypeMap } from '../materials/prototypes';
 import { Material } from '../../classes/Material';
+import { PrototypeComponentName } from '../materials/config';
 
 const ctrlDots: CtrlDotType[] = [
     'tl',
@@ -253,8 +255,16 @@ export default defineComponent({
 
         // 可用控制点
         const ableCtrlDots = computed(() => {
-            return prototypeMap[instance.value.config.componentName]
-                .dragHandlers;
+            const dragHandlers =
+                prototypeMap[
+                    instance.value.config
+                        .componentName as PrototypeComponentName
+                ].dragHandlers;
+            if (dragHandlers instanceof Function) {
+                return dragHandlers(instance.value.config);
+            } else {
+                return dragHandlers;
+            }
         });
 
         return {
