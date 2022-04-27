@@ -1,58 +1,38 @@
 <template>
-    <div
-        class="prototype-container pa-1 bg-color-white elevation-2 hover-elevation-12 d-flex bdrs-8 align-center justify-center"
-        :style="{ left: containerLeft }"
-    >
-        <MyIconButton
-            v-for="(proto, name) in prototypes"
-            :key="name"
-            :icon="proto.icon"
-            :style="proto.tempStyle"
-            @mousedown.prevent.stop="
-                draggingProtoType = name;
-                onProtoMousedown($event);
-            "
-        >
-            {{ proto.label }}
-        </MyIconButton>
-
-        <div
-            class="prototype-container__toggle bg-color-white cursor-pointer d-flex align-center justify-center"
-            @click="containerHidden = !containerHidden"
-        >
-            <i
-                class="mdi mdi-arrow-left-bold color-info fz-18"
-                :style="{
-                    transform: `rotate(${containerHidden ? 180 : 0}deg)`,
-                }"
-            ></i>
-        </div>
-    </div>
+    <v-row no-gutters class="pa-6">
+        <v-col v-for="(proto, name) in prototypes" :key="name" cols="4">
+            <v-sheet
+                class="border sheet"
+                :style="proto.tempStyle"
+                @mousedown.prevent.stop="
+                    draggingProtoType = name;
+                    onProtoMousedown($event);
+                "
+            >
+                <v-responsive :aspect-ratio="1">
+                    <div
+                        class="text-caption w-100 h-100 d-flex flex-column justify-center align-center"
+                    >
+                        <v-icon size="24">mdi-{{ proto.icon }}</v-icon>
+                        <span>{{ proto.label }}</span>
+                    </div>
+                </v-responsive>
+            </v-sheet>
+        </v-col>
+    </v-row>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, reactive, ref, Ref } from 'vue';
-import MyIconButton from '../ui/MyIconButton.vue';
+import { defineComponent, inject, reactive, ref, Ref } from 'vue';
 import { Paper } from '../../classes/Paper';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
-import { AppState } from '../../classes/App';
-import prototypeMap from '../materials/prototypes';
+import { prototypeMap } from '../materials/prototypes';
+import { PrototypeComponentName } from '../materials/config';
 
 export default defineComponent({
     name: 'MaterialPrototype',
-    components: { MyIconButton },
-
+    components: {},
     setup() {
-        const appState: Ref<AppState> = inject('app:state', ref('welcome'));
-        const containerHidden = ref(false);
-        const containerLeft = computed(() =>
-            appState.value === 'welcome'
-                ? '-150px'
-                : containerHidden.value
-                ? '-96px'
-                : '16px'
-        );
-
         // Sketch组件注入
         const sketch: Ref = inject('sketch', ref({}));
 
@@ -63,20 +43,22 @@ export default defineComponent({
         const paperInstance: Paper = inject('paper', new Paper({}));
 
         // 原型信息
-        const prototypes: Record<string, any> = reactive(prototypeMap);
+        const prototypes = reactive(prototypeMap);
 
         // 原型拖入paper
-        const draggingProtoType: Ref<string> = ref('');
+        const draggingProtoType: Ref<PrototypeComponentName | null> = ref(null);
         const { onMousedown: onProtoMousedown } = useMouseDrag({
-            onStart() {
+            onStart({ startX, startY }) {
                 //console.log(draggingProtoType.value);
             },
             onDrag({ transX, transY }: MouseEvtInfo) {
+                if (!draggingProtoType.value) return;
                 const proto = prototypes[draggingProtoType.value];
                 if (!proto) return;
                 proto.tempStyle = `transition: 0s;transform: translateX(${transX}px) translateY(${transY}px) !important`;
             },
             onFinish({ currentX, currentY }: MouseEvtInfo) {
+                if (!draggingProtoType.value) return;
                 const proto = prototypes[draggingProtoType.value];
                 if (!proto) return;
                 proto.tempStyle = '';
@@ -104,8 +86,6 @@ export default defineComponent({
         });
 
         return {
-            containerLeft,
-            containerHidden,
             prototypes,
             onProtoMousedown,
             draggingProtoType,
@@ -115,7 +95,9 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import 'src/styles/elevation';
+.sheet {
+    cursor: pointer;
+}
 .prototype-container {
     position: fixed;
     transition: 0.3s;
@@ -134,7 +116,7 @@ export default defineComponent({
         border-top-right-radius: 24px;
         border-bottom-right-radius: 24px;
         transition: 0.3s;
-        @include elevation(3);
+        //
 
         i {
             transition: 0.4s;
@@ -143,7 +125,7 @@ export default defineComponent({
 
     &:hover {
         .prototype-container__toggle {
-            @include elevation(12);
+            //
         }
     }
 }

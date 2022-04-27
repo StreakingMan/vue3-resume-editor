@@ -1,38 +1,31 @@
 import { Material, MaterialOptions } from '../../classes/Material';
-import MTitle from './MTitle.vue';
 import MText from './MText.vue';
 import MImage from './MImage.vue';
 import MList from './MList.vue';
+import {
+    M_IMAGE_NAME,
+    M_LIST_NAME,
+    M_TEXT_NAME,
+    PrototypeComponentName,
+} from './config';
 
-const prototypeMap = new Map();
+export type CtrlDotType = 'tl' | 'tm' | 'tr' | 'mr' | 'br' | 'bm' | 'bl' | 'ml';
+export type CtrlDotFunction<T> = (config: T) => CtrlDotType[];
 
-export interface ProtoInfo {
-    creator: (options: Partial<MaterialOptions>) => Material;
+export interface ProtoInfo<T> {
+    creator: (options: Partial<MaterialOptions<T>>) => Material<T>;
+    dragHandlers: CtrlDotType[] | CtrlDotFunction<T>;
     label: string;
     icon: string;
-    configOptions?: Record<string, string | number>;
 }
 
-interface MaterialComponent extends Record<any, any> {
-    name?: string;
-    protoInfo?: ProtoInfo;
-}
+export type PrototypeMap = Record<
+    PrototypeComponentName,
+    ProtoInfo<{ [key: string]: any }> & { tempStyle: string }
+>;
 
-const appendPrototype = ({ name, protoInfo }: MaterialComponent) => {
-    if (!name || !protoInfo) return;
-    const { creator, label, icon, configOptions } = protoInfo;
-    prototypeMap.set(name, {
-        label,
-        icon,
-        tempStyle: '',
-        creator,
-        configOptions,
-    });
+export const prototypeMap: PrototypeMap = {
+    [M_TEXT_NAME]: { ...MText.protoInfo, tempStyle: '' },
+    [M_IMAGE_NAME]: { ...MImage.protoInfo, tempStyle: '' },
+    [M_LIST_NAME]: { ...MList.protoInfo, tempStyle: '' },
 };
-
-appendPrototype(MTitle);
-appendPrototype(MText);
-appendPrototype(MImage);
-appendPrototype(MList);
-
-export default Object.fromEntries(prototypeMap.entries());

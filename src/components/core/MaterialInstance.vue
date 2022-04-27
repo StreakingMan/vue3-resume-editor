@@ -1,36 +1,71 @@
 <template>
     <div
-        :key="selfItem.id"
-        ref="itemRef"
-        class="material-instance animate__animated animate__bounceIn"
+        :key="instance.id"
+        class="material-instance"
         :style="{
-            left: selfItem.x + 'px',
-            top: selfItem.y + 'px',
-            width: selfItem.w + 'px',
-            height: selfItem.h + 'px',
-            padding: selfItem.config.padding + 'px',
-            borderStyle: selfItem.config.borderStyle,
-            borderWidth: selfItem.config.borderWidth + 'px',
-            borderColor: selfItem.config.borderColor,
-            borderRadius: selfItem.config.borderRadius + 'px',
-            backgroundColor: selfItem.config.backgroundColor,
+            left: instance.x + 'px',
+            top: instance.y + 'px',
+            width: instance.w + 'px',
+            height: instance.h + 'px',
+            padding: CTRL_DOT_SIZE / scale + 'px',
         }"
-        @click.prevent.stop="onClick"
+        :class="{
+            border: active,
+        }"
+        @mouseenter.prevent.stop="focus"
+        @mouseleave.prevent.stop="blur"
+        @click.stop="focus"
     >
-        <component :is="selfItem.config.componentName"></component>
+        <div
+            class="w-100 h-100"
+            :style="{
+                padding: instance.config.padding || 0 + 'px',
+                borderStyle: instance.config.borderStyle,
+                borderWidth: instance.config.borderWidth || 0 + 'px',
+                borderColor: instance.config.borderColor,
+                borderRadius: instance.config.borderRadius || 0 + 'px',
+                backgroundColor: instance.config.backgroundColor,
+            }"
+        >
+            <component :is="instance.config.componentName">
+                <template #activator>
+                    <v-btn
+                        ref="moveHandlerRef"
+                        variant="outlined"
+                        color="primary"
+                        size="x-small"
+                        :disabled="!active"
+                        icon="mdi-arrow-all"
+                        class="border-r-0"
+                        :rounded="0"
+                    >
+                    </v-btn>
+                </template>
+            </component>
+        </div>
+
         <div
             v-for="dot in dots"
-            v-show="active"
             :key="dot"
-            :style="`transform: scale(${1 / scale});${styleMap[dot]}`"
-            class="control-dot"
-            :class="{
-                active: clickingDot === dot,
-                hide: clickingDot && clickingDot !== dot,
-            }"
+            :style="[
+                `transform: scale(${1 / scale});${styleMap[dot]}`,
+                !ableCtrlDots.includes(dot) ? 'cursor: not-allowed;' : '',
+                {
+                    opacity:
+                        (clickingDot && clickingDot !== dot) || !active
+                            ? 0
+                            : ableCtrlDots.includes(dot)
+                            ? 1
+                            : 0.3,
+                    width: CTRL_DOT_SIZE + 'px',
+                    height: CTRL_DOT_SIZE + 'px',
+                },
+            ]"
+            class="control-dot bg-primary"
             @mousedown.stop.prevent="
-                clickingDot = dot;
-                onDotMousedown($event);
+                ableCtrlDots.includes(dot) &&
+                    (clickingDot = dot) &&
+                    onDotMousedown($event)
             "
         ></div>
     </div>
@@ -45,28 +80,50 @@ import {
     Ref,
     ref,
     toRefs,
-    watch,
+    WritableComputedOptions,
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
-import MTitle from '../materials/MTitle.vue';
-import MList from '../materials/MList.vue';
 import MImage from '../materials/MImage.vue';
+import MList from '../materials/MList.vue';
 import MText from '../materials/MText.vue';
+import { CTRL_DOT_SIZE, UNIT_SIZE } from './config';
+import MaterialConfig from './MaterialConfigPopover.vue';
+import { CtrlDotType, prototypeMap } from '../materials/prototypes';
+import { Material } from '../../classes/Material';
+import { PrototypeComponentName } from '../materials/config';
 
-const styleMap = {
-    tl: `top: -10px;left: -10px;cursor: nw-resize;`,
-    tm: `top: -10px;left: 50%;margin-left: -5px;cursor: n-resize;`,
-    tr: `top: -10px;right: -10px;cursor: ne-resize;`,
-    mr: `top: 50%;margin-top: -5px;right: -10px;cursor: e-resize;`,
-    br: `bottom: -10px;right: -10px;cursor: se-resize;`,
-    bm: `bottom: -10px;left: 50%;margin-left: -5px;cursor: s-resize;`,
-    bl: `bottom: -10px;left: -10px;cursor: sw-resize;`,
-    ml: `top: 50%;margin-top: -5px;left: -10px;cursor: w-resize;`,
+const ctrlDots: CtrlDotType[] = [
+    'tl',
+    'tm',
+    'tr',
+    'mr',
+    'br',
+    'bm',
+    'bl',
+    'ml',
+];
+const styleMap: Record<CtrlDotType, string> = {
+    tl: `top: 0px;left: 0px;cursor: nw-resize;transform-origin: top left;`,
+    tm: `top: 0px;left: 50%;margin-left: -${
+        CTRL_DOT_SIZE / 2
+    }px;cursor: n-resize;transform-origin: top center;`,
+    tr: `top: 0px;right: 0px;cursor: ne-resize;transform-origin: top right;`,
+    mr: `top: 50%;margin-top: -${
+        CTRL_DOT_SIZE / 2
+    }px;right: 0px;cursor: e-resize;transform-origin: center right;`,
+    br: `bottom: 0px;right: 0px;cursor: se-resize;transform-origin: bottom right;`,
+    bm: `bottom: 0px;left: 50%;margin-left: -${
+        CTRL_DOT_SIZE / 2
+    }px;cursor: s-resize;transform-origin: bottom center;`,
+    bl: `bottom: 0px;left: 0px;cursor: sw-resize;transform-origin: bottom left;`,
+    ml: `top: 50%;margin-top: -${
+        CTRL_DOT_SIZE / 2
+    }px;left: 0px;cursor: w-resize;transform-origin: center left;`,
 };
 
 export default defineComponent({
     name: 'MaterialInstance',
-    components: { MTitle, MText, MImage, MList },
+    components: { MaterialConfig, MText, MImage, MList },
     props: {
         item: {
             type: Object,
@@ -86,20 +143,24 @@ export default defineComponent({
 
         // 数据源
         const { item } = toRefs(props);
-        const selfItem = computed({
+        const instance = computed({
             get: () => item.value,
             set: (v) => emit('update:item', v),
         });
-        provide('instance', props.item);
+        provide('m-instance', props.item);
 
         // 状态维护
-        const focusMaterial: Ref = inject('focus:material');
-        const onClick = () => {
+        const focusMaterial: Ref = inject('focus:material') as Ref;
+        const focus = () => {
             focusMaterial.value = item.value;
+        };
+        const blur = () => {
+            focusMaterial.value = null;
         };
         const active = computed(() => {
             return focusMaterial.value === item.value;
         });
+        provide('m-instance:active', active);
 
         // 缩放值注入
         const scale: Ref<number> = inject('scale', ref(1));
@@ -107,39 +168,41 @@ export default defineComponent({
         // 空格键状态注入
         const space: Ref<boolean> = inject('keyboard:space', ref(false));
 
-        const itemRef = ref(null);
+        const moveHandlerRef = ref(null);
         useMouseDrag({
             onStart() {
                 if (space.value) return false;
-                const { x, y } = selfItem.value;
+                const { x, y } = instance.value;
                 posInfoCache.itemStartX = x;
                 posInfoCache.itemStartY = y;
             },
             onDrag({ transX, transY }: MouseEvtInfo) {
-                selfItem.value.x =
+                instance.value.x =
                     posInfoCache.itemStartX + transX / scale.value;
-                selfItem.value.y =
+                instance.value.y =
                     posInfoCache.itemStartY + transY / scale.value;
             },
             onFinish() {
                 posInfoCache.itemStartX = 0;
                 posInfoCache.itemStartY = 0;
             },
-            bindElementRef: itemRef,
+            bindElementRef: moveHandlerRef,
         });
 
         // 缩放控制点
-        const clickingDot = ref('');
+        const clickingDot = ref<CtrlDotType | null>(null);
         const { onMousedown: onDotMousedown } = useMouseDrag({
             onStart() {
                 if (!active.value) return;
-                const { x, y, w, h } = selfItem.value;
+                const { x, y, w, h } = instance.value;
                 posInfoCache.itemStartX = x;
                 posInfoCache.itemStartY = y;
                 posInfoCache.itemStartW = w;
                 posInfoCache.itemStartH = h;
             },
             onDrag({ transX, transY }: MouseEvtInfo) {
+                if (!clickingDot.value) return;
+
                 // TODO 最小值控制，方向锁定，比例锁定，网格吸附
                 const {
                     itemStartX,
@@ -167,24 +230,22 @@ export default defineComponent({
                     newW = itemStartW - transX / scale.value;
                 }
 
-                const unit = 10;
-
-                if (newH < unit) newH = unit;
-                if (newW < unit) newW = unit;
-                if (newX + unit > itemStartX + itemStartW) {
-                    newX = itemStartX + itemStartW - unit;
+                if (newH < UNIT_SIZE) newH = UNIT_SIZE;
+                if (newW < UNIT_SIZE) newW = UNIT_SIZE;
+                if (newX + UNIT_SIZE > itemStartX + itemStartW) {
+                    newX = itemStartX + itemStartW - UNIT_SIZE;
                 }
-                if (newY + unit > itemStartY + itemStartH) {
-                    newY = itemStartY + itemStartH - unit;
+                if (newY + UNIT_SIZE > itemStartY + itemStartH) {
+                    newY = itemStartY + itemStartH - UNIT_SIZE;
                 }
 
-                selfItem.value.x = newX;
-                selfItem.value.y = newY;
-                selfItem.value.w = newW;
-                selfItem.value.h = newH;
+                instance.value.x = newX;
+                instance.value.y = newY;
+                instance.value.w = newW;
+                instance.value.h = newH;
             },
             onFinish() {
-                clickingDot.value = '';
+                clickingDot.value = null;
                 posInfoCache.itemStartX = 0;
                 posInfoCache.itemStartY = 0;
                 posInfoCache.itemStartW = 0;
@@ -192,61 +253,48 @@ export default defineComponent({
             },
         });
 
+        // 可用控制点
+        const ableCtrlDots = computed(() => {
+            const dragHandlers =
+                prototypeMap[
+                    instance.value.config
+                        .componentName as PrototypeComponentName
+                ].dragHandlers;
+            if (dragHandlers instanceof Function) {
+                return dragHandlers(instance.value.config);
+            } else {
+                return dragHandlers;
+            }
+        });
+
         return {
-            itemRef,
-            selfItem,
-            dots: ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'],
+            moveHandlerRef,
+            instance,
+            dots: ctrlDots,
+            ableCtrlDots,
             scale,
             styleMap,
             clickingDot,
             onDotMousedown,
             active,
-            onClick,
+            focus,
+            blur,
+            CTRL_DOT_SIZE,
         };
     },
 });
 </script>
 
 <style scoped lang="scss">
-@import 'src/styles/color';
-@import 'src/styles/elevation';
 .material-instance {
     position: absolute;
-    @include elevationTransition();
-
-    .setting-icon {
-        position: absolute;
-        right: 4px;
-        top: 4px;
-        transition: 0.16s;
-        opacity: 0;
-        cursor: pointer;
-    }
+    border: 1px solid transparent;
+    box-sizing: content-box;
 
     .control-dot {
         box-sizing: border-box;
         position: absolute;
-        width: 12px;
-        height: 12px;
         transition: background-color 0.5s, opacity 0.5s;
-        @include bgColor('primary-light');
-        @include elevation(1);
-
-        &.active {
-            @include bgColor('accent');
-        }
-
-        &.hide {
-            opacity: 0;
-        }
-    }
-
-    &:hover {
-        @include elevation(2);
-
-        .setting-icon {
-            opacity: 1;
-        }
     }
 }
 </style>

@@ -20,4 +20,9 @@ module.exports = {
         'plugin:@typescript-eslint/recommended',
         'prettier',
     ],
+    rules: {
+        '@typescript-eslint/ban-ts-comment': 0,
+        '@typescript-eslint/no-explicit-any': 0,
+        '@typescript-eslint/no-non-null-assertion': 0,
+    },
 };
