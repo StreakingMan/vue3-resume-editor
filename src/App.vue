@@ -70,6 +70,10 @@ export default defineComponent({
             provide(`keyboard:${key}`, value);
         }
 
+        // 辅助网格显示
+        const showGrid = ref(true);
+        provide('showGrid', showGrid);
+
         // 缩放值
         const scale = ref(1);
         const scalePosition = reactive({ x: 0, y: 0 });
@@ -88,7 +92,7 @@ export default defineComponent({
         provide('scale:position', scalePosition);
 
         // Paper实例
-        const paper = reactive(new Paper({ cellSize: 1 }));
+        const paper = reactive(new Paper({}));
         provide('paper', paper);
 
         // Sketch组件

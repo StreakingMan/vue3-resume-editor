@@ -18,7 +18,7 @@ export class Paper {
     public materialList: Material<any>[] = [];
     private _materialMap: Map<Material<any>['id'], Material<any>>;
     // 网格尺寸同步到每个元素实例
-    private _cellSize = 1;
+    private _cellSize = 10;
     get cellSize(): number {
         return this._cellSize;
     }

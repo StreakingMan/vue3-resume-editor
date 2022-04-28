@@ -31,7 +31,7 @@ export class Material<T> {
     public readonly componentName: MaterialComponentNameType;
     public groupName?: string;
     public config: T;
-    public cellSize = 1; // 网格尺寸
+    public cellSize = 10; // 网格尺寸
 
     private _x = 0;
     get x(): number {

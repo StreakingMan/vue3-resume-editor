@@ -1,5 +1,17 @@
 <template>
-    <div id="paper" ref="paper" class="paper" @click="onClick">
+    <div
+        id="paper"
+        ref="paper"
+        class="paper"
+        :style="[
+            (paperInstance.cellSize < 10 || !showGrid) &&
+                'background-image: none',
+            {
+                backgroundSize: `${paperInstance.cellSize}px ${paperInstance.cellSize}px,${paperInstance.cellSize}px ${paperInstance.cellSize}px`,
+            },
+        ]"
+        @click="onClick"
+    >
         <v-theme-provider theme="light" with-background="">
             <MaterialInstance
                 v-for="(m, i) in materialList"
@@ -123,9 +135,13 @@ export default defineComponent({
             focusMaterial.value = null;
         };
 
+        const showGrid = inject('showGrid');
+
         return {
             space,
             paper,
+            paperInstance,
+            showGrid,
             selecting,
             selectorStyle,
             materialList,
@@ -138,9 +154,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 .paper {
     position: relative;
-    background-color: white;
     border-radius: 4px;
-    //
+    background: white;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 0),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 0);
 
     .select-box {
         position: absolute;

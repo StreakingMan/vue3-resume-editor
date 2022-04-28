@@ -7,7 +7,6 @@
             top: instance.y + 'px',
             width: instance.w + 'px',
             height: instance.h + 'px',
-            padding: CTRL_DOT_SIZE / scale + 'px',
         }"
         :class="{
             border: active,
