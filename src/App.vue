@@ -15,9 +15,7 @@
             <v-btn icon>
                 <v-icon>mdi-github</v-icon>
             </v-btn>
-            <v-btn icon>
-                <v-icon>mdi-printer</v-icon>
-            </v-btn>
+            <Print />
             <v-btn icon>
                 <v-icon>mdi-content-save</v-icon>
             </v-btn>
@@ -49,11 +47,13 @@ import { Paper } from './classes/Paper';
 import Beian from './components/Beian.vue';
 import Sketch from './components/core/Sketch.vue';
 import MaterialPrototype from './components/core/MaterialPrototype.vue';
-import Toolbar from './components/core/Toolbar.vue';
+import Toolbar from './components/tools/Toolbar.vue';
+import Print from './components/tools/Print.vue';
 
 export default defineComponent({
     name: 'App',
     components: {
+        Print,
         Toolbar,
         MaterialPrototype,
         Sketch,
