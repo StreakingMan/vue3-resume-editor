@@ -190,9 +190,7 @@ export default defineComponent({
     components: { MaterialConfigPopover },
     protoInfo,
     setup() {
-        const instance: Material<MTextConfig> = inject('m-instance', {
-            config: {},
-        }) as Material<MTextConfig>;
+        const instance = inject('m-instance') as Material<MTextConfig>;
         const eleRef = ref<HTMLDivElement | null>(null);
         const classNames = computed(() => {
             return [

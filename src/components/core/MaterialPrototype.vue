@@ -14,7 +14,7 @@
                         class="text-caption w-100 h-100 d-flex flex-column justify-center align-center"
                     >
                         <v-icon size="24">mdi-{{ proto.icon }}</v-icon>
-                        <span>{{ proto.label }}</span>
+                        <span class="mt-1">{{ proto.label }}</span>
                     </div>
                 </v-responsive>
             </v-sheet>
@@ -40,7 +40,7 @@ export default defineComponent({
         const scale: Ref<number> = inject('scale', ref(1));
 
         // Paper实例注入
-        const paperInstance: Paper = inject('paper') as Paper;
+        const paperInstance = inject('paper') as Paper;
 
         // 原型信息
         const prototypes = reactive(prototypeMap);
@@ -82,7 +82,9 @@ export default defineComponent({
                             scrollTop)) /
                     scale.value;
                 if (x < 0 || y < 0) return;
-                paperInstance.addMaterial(proto.genInitOptions({ x, y }));
+                paperInstance.addMaterial(
+                    proto.genInitOptions({ x, y, paperInstance })
+                );
             },
         });
 

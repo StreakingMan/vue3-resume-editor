@@ -8,3 +8,16 @@ export const calcSelectedItem = (rect: number[][], items: Item[]): Item[] => {
         return !(y + h <= y1 || y >= y2 || x + w <= x1 || x >= x2);
     });
 };
+
+interface Rect {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+}
+
+// 计算矩形中心旋转后的位置信息
+export const centerRotateRect: (rect: Rect) => Rect = ({ x, y, w, h }) => {
+    const [centerX, centerY] = [x + w / 2, y + h / 2];
+    return { x: centerX - h / 2, y: centerY - w / 2, w: h, h: w };
+};

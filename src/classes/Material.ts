@@ -19,7 +19,7 @@ const calcCellingValue: (
 ) => number = (value, cellSize, ceil) => {
     const newValue = Math.round(value);
     const offset = newValue % cellSize;
-    if (offset > cellSize / 2 || ceil) {
+    if (offset > cellSize / 2 || (offset && ceil)) {
         return newValue - offset + cellSize;
     } else {
         return newValue - offset;
@@ -78,6 +78,7 @@ export class Material<T> {
             config,
             cellSize,
         } = options;
+        if (cellSize) this.cellSize = cellSize;
         this.componentName = componentName;
         this.config = config;
         this.groupName = groupName;
@@ -85,6 +86,5 @@ export class Material<T> {
         this.y = y;
         this.w = w;
         this.h = h;
-        if (cellSize) this.cellSize = cellSize;
     }
 }

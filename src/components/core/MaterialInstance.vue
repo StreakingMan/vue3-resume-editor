@@ -63,6 +63,7 @@
                 `transform: scale(${1 / scale});${styleMap[dot]}`,
                 !ableCtrlDots.includes(dot) ? 'cursor: not-allowed;' : '',
                 {
+                    zIndex: ableCtrlDots.includes(dot) ? 2 : 1,
                     opacity:
                         (clickingDot && clickingDot !== dot) || !active
                             ? 0
@@ -103,6 +104,7 @@ import { prototypeMap } from '../materials/prototypes';
 import { CtrlDotType } from '../materials/config';
 import { Material } from '../../classes/Material';
 import { Paper } from '../../classes/Paper';
+import MDivider from '../materials/MDivider.vue';
 
 const ctrlDots: CtrlDotType[] = [
     'tl',
@@ -135,7 +137,7 @@ const styleMap: Record<CtrlDotType, string> = {
 
 export default defineComponent({
     name: 'MaterialInstance',
-    components: { MaterialConfig, MText, MImage, MList },
+    components: { MDivider, MaterialConfig, MText, MImage, MList },
     props: {
         item: {
             type: Object,

@@ -5,17 +5,24 @@ import MList from './MList.vue';
 import {
     CtrlDotFunction,
     CtrlDotType,
+    M_DIVIDER_NAME,
     M_IMAGE_NAME,
     M_LIST_NAME,
     M_TEXT_NAME,
     MaterialComponentNameType,
 } from './config';
+import MDivider from './MDivider.vue';
+import { Paper } from '../../classes/Paper';
 
 export interface ProtoInfo<T> {
     label: string;
     icon: string;
     dragHandlers: CtrlDotType[] | CtrlDotFunction<T>;
-    genInitOptions: (options: { x: number; y: number }) => MaterialOptions<T>;
+    genInitOptions: (options: {
+        x: number;
+        y: number;
+        paperInstance: Paper;
+    }) => MaterialOptions<T>;
 }
 
 export type PrototypeMap = Record<
@@ -27,4 +34,5 @@ export const prototypeMap: PrototypeMap = {
     [M_TEXT_NAME]: { ...MText.protoInfo, tempStyle: '' },
     [M_IMAGE_NAME]: { ...MImage.protoInfo, tempStyle: '' },
     [M_LIST_NAME]: { ...MList.protoInfo, tempStyle: '' },
+    [M_DIVIDER_NAME]: { ...MDivider.protoInfo, tempStyle: '' },
 };

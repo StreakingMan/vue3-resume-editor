@@ -129,9 +129,7 @@ export default defineComponent({
     components: { MaterialConfigPopover },
     protoInfo,
     setup() {
-        const instance: Material<MImageConfig> = inject('m-instance', {
-            config: {},
-        }) as Material<MImageConfig>;
+        const instance = inject('m-instance') as Material<MImageConfig>;
 
         watch(
             () => ({
