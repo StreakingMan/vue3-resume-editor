@@ -15,6 +15,7 @@ export interface PaperOptions {
 export class Paper {
     public readonly w: number;
     public readonly h: number;
+    public background = 'white';
     public materialList: Material<any>[] = [];
     private _materialMap: Map<Material<any>['id'], Material<any>>;
     // 网格尺寸同步到每个元素实例

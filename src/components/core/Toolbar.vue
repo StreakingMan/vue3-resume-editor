@@ -27,7 +27,8 @@
     <v-divider vertical class="mx-4"></v-divider>
     <v-btn icon>
         <v-icon>mdi-grid</v-icon>
-        <v-menu activator="parent">
+        <v-tooltip activator="parent" anchor="bottom">辅助网格</v-tooltip>
+        <v-menu activator="parent" anchor="bottom">
             <v-sheet class="pa-4 rounded" width="200">
                 <div class="d-flex align-center">
                     <div class="text-subtitle-2">显示网格</div>
@@ -56,6 +57,24 @@
                         thumb-label
                     ></v-slider>
                 </div>
+            </v-sheet>
+        </v-menu>
+    </v-btn>
+    <v-btn icon>
+        <v-icon :style="{ color: paperInstance.background }">
+            mdi-palette
+        </v-icon>
+        <v-tooltip activator="parent" anchor="bottom">纸张背景</v-tooltip>
+        <v-menu activator="parent" anchor="bottom">
+            <v-sheet class="pa-4 rounded" width="fit-content">
+                <div class="d-flex align-center">
+                    <div class="text-subtitle-2">背景色</div>
+                </div>
+                <v-color-picker
+                    v-model="paperInstance.background"
+                    show-swatches
+                    elevation="0"
+                ></v-color-picker>
             </v-sheet>
         </v-menu>
     </v-btn>

@@ -68,7 +68,7 @@
                             ? 0
                             : ableCtrlDots.includes(dot)
                             ? 1
-                            : 0.3,
+                            : 0.15,
                     width: CTRL_DOT_SIZE + 'px',
                     height: CTRL_DOT_SIZE + 'px',
                 },

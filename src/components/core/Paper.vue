@@ -7,6 +7,7 @@
             (paperInstance.cellSize < 10 || !showGrid) &&
                 'background-image: none',
             {
+                backgroundColor: paperInstance.background,
                 backgroundSize: `${paperInstance.cellSize}px ${paperInstance.cellSize}px,${paperInstance.cellSize}px ${paperInstance.cellSize}px`,
             },
         ]"
@@ -155,9 +156,17 @@ export default defineComponent({
 .paper {
     position: relative;
     border-radius: 4px;
-    background: white;
     background-image: linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 0),
         linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 0);
+    background-position: initial;
+    background-size: 10px 10px, 10px 10px;
+    background-repeat: initial;
+    background-attachment: initial;
+    background-origin: initial;
+    background-clip: initial;
+    background-color: white;
+    width: 620px;
+    height: 877px;
 
     .select-box {
         position: absolute;
