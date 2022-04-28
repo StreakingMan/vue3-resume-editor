@@ -67,15 +67,15 @@ export default defineComponent({
                 (paperHeight + paddingY.value * 2 - windowHeight) / 2;
         };
 
-        window.addEventListener('resize', adjustSketch);
-        onUnmounted(() => {
-            window.removeEventListener('resize', adjustSketch);
-        });
-
         onMounted(() => {
             if (!paper?.value?.paper) return;
             paperDiv = ref<HTMLDivElement>(paper.value.paper);
             adjustSketch();
+            window.addEventListener('resize', adjustSketch);
+        });
+
+        onUnmounted(() => {
+            window.removeEventListener('resize', adjustSketch);
         });
 
         const space: Ref<boolean> = inject('keyboard:space') as Ref<boolean>;
@@ -190,7 +190,6 @@ export default defineComponent({
         &::-webkit-scrollbar-thumb {
             border-radius: 6px;
             background-color: transparent;
-            //@include bgColor('primary-dark');
         }
     }
     &__inner {

@@ -10,6 +10,8 @@
                 <span class="text-subtitle-1 ml-2">轻松制作一份精美简历</span>
             </v-app-bar-title>
             <v-spacer />
+            <Toolbar />
+            <v-spacer />
             <v-btn icon>
                 <v-icon>mdi-github</v-icon>
             </v-btn>
@@ -47,10 +49,12 @@ import { Paper } from './classes/Paper';
 import Beian from './components/Beian.vue';
 import Sketch from './components/core/Sketch.vue';
 import MaterialPrototype from './components/core/MaterialPrototype.vue';
+import Toolbar from './components/core/Toolbar.vue';
 
 export default defineComponent({
     name: 'App',
     components: {
+        Toolbar,
         MaterialPrototype,
         Sketch,
         Beian,
