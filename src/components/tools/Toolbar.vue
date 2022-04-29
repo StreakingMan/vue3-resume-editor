@@ -78,15 +78,61 @@
             </v-sheet>
         </v-menu>
     </v-btn>
+    <v-btn icon>
+        <v-icon>mdi-magnify-plus</v-icon>
+        <v-tooltip activator="parent" anchor="bottom">缩放视图</v-tooltip>
+        <v-menu activator="parent" anchor="bottom">
+            <v-sheet class="pa-4 rounded" width="200">
+                <div class="d-flex align-center">
+                    <div class="text-subtitle-2">比例</div>
+                    <v-slider
+                        v-model="scale"
+                        hide-details
+                        min="0.5"
+                        max="2"
+                        tick-size="4"
+                        step="0.01"
+                    ></v-slider>
+                </div>
+                <div class="text-caption">[ctrl + 滚轮] 快捷操作</div>
+            </v-sheet>
+        </v-menu>
+    </v-btn>
+
+    <v-divider vertical class="mx-4"></v-divider>
+
+    <Print />
+    <v-btn icon>
+        <v-icon>mdi-content-save</v-icon>
+    </v-btn>
+
+    <v-divider vertical class="mx-4"></v-divider>
+
+    <v-btn
+        icon
+        tag="a"
+        href="https://github.com/StreakingMan/vue3-resume-editor"
+        target="_blank"
+    >
+        <v-icon>mdi-github</v-icon>
+        <v-tooltip activator="parent" anchor="bottom">
+            star, issue or pr!
+        </v-tooltip>
+    </v-btn>
+    <v-btn icon>
+        <v-icon>mdi-dots-vertical</v-icon>
+    </v-btn>
 </template>
 
 <script lang="ts">
 import { defineComponent, inject } from 'vue';
 import { UnwrapNestedRefs } from '@vue/reactivity';
 import { Paper } from '../../classes/Paper';
+import Print from './Print.vue';
 
 export default defineComponent({
     name: 'Toolbar',
+    components: { Print },
     setup() {
         // Paper实例注入
         const paperInstance: UnwrapNestedRefs<Paper> = inject(
@@ -95,7 +141,10 @@ export default defineComponent({
 
         const showGrid = inject('showGrid');
 
+        const scale = inject('scale');
+
         return {
+            scale,
             showGrid,
             paperInstance,
         };

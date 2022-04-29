@@ -11,17 +11,6 @@
             </v-app-bar-title>
             <v-spacer />
             <Toolbar />
-            <v-spacer />
-            <v-btn icon>
-                <v-icon>mdi-github</v-icon>
-            </v-btn>
-            <Print />
-            <v-btn icon>
-                <v-icon>mdi-content-save</v-icon>
-            </v-btn>
-            <v-btn icon>
-                <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
         </v-app-bar>
         <v-navigation-drawer v-model="drawer" width="300" temporary app>
             <div class="w-100 h-100 d-flex flex-column">
@@ -48,12 +37,10 @@ import Beian from './components/Beian.vue';
 import Sketch from './components/core/Sketch.vue';
 import MaterialPrototype from './components/core/MaterialPrototype.vue';
 import Toolbar from './components/tools/Toolbar.vue';
-import Print from './components/tools/Print.vue';
 
 export default defineComponent({
     name: 'App',
     components: {
-        Print,
         Toolbar,
         MaterialPrototype,
         Sketch,
