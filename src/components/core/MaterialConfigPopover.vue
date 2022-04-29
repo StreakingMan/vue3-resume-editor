@@ -15,10 +15,13 @@
                     color="primary"
                     size="x-small"
                     :disabled="!active"
-                    icon="mdi-cog"
+                    icon
                     :rounded="0"
-                    title="配置面板"
                 >
+                    <v-icon size="x-small">mdi-cog</v-icon>
+                    <v-tooltip activator="parent" anchor="top">
+                        配置面板
+                    </v-tooltip>
                 </v-btn>
             </div>
         </template>

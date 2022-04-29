@@ -5,6 +5,7 @@ export interface MaterialOptions<T> {
     componentName: MaterialComponentNameType;
     x: number;
     y: number;
+    z?: number;
     w: number;
     h: number;
     config: T;
@@ -32,6 +33,7 @@ export class Material<T> {
     public groupName?: string;
     public config: T;
     public cellSize = 10; // 网格尺寸
+    public z: number;
 
     private _x = 0;
     get x(): number {
@@ -72,6 +74,7 @@ export class Material<T> {
             componentName,
             x,
             y,
+            z,
             w,
             h,
             groupName,
@@ -84,6 +87,7 @@ export class Material<T> {
         this.groupName = groupName;
         this.x = x;
         this.y = y;
+        this.z = z || 1;
         this.w = w;
         this.h = h;
     }

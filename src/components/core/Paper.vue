@@ -67,7 +67,7 @@ export default defineComponent({
         watch(
             () => materialList.value.length,
             (v) => {
-                console.log(v);
+                //console.log(v);
             }
         );
 

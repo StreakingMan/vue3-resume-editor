@@ -5,6 +5,7 @@
         :style="{
             left: instance.x + 'px',
             top: instance.y + 'px',
+            zIndex: active ? paperInstance.materialList.length + 1 : instance.z,
             width: instance.w + 'px',
             height: instance.h + 'px',
         }"
@@ -28,29 +29,100 @@
         >
             <component :is="instance.componentName">
                 <template #activator>
+                    <!-- 移动 -->
                     <v-btn
                         ref="moveHandlerRef"
                         variant="outlined"
                         color="primary"
                         size="x-small"
                         :disabled="!active"
-                        icon="mdi-arrow-all"
+                        icon
                         class="border-r-0"
                         :rounded="0"
-                        title="移动元素"
                     >
+                        <v-icon size="x-small">mdi-arrow-all</v-icon>
+                        <v-tooltip activator="parent" anchor="top">
+                            拖拽移动
+                        </v-tooltip>
                     </v-btn>
+
+                    <!-- 层级 -->
+                    <v-btn
+                        variant="outlined"
+                        color="primary"
+                        size="x-small"
+                        :disabled="!active"
+                        icon
+                        class="border-r-0"
+                        :rounded="0"
+                        title="层级调整"
+                    >
+                        <v-icon size="x-small">mdi-vector-arrange-above</v-icon>
+                        <v-tooltip activator="parent" anchor="top">
+                            层级调整
+                        </v-tooltip>
+                        <v-menu activator="parent" anchor="bottom">
+                            <v-list density="compact">
+                                <v-list-item
+                                    v-for="({ icon, text, onClick }, i) in [
+                                        {
+                                            icon: 'mdi-arrange-bring-to-front',
+                                            text: '置于顶层',
+                                            onClick: bringToFront,
+                                        },
+                                        {
+                                            icon: 'mdi-arrange-bring-forward',
+                                            text: '上移一层',
+                                            onClick: bringForward,
+                                        },
+                                        {
+                                            icon: 'mdi-arrange-send-backward',
+                                            text: '下移一层',
+                                            onClick: sendBackward,
+                                        },
+                                        {
+                                            icon: 'mdi-arrange-send-to-back',
+                                            text: '置于底层',
+                                            onClick: sendToBack,
+                                        },
+                                    ]"
+                                    :key="i"
+                                    height="30"
+                                    :value="i"
+                                    active-color="primary"
+                                    class="pl-0"
+                                    @click="onClick"
+                                >
+                                    <v-list-item-avatar start class="mr-1">
+                                        <v-icon
+                                            :icon="icon"
+                                            size="small"
+                                        ></v-icon>
+                                    </v-list-item-avatar>
+                                    <v-list-item-subtitle
+                                        v-text="text"
+                                    ></v-list-item-subtitle>
+                                </v-list-item>
+                            </v-list>
+                        </v-menu>
+                    </v-btn>
+
+                    <!-- 删除 -->
                     <v-btn
                         variant="outlined"
                         color="error"
                         size="x-small"
                         :disabled="!active"
-                        icon="mdi-trash-can"
+                        icon
                         class="border-r-0"
                         :rounded="0"
                         title="双击删除"
                         @dblclick="removeMaterialInstance"
                     >
+                        <v-icon size="x-small">mdi-trash-can</v-icon>
+                        <v-tooltip activator="parent" anchor="top">
+                            双击删除
+                        </v-tooltip>
                     </v-btn>
                 </template>
             </component>
@@ -282,7 +354,65 @@ export default defineComponent({
             paperInstance.removeMaterial(instance.value.id);
         };
 
+        // 层级调整
+        // 使用置换操作，每个元素实例的z值不可重复
+        // 置顶
+        // TODO 这堆方法是否移动到Paper类中？
+        const bringToFront = () => {
+            let startZ = instance.value.z;
+            const zMap = paperInstance.zMap;
+            while (startZ <= paperInstance.materialList.length) {
+                const nextInstance = zMap.get(startZ + 1);
+                if (nextInstance) {
+                    nextInstance.z -= 1;
+                }
+                startZ += 1;
+            }
+            instance.value.z = paperInstance.materialList.length;
+        };
+        // 上移一层
+        const bringForward = () => {
+            const topZ = paperInstance.materialList.length;
+            if (instance.value.z === topZ) return;
+            const newZ = instance.value.z + 1;
+            const zMap = paperInstance.zMap;
+            const replaceInstance = zMap.get(newZ);
+            if (replaceInstance) {
+                replaceInstance.z -= 1;
+            }
+            instance.value.z = newZ;
+        };
+        // 下移一层
+        const sendBackward = () => {
+            if (instance.value.z === 1) return;
+            const newZ = instance.value.z - 1;
+            const zMap = paperInstance.zMap;
+            const replaceInstance = zMap.get(newZ);
+            if (replaceInstance) {
+                replaceInstance.z += 1;
+            }
+            instance.value.z = newZ;
+        };
+        // 置底
+        const sendToBack = () => {
+            let endZ = instance.value.z;
+            const zMap = paperInstance.zMap;
+            while (endZ > 1) {
+                const prevInstance = zMap.get(endZ - 1);
+                if (prevInstance) {
+                    prevInstance.z += 1;
+                }
+                endZ -= 1;
+            }
+            instance.value.z = 1;
+        };
+
         return {
+            paperInstance,
+            bringToFront,
+            bringForward,
+            sendBackward,
+            sendToBack,
             moveHandlerRef,
             instance,
             dots: ctrlDots,
