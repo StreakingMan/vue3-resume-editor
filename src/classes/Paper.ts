@@ -1,5 +1,7 @@
 import { Material, MaterialOptions } from './Material';
 
+const LOCAL_STORAGE_KEY = 'paper_cache';
+
 const paperSizeMap = {
     a4: {
         w: 620,
@@ -13,8 +15,8 @@ export interface PaperOptions {
 }
 
 export class Paper {
-    public readonly w: number;
-    public readonly h: number;
+    public w: number;
+    public h: number;
     public background = 'white';
     public materialList: Material<any>[] = [];
     private _materialMap: Map<Material<any>['id'], Material<any>>;
@@ -45,11 +47,47 @@ export class Paper {
         this._materialMap = new Map();
         if (cellSize) this.cellSize = cellSize;
     }
+    loadFromStorage(): void {
+        const jsonString = window.localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (!jsonString) return;
+        const { w, h, _cellSize, materialList = [], background } = JSON.parse(
+            jsonString
+        ) as {
+            background: string;
+            w: number;
+            h: number;
+            _cellSize: number;
+            materialList: any[];
+        };
+        this.background = background;
+        this.w = w;
+        this.h = h;
+        this.cellSize = _cellSize;
+        this.materialList = [];
+        this._materialMap.clear();
+        materialList.forEach((m) => {
+            this.addMaterial({
+                componentName: m.componentName,
+                _id: m._id,
+                x: m._x,
+                y: m._y,
+                z: m.z,
+                w: m._w,
+                h: m._h,
+                cellSize: m.cellSize,
+                config: m.config,
+                groupId: m.groupId,
+            });
+        });
+    }
+    saveToStorage(): void {
+        window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this));
+    }
     addMaterial(materialOptions: MaterialOptions<any>): Material<any>[] {
         const materialInstance = new Material({
             ...materialOptions,
-            z: this.materialList.length + 1,
-            cellSize: this.cellSize,
+            z: materialOptions.z ?? this.materialList.length + 1,
+            cellSize: materialOptions.cellSize ?? this.cellSize,
         });
         this.materialList.push(materialInstance);
         this._materialMap.set(materialInstance.id, materialInstance);

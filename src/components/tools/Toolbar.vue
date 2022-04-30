@@ -4,9 +4,7 @@
     <View />
     <v-divider vertical class="mx-4"></v-divider>
     <Print />
-    <v-btn icon>
-        <v-icon>mdi-content-save</v-icon>
-    </v-btn>
+    <Save />
     <v-divider vertical class="mx-4"></v-divider>
     <Github />
     <v-btn icon>
@@ -20,10 +18,11 @@ import Print from './Print.vue';
 import Align from './Align.vue';
 import View from './View.vue';
 import Github from './Github.vue';
+import Save from './Save.vue';
 
 export default defineComponent({
     name: 'Toolbar',
-    components: { Github, View, Align, Print },
+    components: { Save, Github, View, Align, Print },
 });
 </script>
 

@@ -3,13 +3,14 @@ import { MaterialComponentNameType } from '../components/materials/config';
 
 export interface MaterialOptions<T> {
     componentName: MaterialComponentNameType;
+    _id?: string;
     x: number;
     y: number;
     z?: number;
     w: number;
     h: number;
     config: T;
-    groupName?: string;
+    groupId?: string;
     cellSize?: number;
 }
 
@@ -28,9 +29,12 @@ const calcCellingValue: (
 };
 
 export class Material<T> {
-    public readonly id: string;
+    private readonly _id: string;
+    get id(): string {
+        return this._id;
+    }
     public readonly componentName: MaterialComponentNameType;
-    public groupName?: string;
+    public groupId?: string;
     public config: T;
     public cellSize = 10; // 网格尺寸
     public z: number;
@@ -69,22 +73,27 @@ export class Material<T> {
     }
 
     constructor(options: MaterialOptions<T>) {
-        this.id = uniqueString();
         const {
             componentName,
+            _id,
             x,
             y,
             z,
             w,
             h,
-            groupName,
+            groupId,
             config,
             cellSize,
         } = options;
+        if (_id) {
+            this._id = _id;
+        } else {
+            this._id = uniqueString();
+        }
         if (cellSize) this.cellSize = cellSize;
         this.componentName = componentName;
         this.config = config;
-        this.groupName = groupName;
+        this.groupId = groupId;
         this.x = x;
         this.y = y;
         this.z = z || 1;

@@ -24,11 +24,22 @@
             <Sketch ref="sketch" />
             <Beian />
         </v-main>
+        <v-snackbar
+            v-model="snackbar"
+            app
+            top="72"
+            right
+            timeout="2000"
+            color="grey-darken-3"
+            transition="scroll-x-reverse-transition"
+        >
+            {{ snackbarText }}
+        </v-snackbar>
     </v-app>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, provide, reactive, Ref } from 'vue';
+import { defineComponent, ref, provide, reactive, Ref, onMounted } from 'vue';
 import { AppState } from './classes/App';
 import useKeyboardStatus from './composables/useKeyboardStatus';
 import useMouseWheel from './composables/useMouseWheel';
@@ -82,6 +93,10 @@ export default defineComponent({
         // Paper实例
         const paper = reactive(new Paper({}));
         provide('paper', paper);
+        onMounted(() => {
+            paper.loadFromStorage();
+            console.log(paper);
+        });
 
         // Sketch组件
         const sketch = ref(null);
@@ -91,7 +106,15 @@ export default defineComponent({
         const focusMaterialList = ref([]) as Ref<Material<any>['id'][]>;
         provide('focus:materialList', focusMaterialList);
 
+        // snackbar
+        const snackbar = ref(false);
+        const snackbarText = ref('');
+        provide('snackbar', snackbar);
+        provide('snackbar:text', snackbarText);
+
         return {
+            snackbar,
+            snackbarText,
             ctrl: keyboardStatus.ctrl,
             space: keyboardStatus.space,
             sketch,
