@@ -159,4 +159,59 @@ export class Paper {
             return !(y + h <= y1 || y >= y2 || x + w <= x1 || x >= x2);
         });
     }
+    // 对齐操作
+    // 左对齐
+    alignHorizontalLeft(ids: Material<any>['id'][]): void {
+        const setMinX: (index: number, minX?: number) => number = (
+            index,
+            minX
+        ) => {
+            if (index === ids.length) return minX ?? 0;
+            const m = this._materialMap.get(ids[index]);
+            if (!m) return setMinX(index + 1, minX);
+            if (minX === undefined) minX = m.x;
+            m.x = setMinX(index + 1, minX > m.x ? m.x : minX);
+            return m.x;
+        };
+        setMinX(0);
+    }
+    // 水平居中对齐
+    alignHorizontalCenter(ids: Material<any>['id'][]): void {
+        //
+    }
+    // 右对齐
+    alignHorizontalRight(ids: Material<any>['id'][]): void {
+        const setMaxX: (index: number, maxX?: number) => number = (
+            index,
+            maxX
+        ) => {
+            if (index === ids.length) return maxX ?? 0;
+            const m = this._materialMap.get(ids[index]);
+            if (!m) return setMaxX(index + 1, maxX);
+            if (maxX === undefined) maxX = m.x + m.w;
+            m.x = setMaxX(index + 1, m.x + m.w > maxX ? m.x + m.w : maxX) - m.w;
+            return m.x + m.w;
+        };
+        setMaxX(0);
+    }
+    // 水平均匀分布
+    alignHorizontalDistribute(ids: Material<any>['id'][]): void {
+        //
+    }
+    // 顶对齐
+    alignVerticalTop(ids: Material<any>['id'][]): void {
+        //
+    }
+    // 垂直居中对齐
+    alignVerticalCenter(ids: Material<any>['id'][]): void {
+        //
+    }
+    // 底对齐
+    alignVerticalBottom(ids: Material<any>['id'][]): void {
+        //
+    }
+    // 垂直均匀分布
+    alignVerticalDistribute(ids: Material<any>['id'][]): void {
+        //
+    }
 }

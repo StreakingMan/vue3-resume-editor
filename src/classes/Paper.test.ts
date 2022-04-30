@@ -19,7 +19,7 @@ const makeTestMaterialOptions: (rect: {
     config: {},
 });
 
-test('getSelectRangeMaterial', () => {
+test('获取选区内元素', () => {
     const paper = new Paper({});
     const mAOptions = makeTestMaterialOptions({ x: 0, y: 0, w: 100, h: 100 });
     const mBOptions = makeTestMaterialOptions({
@@ -73,7 +73,7 @@ test('元素增减', () => {
     expect(m4.z).toEqual(1);
 });
 
-test('adjustZ', () => {
+test('层级调整', () => {
     const paper = new Paper({});
     const mOptions = makeTestMaterialOptions({ x: 0, y: 0, w: 100, h: 100 });
     paper.addMaterial(mOptions);
@@ -98,4 +98,54 @@ test('adjustZ', () => {
     // m3, m1, m4, m2
     paper.bringToFront(m2.id);
     expect([m3.z, m1.z, m4.z, m2.z]).toEqual([1, 2, 3, 4]);
+});
+
+test('对齐操作:左对齐', () => {
+    const paper = new Paper({});
+    const mOptions1 = makeTestMaterialOptions({ x: 12, y: 0, w: 100, h: 100 });
+    const mOptions2 = makeTestMaterialOptions({ x: 450, y: 0, w: 100, h: 100 });
+    const mOptions3 = makeTestMaterialOptions({ x: 0, y: 0, w: 100, h: 100 });
+    const mOptions4 = makeTestMaterialOptions({ x: 70, y: 0, w: 100, h: 100 });
+    paper.addMaterial(mOptions1);
+    paper.addMaterial(mOptions2);
+    paper.addMaterial(mOptions3);
+    paper.addMaterial(mOptions4);
+    const [m1, m2, m3, m4] = paper.materialList;
+    paper.alignHorizontalLeft([m1.id, m2.id, m3.id, m4.id]);
+    expect([m1.x, m2.x, m3.x, m4.x]).toEqual([0, 0, 0, 0]);
+});
+
+test('对齐操作:右对齐', () => {
+    const paper = new Paper({});
+    const mOptions1 = makeTestMaterialOptions({
+        x: 300,
+        y: 100,
+        w: 100,
+        h: 100,
+    });
+    const mOptions2 = makeTestMaterialOptions({
+        x: 100,
+        y: 200,
+        w: 300,
+        h: 100,
+    });
+    const mOptions3 = makeTestMaterialOptions({ x: 0, y: 300, w: 100, h: 200 });
+    const mOptions4 = makeTestMaterialOptions({
+        x: 400,
+        y: 400,
+        w: 400,
+        h: 100,
+    });
+    paper.addMaterial(mOptions1);
+    paper.addMaterial(mOptions2);
+    paper.addMaterial(mOptions3);
+    paper.addMaterial(mOptions4);
+    const [m1, m2, m3, m4] = paper.materialList;
+    paper.alignHorizontalRight([m1.id, m2.id, m3.id, m4.id]);
+    expect([m1.x + m1.w, m2.x + m2.w, m3.x + m3.w, m4.x + m4.w]).toEqual([
+        800,
+        800,
+        800,
+        800,
+    ]);
 });
