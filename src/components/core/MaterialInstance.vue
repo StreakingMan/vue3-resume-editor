@@ -14,7 +14,7 @@
         }"
         @mouseenter.prevent.stop="hover = true"
         @mouseleave.prevent.stop="hover = false"
-        @mousedown.stop="focus"
+        @mousedown="focus"
     >
         <div
             class="w-100 h-100"
@@ -232,14 +232,6 @@ export default defineComponent({
     },
     emits: ['update:item'],
     setup(props) {
-        // 位置信息缓存
-        const posInfoCache = {
-            itemStartX: 0,
-            itemStartY: 0,
-            itemStartW: 0,
-            itemStartH: 0,
-        };
-
         // 数据源
         const { item: instance } = toRefs<{ item: Material<any> }>(
             props as any
@@ -254,7 +246,9 @@ export default defineComponent({
             Material<any>['id'][]
         >;
         const hover = ref(false);
-        const focus = () => {
+        const focus = (e: MouseEvent) => {
+            // 没按空格时阻止冒泡
+            if (!space.value) e.stopPropagation();
             // 按住shift点击元素则切换选中状态
             if (shift.value) {
                 const findIdx = focusMaterialList.value.findIndex(
@@ -284,23 +278,47 @@ export default defineComponent({
         // 空格键状态注入
         const space: Ref<boolean> = inject('keyboard:space', ref(false));
 
+        // 位置信息缓存
+        const posInfoCache = {
+            itemStartX: 0,
+            itemStartY: 0,
+            itemStartW: 0,
+            itemStartH: 0,
+        };
+        // 所有激活元素的位置缓存
+        const posInfoCacheMap = new Map();
+
         const moveHandlerRef = ref(null);
         useMouseDrag({
             onStart() {
                 if (space.value) return false;
-                const { x, y } = instance.value;
-                posInfoCache.itemStartX = x;
-                posInfoCache.itemStartY = y;
+                // 若当前实例不在激活列表中，则重置激活列表
+                if (!focusMaterialList.value.includes(instance.value.id)) {
+                    focusMaterialList.value = [instance.value.id];
+                }
+                for (const mId of focusMaterialList.value) {
+                    const mInstance = paperInstance.queryMaterial(mId);
+                    if (!mInstance) continue;
+                    const { x, y } = mInstance;
+                    posInfoCacheMap.set(mId, {
+                        itemStartX: x,
+                        itemStartY: y,
+                    });
+                }
             },
             onDrag({ transX, transY }: MouseEvtInfo) {
-                instance.value.x =
-                    posInfoCache.itemStartX + transX / scale.value;
-                instance.value.y =
-                    posInfoCache.itemStartY + transY / scale.value;
+                for (const mId of focusMaterialList.value) {
+                    const mInstance = paperInstance.queryMaterial(mId);
+                    if (!mInstance) continue;
+                    const posInfoCache = posInfoCacheMap.get(mId);
+                    mInstance.x =
+                        posInfoCache.itemStartX + transX / scale.value;
+                    mInstance.y =
+                        posInfoCache.itemStartY + transY / scale.value;
+                }
             },
             onFinish() {
-                posInfoCache.itemStartX = 0;
-                posInfoCache.itemStartY = 0;
+                posInfoCacheMap.clear();
             },
             bindElementRef: moveHandlerRef,
         });
