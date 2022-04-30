@@ -51,6 +51,23 @@ test('getSelectRangeMaterial', () => {
     );
 });
 
+test('CURD', () => {
+    const paper = new Paper({});
+    expect(paper.materialList).toEqual([]);
+    const mOptions = makeTestMaterialOptions({ x: 0, y: 0, w: 100, h: 100 });
+    paper.addMaterial(mOptions);
+    paper.addMaterial(mOptions);
+    paper.addMaterial(mOptions);
+    paper.addMaterial(mOptions);
+    expect(paper.materialList.length).toEqual(4);
+    const [m1, m2, m3, m4] = paper.materialList;
+    expect([m1.z, m2.z, m3.z, m4.z]).toEqual([1, 2, 3, 4]);
+    paper.removeMaterial(m2.id);
+    expect(paper.materialList.length).toEqual(3);
+    // 删除元素后调整层级
+    expect([m1.z, m3.z, m4.z]).toEqual([1, 2, 3]);
+});
+
 test('adjustZ', () => {
     const paper = new Paper({});
     const mOptions = makeTestMaterialOptions({ x: 0, y: 0, w: 100, h: 100 });
