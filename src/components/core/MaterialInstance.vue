@@ -309,7 +309,7 @@ export default defineComponent({
         const clickingDot = ref<CtrlDotType | null>(null);
         const { onMousedown: onDotMousedown } = useMouseDrag({
             onStart() {
-                if (!active.value) return;
+                if (!(active.value || hover.value)) return;
                 const { x, y, w, h } = instance.value;
                 posInfoCache.itemStartX = x;
                 posInfoCache.itemStartY = y;
