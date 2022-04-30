@@ -413,6 +413,7 @@ export default defineComponent({
     position: absolute;
     border: 1px solid transparent;
     box-sizing: content-box;
+    user-select: none;
 
     .control-dot {
         box-sizing: border-box;
