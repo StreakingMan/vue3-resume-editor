@@ -190,12 +190,22 @@ export class Paper {
         h: number;
     }): Material<any>[] {
         // 选区的对角坐标
-        const [x1, y1, x2, y2] = [
+        let [x1, y1, x2, y2] = [
             selection.x,
             selection.y,
             selection.x + selection.w,
             selection.y + selection.h,
         ];
+        // w、h可能为负数，转换为原点在左上的坐标
+        if (selection.h < 0) {
+            y1 = y1 + selection.h;
+            y2 = selection.y;
+        }
+        if (selection.w < 0) {
+            x1 = x1 + selection.w;
+            x2 = selection.x;
+        }
+
         return this.materialList.filter(({ x, y, w, h }) => {
             // 块与选区有交集视为选中
             // 两矩形不重叠情况取反即为交集
