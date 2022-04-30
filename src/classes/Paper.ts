@@ -50,15 +50,17 @@ export class Paper {
     loadFromStorage(): void {
         const jsonString = window.localStorage.getItem(LOCAL_STORAGE_KEY);
         if (!jsonString) return;
-        const { w, h, _cellSize, materialList = [], background } = JSON.parse(
-            jsonString
-        ) as {
-            background: string;
-            w: number;
-            h: number;
-            _cellSize: number;
-            materialList: any[];
-        };
+        const data = JSON.parse(jsonString);
+        this.loadData(data);
+    }
+    loadData(data: {
+        background: string;
+        w: number;
+        h: number;
+        _cellSize: number;
+        materialList: any[];
+    }): void {
+        const { w, h, _cellSize, materialList = [], background } = data;
         this.background = background;
         this.w = w;
         this.h = h;

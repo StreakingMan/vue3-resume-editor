@@ -129,7 +129,9 @@ export default defineComponent({
 
 <style lang="scss">
 body {
-    //
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 #app {
     //
