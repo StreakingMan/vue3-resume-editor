@@ -116,7 +116,6 @@ import { ProtoInfo } from './prototypes';
 import { M_DIVIDER_NAME } from './config';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
 import { Material } from '../../classes/Material';
-import { centerRotateRect } from '../../algorithms/item';
 
 interface MDividerConfig {
     direction: 'horizontal' | 'vertical';
@@ -156,11 +155,7 @@ export default defineComponent({
         watch(
             () => ({ direction: instance.config.direction }),
             () => {
-                const { x, y, w, h } = centerRotateRect(instance);
-                instance.x = x;
-                instance.y = y < 0 ? 0 : y;
-                instance.w = w;
-                instance.h = h;
+                instance.centerRotate();
             }
         );
         // 根据网格调整宽高

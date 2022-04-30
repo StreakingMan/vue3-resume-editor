@@ -130,4 +130,24 @@ export class Paper {
         }
         mInstance.z = 1;
     }
+    // 获取选区内的元素
+    getSelectRangeMaterial(selection: {
+        x: number;
+        y: number;
+        w: number;
+        h: number;
+    }): Material<any>[] {
+        // 选区的对角坐标
+        const [x1, y1, x2, y2] = [
+            selection.x,
+            selection.y,
+            selection.x + selection.w,
+            selection.y + selection.h,
+        ];
+        return this.materialList.filter(({ x, y, w, h }) => {
+            // 块与选区有交集视为选中
+            // 两矩形不重叠情况取反即为交集
+            return !(y + h <= y1 || y >= y2 || x + w <= x1 || x >= x2);
+        });
+    }
 }

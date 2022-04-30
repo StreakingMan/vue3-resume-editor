@@ -91,4 +91,16 @@ export class Material<T> {
         this.w = w;
         this.h = h;
     }
+
+    // 中心旋转
+    centerRotate(): void {
+        const [centerX, centerY] = [this.x + this.w / 2, this.y + this.h / 2];
+        const newX = centerX - this.h / 2;
+        const newY = centerY - this.w / 2;
+        const [newW, newH] = [this.h, this.w];
+        this.x = newX < 0 ? 0 : newX;
+        this.y = newY < 0 ? 0 : newY;
+        this.w = newW;
+        this.h = newH;
+    }
 }
