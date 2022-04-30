@@ -10,7 +10,7 @@
             height: instance.h + 'px',
         }"
         :class="{
-            border: active,
+            border: active || hover,
         }"
         @mouseenter.prevent.stop="hover = true"
         @mouseleave.prevent.stop="hover = false"
@@ -35,7 +35,7 @@
                         variant="outlined"
                         color="primary"
                         size="x-small"
-                        :disabled="!active"
+                        :disabled="!(active || hover)"
                         icon
                         class="border-r-0"
                         :rounded="0"
@@ -51,7 +51,7 @@
                         variant="outlined"
                         color="primary"
                         size="x-small"
-                        :disabled="!active"
+                        :disabled="!(active || hover)"
                         icon
                         class="border-r-0"
                         :rounded="0"
@@ -124,7 +124,7 @@
                         variant="outlined"
                         color="error"
                         size="x-small"
-                        :disabled="!active"
+                        :disabled="!(active || hover)"
                         icon
                         class="border-r-0"
                         :rounded="0"
@@ -149,7 +149,8 @@
                 {
                     zIndex: ableCtrlDots.includes(dot) ? 2 : 1,
                     opacity:
-                        (clickingDot && clickingDot !== dot) || !active
+                        (clickingDot && clickingDot !== dot) ||
+                        !(active || hover)
                             ? 0
                             : ableCtrlDots.includes(dot)
                             ? 1
@@ -177,7 +178,6 @@ import {
     Ref,
     ref,
     toRefs,
-    watch,
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import MImage from '../materials/MImage.vue';
@@ -273,12 +273,10 @@ export default defineComponent({
             focusMaterialList.value = [];
         };
         const active = computed(() => {
-            return (
-                focusMaterialList.value.includes(instance.value.id) ||
-                hover.value
-            );
+            return focusMaterialList.value.includes(instance.value.id);
         });
         provide('m-instance:active', active);
+        provide('m-instance:hover', hover);
 
         // 缩放值注入
         const scale: Ref<number> = inject('scale', ref(1));

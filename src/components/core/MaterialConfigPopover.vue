@@ -4,8 +4,10 @@
             <div
                 class="activator"
                 :style="{
-                    transform: `translateY(-100%) scale(${1 / scale})`,
-                    opacity: active ? 1 : 0,
+                    transform: `translateY(${
+                        active || hover ? -100 : 0
+                    }%) scale(${1 / scale})`,
+                    opacity: active || hover ? 1 : 0,
                 }"
             >
                 <slot name="activator"></slot>
@@ -14,7 +16,7 @@
                     variant="outlined"
                     color="primary"
                     size="x-small"
-                    :disabled="!active"
+                    :disabled="!(active || hover)"
                     icon
                     :rounded="0"
                 >
@@ -60,16 +62,20 @@ export default defineComponent({
         const paperInstance: Paper = inject('paper') as Paper;
 
         // 当前操作
-        const focusMaterialList: Ref = inject('focus:materialList') as Ref<Material<any>['id'][]>;
+        const focusMaterialList: Ref = inject('focus:materialList') as Ref<
+            Material<any>['id'][]
+        >;
 
         // 元素实例
         const instance: Material<any> = inject(
             'm-instance',
             {}
         ) as Material<any>;
-        const active = inject('m-instance:active', {});
+        const active = inject('m-instance:active');
+        const hover = inject('m-instance:hover');
 
         return {
+            hover,
             active,
             scale,
             instance,
