@@ -51,7 +51,7 @@ test('getSelectRangeMaterial', () => {
     );
 });
 
-test('CURD', () => {
+test('元素增减', () => {
     const paper = new Paper({});
     expect(paper.materialList).toEqual([]);
     const mOptions = makeTestMaterialOptions({ x: 0, y: 0, w: 100, h: 100 });
@@ -66,6 +66,11 @@ test('CURD', () => {
     expect(paper.materialList.length).toEqual(3);
     // 删除元素后调整层级
     expect([m1.z, m3.z, m4.z]).toEqual([1, 2, 3]);
+    // 批量删除
+    paper.removeMaterial([m1.id, m3.id]);
+    expect(paper.materialList.length).toEqual(1);
+    expect(paper.materialList[0].id).toEqual(m4.id);
+    expect(m4.z).toEqual(1);
 });
 
 test('adjustZ', () => {

@@ -55,21 +55,30 @@ export class Paper {
         this._materialMap.set(materialInstance.id, materialInstance);
         return this.materialList;
     }
-    removeMaterial(id: Material<any>['id']): void {
-        const findIdx = this.materialList.findIndex((m) => m.id === id);
-        if (findIdx !== -1) {
-            // 调整层级，后面的递补
-            const zMap = this.currentZMap;
-            let startZ = this._materialMap.get(id)!.z;
-            while (startZ < this.materialList.length) {
-                const nextInstance = zMap.get(startZ + 1);
-                if (nextInstance) {
-                    nextInstance.z -= 1;
+    removeMaterial(idOrIds: Material<any>['id'] | Material<any>['id'][]): void {
+        const deleteFunc: (id: Material<any>['id']) => void = (id) => {
+            const findIdx = this.materialList.findIndex((m) => m.id === id);
+            if (findIdx !== -1) {
+                // 调整层级，后面的递补
+                const zMap = this.currentZMap;
+                let startZ = this._materialMap.get(id)!.z;
+                while (startZ < this.materialList.length) {
+                    const nextInstance = zMap.get(startZ + 1);
+                    if (nextInstance) {
+                        nextInstance.z -= 1;
+                    }
+                    startZ += 1;
                 }
-                startZ += 1;
+                this.materialList.splice(findIdx, 1);
+                this._materialMap.delete(id);
             }
-            this.materialList.splice(findIdx, 1);
-            this._materialMap.delete(id);
+        };
+        if (Array.isArray(idOrIds)) {
+            for (const id of idOrIds) {
+                deleteFunc(id);
+            }
+        } else {
+            deleteFunc(idOrIds);
         }
     }
     // 调整元素层级
