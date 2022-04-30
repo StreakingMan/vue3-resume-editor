@@ -385,7 +385,42 @@ export class Paper {
     }
     // 水平居中对齐
     alignHorizontalCenter(ids: Material<any>['id'][]): void {
-        //
+        const setCenterX: (
+            index: number,
+            maxX?: number,
+            minX?: number
+        ) => number = (index, maxX, minX) => {
+            if (index === ids.length) {
+                if (maxX && minX) {
+                    return (maxX + minX) / 2;
+                }
+
+                return 0;
+            }
+
+            const m = this._materialMap.get(ids[index]);
+
+            if (!m) {
+                return setCenterX(index + 1, maxX, minX);
+            }
+
+            if (!maxX) {
+                maxX = m.x;
+            }
+
+            if (!minX) {
+                minX = m.x;
+            }
+
+            m.x = setCenterX(
+                index + 1,
+                minX > m.x ? m.x : minX,
+                maxX > m.x ? maxX : m.x
+            );
+            return m.x;
+        };
+
+        setCenterX(0);
     }
     // 右对齐
     alignHorizontalRight(ids: Material<any>['id'][]): void {
@@ -404,22 +439,133 @@ export class Paper {
     }
     // 水平均匀分布
     alignHorizontalDistribute(ids: Material<any>['id'][]): void {
-        //
+        if (ids.length < 2) {
+            return
+        }
+
+        let maxX = Number.MIN_SAFE_INTEGER, minX = Number.MAX_SAFE_INTEGER
+
+        for (let i = 0; i < ids.length; i++) {
+            const m = this._materialMap.get(ids[i]);
+
+            if (!m) {
+                continue
+            }
+
+            maxX = m.x > maxX ? m.x : maxX
+            minX = m.x > minX ? minX : m.x
+        }
+
+        for (let i = 0; i < ids.length; i++) {
+            const m = this._materialMap.get(ids[i]);
+
+            if (!m) {
+                continue
+            }
+
+            m.x = minX + (maxX - minX) / (ids.length - 1) * i
+        }
     }
     // 顶对齐
     alignVerticalTop(ids: Material<any>['id'][]): void {
-        //
+        const setMinY: (index: number, minY?: number) => number = (
+            index,
+            minY
+        ) => {
+            if (index === ids.length) return minY || 0;
+            const m = this._materialMap.get(ids[index]);
+            if (!m) return setMinY(index + 1, minY);
+            if (minY === undefined) minY = m.y;
+            m.y = setMinY(index + 1, minY > m.y ? m.y : minY);
+            return m.y;
+        };
+        setMinY(0);
     }
     // 垂直居中对齐
     alignVerticalCenter(ids: Material<any>['id'][]): void {
-        //
+        if (ids.length < 2) {
+            return
+        }
+
+        let maxY = Number.MIN_SAFE_INTEGER, minY = Number.MAX_SAFE_INTEGER
+
+        for (let i = 0; i < ids.length; i++) {
+            const m = this._materialMap.get(ids[i]);
+
+            if (!m) {
+                continue
+            }
+
+            maxY = m.y > maxY ? m.y : maxY
+            minY = m.y > minY ? minY : m.y
+        }
+
+        for (let i = 0; i < ids.length; i++) {
+            const m = this._materialMap.get(ids[i]);
+
+            if (!m) {
+                continue
+            }
+
+            m.y = (maxY + minY) / 2
+        }
     }
     // 底对齐
     alignVerticalBottom(ids: Material<any>['id'][]): void {
-        //
+        if (!ids.length) {
+            return;
+        }
+
+        let maxY = this._materialMap.get(ids[0])?.y || 0;
+
+        for (let i = 0; i < ids.length; i++) {
+            const m = this._materialMap.get(ids[i]);
+
+            if (!m) {
+                continue;
+            }
+
+            maxY = m.y > maxY ? m.y : maxY;
+        }
+
+
+        for (let i = 0; i < ids.length; i++) {
+            const m = this._materialMap.get(ids[i]);
+
+            if (!m) {
+                continue
+            }
+
+            m.y = maxY
+        }
     }
     // 垂直均匀分布
     alignVerticalDistribute(ids: Material<any>['id'][]): void {
-        //
+        if (ids.length < 2) {
+            return
+        }
+
+        let maxY = Number.MIN_SAFE_INTEGER, minY = Number.MAX_SAFE_INTEGER
+
+        for (let i = 0; i < ids.length; i++) {
+            const m = this._materialMap.get(ids[i]);
+
+            if (!m) {
+                continue
+            }
+
+            maxY = m.y > maxY ? m.y : maxY
+            minY = m.y > minY ? minY : m.y
+        }
+
+        for (let i = 0; i < ids.length; i++) {
+            const m = this._materialMap.get(ids[i]);
+
+            if (!m) {
+                continue
+            }
+
+            m.y = minY + (maxY - minY) / (ids.length - 1) * i
+        }
     }
 }
