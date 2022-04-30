@@ -1,30 +1,20 @@
 <template>
-    <v-btn icon>
-        <v-icon>mdi-align-horizontal-left</v-icon>
-    </v-btn>
-    <v-btn icon>
-        <v-icon>mdi-align-horizontal-center</v-icon>
-    </v-btn>
-    <v-btn icon>
-        <v-icon>mdi-align-horizontal-right</v-icon>
-    </v-btn>
-    <v-btn icon>
-        <v-icon>mdi-align-horizontal-distribute</v-icon>
-    </v-btn>
+    <template v-for="opt of alignButtons.slice(0, 4)" :key="opt.icon">
+        <v-btn icon :disabled="alignOperateDisable" @click="opt.onClick">
+            <v-icon>{{ opt.icon }}</v-icon>
+        </v-btn>
+    </template>
+
     <v-divider vertical class="mx-4"></v-divider>
-    <v-btn icon>
-        <v-icon>mdi-align-vertical-top</v-icon>
-    </v-btn>
-    <v-btn icon>
-        <v-icon>mdi-align-vertical-center</v-icon>
-    </v-btn>
-    <v-btn icon>
-        <v-icon>mdi-align-vertical-bottom</v-icon>
-    </v-btn>
-    <v-btn icon>
-        <v-icon>mdi-align-vertical-distribute</v-icon>
-    </v-btn>
+
+    <template v-for="opt of alignButtons.slice(4)" :key="opt.icon">
+        <v-btn icon :disabled="alignOperateDisable" @click="opt.onClick">
+            <v-icon>{{ opt.icon }}</v-icon>
+        </v-btn>
+    </template>
+
     <v-divider vertical class="mx-4"></v-divider>
+
     <v-btn icon>
         <v-icon>mdi-grid</v-icon>
         <v-tooltip activator="parent" anchor="bottom">辅助网格</v-tooltip>
@@ -125,10 +115,59 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue';
+import { computed, defineComponent, inject, Ref } from 'vue';
 import { UnwrapNestedRefs } from '@vue/reactivity';
 import { Paper } from '../../classes/Paper';
 import Print from './Print.vue';
+import { Material } from '../../classes/Material';
+
+type AlignCommandType =
+    | 'alignHorizontalLeft'
+    | 'alignHorizontalCenter'
+    | 'alignHorizontalRight'
+    | 'alignHorizontalDistribute'
+    | 'alignVerticalTop'
+    | 'alignVerticalCenter'
+    | 'alignVerticalBottom'
+    | 'alignVerticalDistribute';
+
+const alignOptions: Array<{
+    icon: string;
+    command: AlignCommandType;
+}> = [
+    {
+        icon: 'mdi-align-horizontal-left',
+        command: 'alignHorizontalLeft',
+    },
+    {
+        icon: 'mdi-align-horizontal-center',
+        command: 'alignHorizontalCenter',
+    },
+    {
+        icon: 'mdi-align-horizontal-right',
+        command: 'alignHorizontalRight',
+    },
+    {
+        icon: 'mdi-align-horizontal-distribute',
+        command: 'alignHorizontalDistribute',
+    },
+    {
+        icon: 'mdi-align-vertical-top',
+        command: 'alignVerticalTop',
+    },
+    {
+        icon: 'mdi-align-vertical-center',
+        command: 'alignVerticalCenter',
+    },
+    {
+        icon: 'mdi-align-vertical-bottom',
+        command: 'alignVerticalBottom',
+    },
+    {
+        icon: 'mdi-align-vertical-distribute',
+        command: 'alignVerticalDistribute',
+    },
+];
 
 export default defineComponent({
     name: 'Toolbar',
@@ -143,10 +182,28 @@ export default defineComponent({
 
         const scale = inject('scale');
 
+        const focusMaterialList = inject('focus:materialList') as Ref<
+            Material<any>['id'][]
+        >;
+
+        const alignOperateDisable = computed(
+            () => focusMaterialList.value.length < 2
+        );
+
+        const alignButtons: Array<{
+            icon: string;
+            onClick: () => void;
+        }> = alignOptions.map((opt) => ({
+            icon: opt.icon,
+            onClick: () => paperInstance[opt.command](focusMaterialList.value),
+        }));
+
         return {
             scale,
             showGrid,
             paperInstance,
+            alignOperateDisable,
+            alignButtons,
         };
     },
 });

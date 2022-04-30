@@ -201,7 +201,6 @@ export default defineComponent({
                 const image = new Image();
                 image.src = url;
                 image.onload = () => {
-                    console.log('fuck');
                     const { width, height } = image;
                     resolve({
                         width: width,

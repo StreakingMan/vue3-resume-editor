@@ -11,9 +11,8 @@
                 backgroundSize: `${paperInstance.cellSize}px ${paperInstance.cellSize}px,${paperInstance.cellSize}px ${paperInstance.cellSize}px`,
             },
         ]"
-        @click="onClick"
     >
-        <v-theme-provider theme="light" with-background="">
+        <v-theme-provider theme="light">
             <MaterialInstance
                 v-for="(m, i) in materialList"
                 :key="m.id"
@@ -44,6 +43,7 @@ import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import MaterialInstance from './MaterialInstance.vue';
 import { UnwrapNestedRefs } from '@vue/reactivity';
 import { Paper } from '../../classes/Paper';
+import { Material } from '../../classes/Material';
 
 export default defineComponent({
     name: 'Paper',
@@ -71,13 +71,18 @@ export default defineComponent({
             }
         );
 
+        // 选中元素注入
+        const focusMaterialList = inject('focus:materialList') as Ref<
+            Material<any>['id'][]
+        >;
+
         // 缩放值注入
         const scale = inject('scale') as Ref<number>;
+
         watch(scale, async (v) => {
             if (!paper.value) return;
             paper.value.style.transform = `scale(${v})`;
         });
-
         // 选择框
         const selectorX = ref(0);
         const selectorY = ref(0);
@@ -99,6 +104,14 @@ export default defineComponent({
             selectorH.value = transY / scale.value;
         };
         const onSelectFinish = (/*info: MouseEvtInfo*/) => {
+            focusMaterialList.value = paperInstance
+                .getSelectRangeMaterial({
+                    x: selectorX.value,
+                    y: selectorY.value,
+                    w: selectorW.value,
+                    h: selectorH.value,
+                })
+                .map((m) => m.id);
             selectorW.value = 0;
             selectorH.value = 0;
         };
@@ -109,6 +122,7 @@ export default defineComponent({
             bindElementRef: paper,
             preventDefault: false,
         });
+
         const selectorStyle = computed(() => {
             let left = selectorX.value,
                 top = selectorY.value,
@@ -130,12 +144,6 @@ export default defineComponent({
             };
         });
 
-        const focusMaterial: Ref = inject('focus:material') as Ref;
-
-        const onClick = () => {
-            focusMaterial.value = null;
-        };
-
         const showGrid = inject('showGrid');
 
         return {
@@ -146,7 +154,6 @@ export default defineComponent({
             selecting,
             selectorStyle,
             materialList,
-            onClick,
         };
     },
 });

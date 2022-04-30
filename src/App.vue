@@ -37,6 +37,7 @@ import Beian from './components/Beian.vue';
 import Sketch from './components/core/Sketch.vue';
 import MaterialPrototype from './components/core/MaterialPrototype.vue';
 import Toolbar from './components/tools/Toolbar.vue';
+import { Material } from './classes/Material';
 
 export default defineComponent({
     name: 'App',
@@ -87,8 +88,8 @@ export default defineComponent({
         provide('sketch', sketch);
 
         // 当前操作
-        const focusMaterial = ref(null);
-        provide('focus:material', focusMaterial);
+        const focusMaterialList = ref([]) as Ref<Material<any>['id'][]>;
+        provide('focus:materialList', focusMaterialList);
 
         return {
             ctrl: keyboardStatus.ctrl,

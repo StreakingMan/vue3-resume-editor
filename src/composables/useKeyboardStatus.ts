@@ -4,12 +4,14 @@ interface KeyboardStatus {
     space: Ref<boolean>;
     ctrl: Ref<boolean>;
     alt: Ref<boolean>;
+    shift: Ref<boolean>;
 }
 
 export default function useKeyboardStatus(): KeyboardStatus {
     const space = ref(false);
     const ctrl = ref(false);
     const alt = ref(false);
+    const shift = ref(false);
 
     const captureMethod = (e: KeyboardEvent) => {
         const pressed = e.type === 'keydown';
@@ -32,6 +34,10 @@ export default function useKeyboardStatus(): KeyboardStatus {
             case 'ControlRight':
                 ctrl.value = pressed;
                 break;
+            case 'ShiftLeft':
+            case 'ShiftRight':
+                shift.value = pressed;
+                break;
             case 'AltLeft':
             case 'AltRight':
                 alt.value = pressed;
@@ -50,5 +56,6 @@ export default function useKeyboardStatus(): KeyboardStatus {
         space,
         ctrl,
         alt,
+        shift,
     };
 }

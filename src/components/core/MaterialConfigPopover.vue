@@ -60,7 +60,7 @@ export default defineComponent({
         const paperInstance: Paper = inject('paper') as Paper;
 
         // 当前操作
-        const focusMaterial: Ref = inject('focus:material') as Ref;
+        const focusMaterialList: Ref = inject('focus:materialList') as Ref<Material<any>['id'][]>;
 
         // 元素实例
         const instance: Material<any> = inject(
@@ -71,7 +71,6 @@ export default defineComponent({
 
         return {
             active,
-            focusMaterial,
             scale,
             instance,
         };

@@ -12,9 +12,9 @@
         :class="{
             border: active,
         }"
-        @mouseenter.prevent.stop="focus"
-        @mouseleave.prevent.stop="blur"
-        @click.stop="focus"
+        @mouseenter.prevent.stop="hover = true"
+        @mouseleave.prevent.stop="hover = false"
+        @mousedown.stop="focus"
     >
         <div
             class="w-100 h-100"
@@ -177,6 +177,7 @@ import {
     Ref,
     ref,
     toRefs,
+    watch,
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import MImage from '../materials/MImage.vue';
@@ -245,16 +246,37 @@ export default defineComponent({
         );
         provide('m-instance', props.item);
 
+        // 按键
+        const shift: Ref<boolean> = inject('keyboard:shift') as Ref<boolean>;
+
         // 状态维护
-        const focusMaterial: Ref = inject('focus:material') as Ref;
+        const focusMaterialList = inject('focus:materialList') as Ref<
+            Material<any>['id'][]
+        >;
+        const hover = ref(false);
         const focus = () => {
-            focusMaterial.value = instance.value;
+            // 按住shift点击元素则切换选中状态
+            if (shift.value) {
+                const findIdx = focusMaterialList.value.findIndex(
+                    (m) => m === instance.value.id
+                );
+                if (findIdx === -1) {
+                    focusMaterialList.value.push(instance.value.id);
+                } else {
+                    focusMaterialList.value.splice(findIdx, 1);
+                }
+            } else {
+                focusMaterialList.value = [instance.value.id];
+            }
         };
         const blur = () => {
-            focusMaterial.value = null;
+            focusMaterialList.value = [];
         };
         const active = computed(() => {
-            return focusMaterial.value === instance.value;
+            return (
+                focusMaterialList.value.includes(instance.value.id) ||
+                hover.value
+            );
         });
         provide('m-instance:active', active);
 
@@ -376,6 +398,7 @@ export default defineComponent({
             clickingDot,
             onDotMousedown,
             active,
+            hover,
             focus,
             blur,
             CTRL_DOT_SIZE,

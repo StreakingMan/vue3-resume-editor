@@ -20,22 +20,40 @@ export const makeTestMaterial: (rect: {
     });
 };
 
-test('cellSize', () => {
-    const m1 = makeTestMaterial({ x: 123, y: 456, w: 789, h: 101, cellSize: 1 });
+test('网格吸附', () => {
+    const m1 = makeTestMaterial({
+        x: 123,
+        y: 456,
+        w: 789,
+        h: 101,
+        cellSize: 1,
+    });
     expect({ x: m1.x, y: m1.y, w: m1.w, h: m1.h }).toEqual({
         x: 123,
         y: 456,
         w: 789,
         h: 101,
     });
-    const m2 = makeTestMaterial({ x: 123, y: 456, w: 789, h: 101, cellSize: 2 });
+    const m2 = makeTestMaterial({
+        x: 123,
+        y: 456,
+        w: 789,
+        h: 101,
+        cellSize: 2,
+    });
     expect({ x: m2.x, y: m2.y, w: m2.w, h: m2.h }).toEqual({
         x: 122,
         y: 456,
         w: 790,
         h: 101,
     });
-    const m3 = makeTestMaterial({ x: 123, y: 456, w: 789, h: 101, cellSize: 10 });
+    const m3 = makeTestMaterial({
+        x: 123,
+        y: 456,
+        w: 789,
+        h: 101,
+        cellSize: 10,
+    });
     expect({ x: m3.x, y: m3.y, w: m3.w, h: m3.h }).toEqual({
         x: 120,
         y: 460,
@@ -44,7 +62,7 @@ test('cellSize', () => {
     });
 });
 
-test('centerRotate', () => {
+test('中心旋转', () => {
     const m = makeTestMaterial({ x: 0, y: 5, w: 11, h: 1 });
     m.centerRotate();
     expect({ x: m.x, y: m.y, w: m.w, h: m.h }).toEqual({

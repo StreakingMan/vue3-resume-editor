@@ -81,6 +81,9 @@ export class Paper {
             deleteFunc(idOrIds);
         }
     }
+    queryMaterial(id: Material<any>['id']): Material<any> | undefined {
+        return this._materialMap.get(id);
+    }
     // 调整元素层级
     // 置顶
     bringToFront(id: Material<any>['id']): void {
