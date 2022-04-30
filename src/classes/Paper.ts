@@ -29,8 +29,9 @@ export class Paper {
             m.cellSize = value;
         });
     }
-    // z值map
-    get zMap(): Map<number, Material<any>> {
+    // 当前z值map
+    // 该访问器在同一批次的操作中应提前访问然后缓存
+    get currentZMap(): Map<number, Material<any>> {
         const map = new Map();
         this.materialList.forEach((m) => {
             map.set(m.z, m);
@@ -54,11 +55,11 @@ export class Paper {
         this._materialMap.set(materialInstance.id, materialInstance);
         return this.materialList;
     }
-    removeMaterial(id: string): void {
+    removeMaterial(id: Material<any>['id']): void {
         const findIdx = this.materialList.findIndex((m) => m.id === id);
         if (findIdx !== -1) {
             // 调整层级，后面的递补
-            const zMap = this.zMap;
+            const zMap = this.currentZMap;
             let startZ = this._materialMap.get(id)!.z;
             while (startZ < this.materialList.length) {
                 const nextInstance = zMap.get(startZ + 1);
@@ -70,5 +71,63 @@ export class Paper {
             this.materialList.splice(findIdx, 1);
             this._materialMap.delete(id);
         }
+    }
+    // 调整元素层级
+    // 置顶
+    bringToFront(id: Material<any>['id']): void {
+        const mInstance = this._materialMap.get(id);
+        if (!mInstance) return;
+        let startZ = mInstance.z;
+        const zMap = this.currentZMap;
+        while (startZ <= this.materialList.length) {
+            const nextInstance = zMap.get(startZ + 1);
+            if (nextInstance) {
+                nextInstance.z -= 1;
+            }
+            startZ += 1;
+        }
+        mInstance.z = this.materialList.length;
+    }
+    // 上移一层
+    bringForward(id: Material<any>['id']): void {
+        const mInstance = this._materialMap.get(id);
+        if (!mInstance) return;
+        const topZ = this.materialList.length;
+        if (mInstance.z === topZ) return;
+        const newZ = mInstance.z + 1;
+        const zMap = this.currentZMap;
+        const replaceInstance = zMap.get(newZ);
+        if (replaceInstance) {
+            replaceInstance.z -= 1;
+        }
+        mInstance.z = newZ;
+    }
+    // 下移一层
+    sendBackward(id: Material<any>['id']): void {
+        const mInstance = this._materialMap.get(id);
+        if (!mInstance) return;
+        if (mInstance.z === 1) return;
+        const newZ = mInstance.z - 1;
+        const zMap = this.currentZMap;
+        const replaceInstance = zMap.get(newZ);
+        if (replaceInstance) {
+            replaceInstance.z += 1;
+        }
+        mInstance.z = newZ;
+    }
+    // 置底
+    sendToBack(id: Material<any>['id']): void {
+        const mInstance = this._materialMap.get(id);
+        if (!mInstance) return;
+        let endZ = mInstance.z;
+        const zMap = this.currentZMap;
+        while (endZ > 1) {
+            const prevInstance = zMap.get(endZ - 1);
+            if (prevInstance) {
+                prevInstance.z += 1;
+            }
+            endZ -= 1;
+        }
+        mInstance.z = 1;
     }
 }

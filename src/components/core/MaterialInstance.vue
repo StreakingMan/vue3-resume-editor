@@ -68,22 +68,34 @@
                                         {
                                             icon: 'mdi-arrange-bring-to-front',
                                             text: '置于顶层',
-                                            onClick: bringToFront,
+                                            onClick: () =>
+                                                paperInstance.bringToFront(
+                                                    instance.id
+                                                ),
                                         },
                                         {
                                             icon: 'mdi-arrange-bring-forward',
                                             text: '上移一层',
-                                            onClick: bringForward,
+                                            onClick: () =>
+                                                paperInstance.bringForward(
+                                                    instance.id
+                                                ),
                                         },
                                         {
                                             icon: 'mdi-arrange-send-backward',
                                             text: '下移一层',
-                                            onClick: sendBackward,
+                                            onClick: () =>
+                                                paperInstance.sendBackward(
+                                                    instance.id
+                                                ),
                                         },
                                         {
                                             icon: 'mdi-arrange-send-to-back',
                                             text: '置于底层',
-                                            onClick: sendToBack,
+                                            onClick: () =>
+                                                paperInstance.sendToBack(
+                                                    instance.id
+                                                ),
                                         },
                                     ]"
                                     :key="i"
@@ -287,7 +299,6 @@ export default defineComponent({
             onDrag({ transX, transY }: MouseEvtInfo) {
                 if (!clickingDot.value) return;
 
-                // TODO 最小值控制，方向锁定，比例锁定，网格吸附
                 const {
                     itemStartX,
                     itemStartY,
@@ -354,65 +365,8 @@ export default defineComponent({
             paperInstance.removeMaterial(instance.value.id);
         };
 
-        // 层级调整
-        // 使用置换操作，每个元素实例的z值不可重复
-        // 置顶
-        // TODO 这堆方法是否移动到Paper类中？
-        const bringToFront = () => {
-            let startZ = instance.value.z;
-            const zMap = paperInstance.zMap;
-            while (startZ <= paperInstance.materialList.length) {
-                const nextInstance = zMap.get(startZ + 1);
-                if (nextInstance) {
-                    nextInstance.z -= 1;
-                }
-                startZ += 1;
-            }
-            instance.value.z = paperInstance.materialList.length;
-        };
-        // 上移一层
-        const bringForward = () => {
-            const topZ = paperInstance.materialList.length;
-            if (instance.value.z === topZ) return;
-            const newZ = instance.value.z + 1;
-            const zMap = paperInstance.zMap;
-            const replaceInstance = zMap.get(newZ);
-            if (replaceInstance) {
-                replaceInstance.z -= 1;
-            }
-            instance.value.z = newZ;
-        };
-        // 下移一层
-        const sendBackward = () => {
-            if (instance.value.z === 1) return;
-            const newZ = instance.value.z - 1;
-            const zMap = paperInstance.zMap;
-            const replaceInstance = zMap.get(newZ);
-            if (replaceInstance) {
-                replaceInstance.z += 1;
-            }
-            instance.value.z = newZ;
-        };
-        // 置底
-        const sendToBack = () => {
-            let endZ = instance.value.z;
-            const zMap = paperInstance.zMap;
-            while (endZ > 1) {
-                const prevInstance = zMap.get(endZ - 1);
-                if (prevInstance) {
-                    prevInstance.z += 1;
-                }
-                endZ -= 1;
-            }
-            instance.value.z = 1;
-        };
-
         return {
             paperInstance,
-            bringToFront,
-            bringForward,
-            sendBackward,
-            sendToBack,
             moveHandlerRef,
             instance,
             dots: ctrlDots,
