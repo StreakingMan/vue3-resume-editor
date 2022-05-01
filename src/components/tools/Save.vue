@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, Ref } from 'vue';
+import { defineComponent, inject, onMounted, Ref } from 'vue';
 import { UnwrapNestedRefs } from '@vue/reactivity';
 import { Paper } from '../../classes/Paper';
 
@@ -26,6 +26,15 @@ export default defineComponent({
             snackbarText.value = '已保存';
             snackbar.value = true;
         };
+
+        onMounted(() => {
+            window.addEventListener('beforeunload', (e) => {
+                if (paperInstance.isNeedSave()) {
+                    e.preventDefault();
+                    e.returnValue = '';
+                }
+            });
+        });
 
         return {
             save,

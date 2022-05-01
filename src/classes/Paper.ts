@@ -82,6 +82,12 @@ export class Paper {
             });
         });
     }
+    isNeedSave(): boolean {
+        return (
+            JSON.stringify(this) !==
+            window.localStorage.getItem(LOCAL_STORAGE_KEY)
+        );
+    }
     saveToStorage(): void {
         window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this));
     }
