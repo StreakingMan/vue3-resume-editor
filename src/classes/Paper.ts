@@ -1,4 +1,5 @@
 import { Material, MaterialOptions } from './Material';
+import { uniqueString } from '../utils/uniqueString';
 
 const LOCAL_STORAGE_KEY = 'paper_cache';
 
@@ -20,6 +21,10 @@ export class Paper {
     public background = 'white';
     public materialList: Material<any>[] = [];
     private _materialMap: Map<Material<any>['id'], Material<any>>;
+    private _groupMap: Map<
+        Material<any>['groupId'],
+        Map<Material<any>['id'], Material<any>>
+    >;
     // 网格尺寸同步到每个元素实例
     private _cellSize = 10;
     get cellSize(): number {
@@ -45,6 +50,7 @@ export class Paper {
         this.w = w;
         this.h = h;
         this._materialMap = new Map();
+        this._groupMap = new Map();
         if (cellSize) this.cellSize = cellSize;
     }
     loadFromStorage(): void {
@@ -67,6 +73,7 @@ export class Paper {
         this.cellSize = _cellSize;
         this.materialList = [];
         this._materialMap.clear();
+        this._groupMap.clear();
         materialList.forEach((m) => {
             this.addMaterial({
                 componentName: m.componentName,
@@ -91,14 +98,30 @@ export class Paper {
     saveToStorage(): void {
         window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this));
     }
-    addMaterial(materialOptions: MaterialOptions<any>): Material<any>[] {
+    addMaterial({
+        z,
+        cellSize,
+        groupId,
+        ...options
+    }: MaterialOptions<any>): Material<any>[] {
         const materialInstance = new Material({
-            ...materialOptions,
-            z: materialOptions.z ?? this.materialList.length + 1,
-            cellSize: materialOptions.cellSize ?? this.cellSize,
+            ...options,
+            groupId,
+            z: z ?? this.materialList.length + 1,
+            cellSize: cellSize ?? this.cellSize,
         });
         this.materialList.push(materialInstance);
         this._materialMap.set(materialInstance.id, materialInstance);
+        if (groupId) {
+            const group = this._groupMap.get(groupId);
+            if (group) {
+                group.set(materialInstance.id, materialInstance);
+            } else {
+                const newGroup = new Map();
+                newGroup.set(materialInstance.id, materialInstance);
+                this._groupMap.set(groupId, newGroup);
+            }
+        }
         return this.materialList;
     }
     removeMaterial(idOrIds: Material<any>['id'] | Material<any>['id'][]): void {
@@ -129,6 +152,66 @@ export class Paper {
     }
     queryMaterial(id: Material<any>['id']): Material<any> | undefined {
         return this._materialMap.get(id);
+    }
+    // 编组操作
+    groupMaterials(ids: Material<any>['id'][]): void {
+        const newGroupId = uniqueString();
+        // 查询包含的编组
+        const existGroups = [];
+        for (const id of ids) {
+            const m = this._materialMap.get(id);
+            if (m?.groupId) {
+                existGroups.push(m.groupId);
+            }
+        }
+        // 所有元素重置分组
+        const newGroup = new Map();
+        for (const id of ids) {
+            const m = this._materialMap.get(id);
+            if (m) {
+                m.groupId = newGroupId;
+                newGroup.set(m.id, m);
+            }
+        }
+        // 缓存
+        existGroups.forEach((groupId) => {
+            this._groupMap.delete(groupId);
+        });
+        this._groupMap.set(newGroupId, newGroup);
+    }
+    // 取消编组
+    unGroupMaterials(groupId: string): void {
+        const group = this._groupMap.get(groupId);
+        if (group) {
+            group.forEach((m) => {
+                m.groupId = undefined;
+            });
+            this._groupMap.delete(groupId);
+        }
+    }
+    // 获取分组边缘矩形
+    getGroupRect(
+        groupId: string
+    ): { x: number; y: number; w: number; h: number } | undefined {
+        const group = this._groupMap.get(groupId);
+        if (!group) return;
+        let minX: number, maxX: number, minY: number, maxY: number;
+        group.forEach(({ x, y, w, h }) => {
+            if (minX === undefined) minX = x;
+            if (maxX === undefined) maxX = x + w;
+            if (minY === undefined) minY = y;
+            if (maxY === undefined) maxY = y + h;
+            if (x < minX) minX = x;
+            if (x + w > maxX) maxX = x + w;
+            if (y < minY) minY = y;
+            if (y + h > maxY) maxY = y + h;
+        });
+        return {
+            x: minX!,
+            y: minY!,
+            w: maxY! - minY!,
+            h: maxY! - minY!,
+        };
     }
     // 调整元素层级
     // 置顶

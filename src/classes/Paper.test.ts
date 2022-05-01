@@ -7,13 +7,15 @@ const makeTestMaterialOptions: (rect: {
     w: number;
     h: number;
     z?: number;
+    groupId?: string;
     cellSize?: number;
-}) => MaterialOptions<any> = ({ x, y, z, w, h, cellSize }) => ({
+}) => MaterialOptions<any> = ({ x, y, z, w, h, groupId, cellSize }) => ({
     x,
     y,
     z,
     w,
     h,
+    groupId,
     cellSize,
     componentName: 'MText',
     config: {},
@@ -71,6 +73,49 @@ test('元素增减', () => {
     expect(paper.materialList.length).toEqual(1);
     expect(paper.materialList[0].id).toEqual(m4.id);
     expect(m4.z).toEqual(1);
+});
+
+test('分组操作', () => {
+    const paper = new Paper({});
+    const mOptions = makeTestMaterialOptions({ x: 0, y: 0, w: 100, h: 100 });
+    const mOptions2 = makeTestMaterialOptions({
+        groupId: 'testGroup',
+        x: 100,
+        y: 100,
+        w: 100,
+        h: 100,
+    });
+    paper.addMaterial(mOptions);
+    paper.addMaterial(mOptions);
+    paper.addMaterial(mOptions);
+    paper.addMaterial(mOptions);
+    paper.addMaterial(mOptions2);
+    const [m1, m2, m3, m4, m5] = paper.materialList;
+    expect(m5.groupId).toEqual('testGroup');
+    paper.groupMaterials([m1.id, m3.id]);
+    const firstGroupId = m1.groupId;
+    expect(m1.groupId === m3.groupId && m1.groupId !== undefined).toEqual(true);
+    expect(!m2.groupId && !m4.groupId).toEqual(true);
+    paper.groupMaterials([m1.id, m2.id, m3.id]);
+    expect(
+        m1.groupId === m2.groupId &&
+            m2.groupId === m3.groupId &&
+            m3.groupId !== firstGroupId
+    ).toEqual(true);
+    paper.unGroupMaterials(m1.groupId!);
+    expect([m1.groupId, m2.groupId, m3.groupId, m4.groupId]).toEqual([
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+    ]);
+    paper.groupMaterials([m1.id, m5.id]);
+    expect(paper.getGroupRect(m1.groupId!)).toEqual({
+        x: 0,
+        y: 0,
+        w: 200,
+        h: 200,
+    });
 });
 
 test('层级调整', () => {
