@@ -385,42 +385,32 @@ export class Paper {
     }
     // 水平居中对齐
     alignHorizontalCenter(ids: Material<any>['id'][]): void {
-        const setCenterX: (
-            index: number,
-            maxX?: number,
-            minX?: number
-        ) => number = (index, maxX, minX) => {
-            if (index === ids.length) {
-                if (maxX && minX) {
-                    return (maxX + minX) / 2;
-                }
+        if (ids.length < 2) {
+            return
+        }
 
-                return 0;
-            }
+        let maxX = Number.MIN_SAFE_INTEGER, minX = Number.MAX_SAFE_INTEGER
 
-            const m = this._materialMap.get(ids[index]);
+        for (let i = 0; i < ids.length; i++) {
+            const m = this._materialMap.get(ids[i]);
 
             if (!m) {
-                return setCenterX(index + 1, maxX, minX);
+                continue
             }
 
-            if (!maxX) {
-                maxX = m.x;
+            maxX = m.x > maxX ? m.x : maxX
+            minX = m.x > minX ? minX : m.x
+        }
+
+        for (let i = 0; i < ids.length; i++) {
+            const m = this._materialMap.get(ids[i]);
+
+            if (!m) {
+                continue
             }
 
-            if (!minX) {
-                minX = m.x;
-            }
-
-            m.x = setCenterX(
-                index + 1,
-                minX > m.x ? m.x : minX,
-                maxX > m.x ? maxX : m.x
-            );
-            return m.x;
-        };
-
-        setCenterX(0);
+            m.x = (maxX + minX) / 2 - m.w / 2
+        }
     }
     // 右对齐
     alignHorizontalRight(ids: Material<any>['id'][]): void {
@@ -507,7 +497,7 @@ export class Paper {
                 continue
             }
 
-            m.y = (maxY + minY) / 2
+            m.y = (maxY + minY) / 2 - m.h / 2
         }
     }
     // 底对齐
@@ -517,6 +507,7 @@ export class Paper {
         }
 
         let maxY = this._materialMap.get(ids[0])?.y || 0;
+        let maxHeight = 0;
 
         for (let i = 0; i < ids.length; i++) {
             const m = this._materialMap.get(ids[i]);
@@ -526,6 +517,13 @@ export class Paper {
             }
 
             maxY = m.y > maxY ? m.y : maxY;
+            if (m.y > maxY) {
+                maxY = m.y
+            }
+
+            if (m.h > maxHeight) {
+                maxHeight = m.h
+            }
         }
 
 
@@ -536,7 +534,7 @@ export class Paper {
                 continue
             }
 
-            m.y = maxY
+            m.y = maxY + maxHeight - m.h
         }
     }
     // 垂直均匀分布
