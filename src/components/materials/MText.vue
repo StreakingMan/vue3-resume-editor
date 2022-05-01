@@ -114,6 +114,7 @@ import { Material } from '../../classes/Material';
 import { ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
 import { M_TEXT_NAME } from './config';
+import {useMaterial} from "../../composables/useApp";
 
 const typographyClass = [
     'text-h1',
@@ -190,7 +191,7 @@ export default defineComponent({
     components: { MaterialConfigPopover },
     protoInfo,
     setup() {
-        const instance = inject('m-instance') as Material<MTextConfig>;
+        const { instance } = useMaterial<MTextConfig>();
         const eleRef = ref<HTMLDivElement | null>(null);
         const classNames = computed(() => {
             return [

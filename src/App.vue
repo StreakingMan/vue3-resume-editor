@@ -25,7 +25,7 @@
             <Beian />
         </v-main>
         <v-snackbar
-            v-model="snackbar"
+            v-model="snackbar.show"
             app
             top="72"
             right
@@ -33,22 +33,22 @@
             color="grey-darken-3"
             transition="scroll-x-reverse-transition"
         >
-            {{ snackbarText }}
+            {{ snackbar.text }}
         </v-snackbar>
     </v-app>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, provide, reactive, Ref, onMounted } from 'vue';
-import { AppState } from './classes/App';
-import useKeyboardStatus from './composables/useKeyboardStatus';
+import { defineComponent, provide, reactive, onMounted, watch } from 'vue';
 import useMouseWheel from './composables/useMouseWheel';
-import { Paper } from './classes/Paper';
+import { Paper, paperInjectionKey } from './classes/Paper';
 import Beian from './components/Beian.vue';
 import Sketch from './components/core/Sketch.vue';
 import MaterialPrototype from './components/core/MaterialPrototype.vue';
 import Toolbar from './components/tools/Toolbar.vue';
-import { Material } from './classes/Material';
+import { stringArrayDiff } from './utils/stringArrayDiff';
+import { Runtime, runtimeInjectionKey } from './classes/Runtime';
+import sketch from './components/core/Sketch.vue';
 
 export default defineComponent({
     name: 'App',
@@ -59,64 +59,47 @@ export default defineComponent({
         Beian,
     },
     setup() {
-        // 应用状态
-        const appState: Ref<AppState> = ref('welcome');
-        provide('app:state', appState);
-
-        // 键盘状态
-        const keyboardStatus = useKeyboardStatus();
-        for (const [key, value] of Object.entries(keyboardStatus)) {
-            provide(`keyboard:${key}`, value);
-        }
-
-        // 辅助网格显示
-        const showGrid = ref(true);
-        provide('showGrid', showGrid);
-
-        // 缩放值
-        const scale = ref(1);
-        const scalePosition = reactive({ x: 0, y: 0 });
+        // 运行时
+        const runtime = reactive(new Runtime());
+        provide(runtimeInjectionKey, runtime);
         useMouseWheel({
             onWheel: (wheelDelta, { x, y }) => {
-                const newScale = scale.value + wheelDelta;
+                // 更新缩放值
+                const scaleValue = runtime.scale.value + wheelDelta;
                 // 缩放范围0.1~5
-                if (0.1 < newScale && newScale < 5) {
-                    scale.value += wheelDelta;
-                    scalePosition.x = x;
-                    scalePosition.y = y;
+                if (0.1 < scaleValue && scaleValue < 5) {
+                    runtime.scale.value += wheelDelta;
+                    runtime.scale.position.x = x;
+                    runtime.scale.position.y = y;
                 }
             },
         });
-        provide('scale', scale);
-        provide('scale:position', scalePosition);
 
         // Paper实例
         const paper = reactive(new Paper({}));
-        provide('paper', paper);
+        provide(paperInjectionKey, paper);
         onMounted(() => {
             paper.loadFromStorage();
             console.log(paper);
         });
 
-        // Sketch组件
-        const sketch = ref(null);
-        provide('sketch', sketch);
-
-        // 当前操作
-        const focusMaterialList = ref([]) as Ref<Material<any>['id'][]>;
-        provide('focus:materialList', focusMaterialList);
-
-        // snackbar
-        const snackbar = ref(false);
-        const snackbarText = ref('');
-        provide('snackbar', snackbar);
-        provide('snackbar:text', snackbarText);
+        // TODO 激活元素集合控制
+        watch(runtime.activeMaterialSet, (nv, ov) => {
+            // 激活列表增减时，同属分组元素一并操作
+            const { added, removed } = stringArrayDiff([...nv], [...ov]);
+            const needAddGroupIds = added
+                    .map((mId) => paper.queryMaterial(mId)?.groupId)
+                    .filter((groupId) => !!groupId),
+                needRemoveGroupIds = removed
+                    .map((mId) => paper.queryMaterial(mId)?.groupId)
+                    .filter((groupId) => !!groupId);
+            //
+        });
 
         return {
-            snackbar,
-            snackbarText,
-            ctrl: keyboardStatus.ctrl,
-            space: keyboardStatus.space,
+            snackbar: runtime.snackbar,
+            ctrl: runtime.keyboardStatus.ctrl,
+            space: runtime.keyboardStatus.space,
             sketch,
         };
     },

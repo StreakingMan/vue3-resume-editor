@@ -23,67 +23,57 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, reactive, ref, Ref } from 'vue';
-import { Paper } from '../../classes/Paper';
+import { defineComponent, reactive, ref } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import { prototypeMap } from '../materials/prototypes';
 import { MaterialComponentNameType } from '../materials/config';
+import { usePaper, useRuntime } from '../../composables/useApp';
 
 export default defineComponent({
     name: 'MaterialPrototype',
     components: {},
     setup() {
-        // Sketch组件注入
-        const sketch: Ref = inject('sketch', ref({}));
-
-        // 缩放值注入
-        const scale: Ref<number> = inject('scale', ref(1));
-
-        // Paper实例注入
-        const paperInstance = inject('paper') as Paper;
+        const runtime = useRuntime();
+        const paper = usePaper();
 
         // 原型信息
         const prototypes = reactive(prototypeMap);
 
         // 原型拖入paper
-        const draggingProtoType: Ref<MaterialComponentNameType | null> = ref(
-            null
-        );
+        const draggingProtoType = ref<MaterialComponentNameType>('MText');
         const { onMousedown: onProtoMousedown } = useMouseDrag({
             onStart({ startX, startY }) {
                 //console.log(draggingProtoType.value);
             },
             onDrag({ transX, transY }: MouseEvtInfo) {
-                if (!draggingProtoType.value) return;
                 const proto = prototypes[draggingProtoType.value];
                 if (!proto) return;
                 proto.tempStyle = `transition: 0s;transform: translateX(${transX}px) translateY(${transY}px) !important`;
             },
             onFinish({ currentX, currentY }: MouseEvtInfo) {
-                if (!draggingProtoType.value) return;
                 const proto = prototypes[draggingProtoType.value];
                 if (!proto) return;
                 proto.tempStyle = '';
 
                 // 计算释放时相对于paper的位置
-                if (!sketch.value) return;
-                const { paddingX, paddingY, wrapper } = sketch.value;
-                const { scrollLeft, scrollTop } = wrapper;
+                const { paddingX, paddingY, wrapperDiv } = runtime.sketch;
+                if (!wrapperDiv) return;
+                const { scrollLeft, scrollTop } = wrapperDiv;
                 const x =
                     (currentX -
                         (paddingX -
-                            (paperInstance.w * (scale.value - 1)) / 2 -
+                            (paper.w * (runtime.scale.value - 1)) / 2 -
                             scrollLeft)) /
-                    scale.value;
+                    runtime.scale.value;
                 const y =
                     (currentY -
                         (paddingY -
-                            (paperInstance.h * (scale.value - 1)) / 2 -
+                            (paper.h * (runtime.scale.value - 1)) / 2 -
                             scrollTop)) /
-                    scale.value;
+                    runtime.scale.value;
                 if (x < 0 || y < 0) return;
-                paperInstance.addMaterial(
-                    proto.genInitOptions({ x, y, paperInstance })
+                paper.addMaterial(
+                    proto.genInitOptions({ x, y, paperInstance: paper })
                 );
             },
         });

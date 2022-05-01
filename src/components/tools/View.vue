@@ -8,12 +8,12 @@
                     <div class="text-subtitle-2">显示网格</div>
                     <v-btn
                         icon
-                        :disabled="paperInstance.cellSize < 10"
+                        :disabled="paper.cellSize < 10"
                         @click="showGrid = !showGrid"
                     >
                         <v-icon>
                             {{
-                                paperInstance.cellSize >= 10 && showGrid
+                                paper.cellSize >= 10 && showGrid
                                     ? 'mdi-eye'
                                     : 'mdi-eye-off'
                             }}
@@ -23,7 +23,7 @@
                 <div class="d-flex align-center">
                     <div class="text-subtitle-2">单元大小</div>
                     <v-slider
-                        v-model="paperInstance.cellSize"
+                        v-model="paper.cellSize"
                         hide-details
                         min="1"
                         max="48"
@@ -36,9 +36,7 @@
     </v-btn>
 
     <v-btn icon>
-        <v-icon :style="{ color: paperInstance.background }">
-            mdi-palette
-        </v-icon>
+        <v-icon :style="{ color: paper.background }"> mdi-palette </v-icon>
         <v-tooltip activator="parent" anchor="bottom">纸张背景</v-tooltip>
         <v-menu activator="parent" anchor="bottom">
             <v-sheet class="pa-4 rounded" width="fit-content">
@@ -46,7 +44,7 @@
                     <div class="text-subtitle-2">背景色</div>
                 </div>
                 <v-color-picker
-                    v-model="paperInstance.background"
+                    v-model="paper.background"
                     show-swatches
                     elevation="0"
                 ></v-color-picker>
@@ -77,26 +75,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue';
-import { UnwrapNestedRefs } from '@vue/reactivity';
-import { Paper } from '../../classes/Paper';
+import { defineComponent, toRef } from 'vue';
+import { usePaper, useRuntime } from '../../composables/useApp';
 
 export default defineComponent({
     name: 'View',
     setup() {
-        // Paper实例注入
-        const paperInstance: UnwrapNestedRefs<Paper> = inject(
-            'paper'
-        ) as UnwrapNestedRefs<Paper>;
-
-        const showGrid = inject('showGrid');
-
-        const scale = inject('scale');
+        const runtime = useRuntime();
+        const paper = usePaper();
 
         return {
-            scale,
-            showGrid,
-            paperInstance,
+            scale: toRef(runtime.scale, 'value'),
+            showGrid: toRef(runtime, 'showGrid'),
+            paper,
         };
     },
 });

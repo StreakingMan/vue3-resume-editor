@@ -1,6 +1,8 @@
 <template>
     <Align />
     <v-divider vertical class="mx-4"></v-divider>
+    <Group />
+    <v-divider vertical class="mx-4"></v-divider>
     <View />
     <v-divider vertical class="mx-4"></v-divider>
     <Print />
@@ -21,10 +23,11 @@ import View from './View.vue';
 import Github from './Github.vue';
 import Save from './Save.vue';
 import ImportExport from './ImportExport.vue';
+import Group from './Group.vue';
 
 export default defineComponent({
     name: 'Toolbar',
-    components: { ImportExport, Save, Github, View, Align, Print },
+    components: { Group, ImportExport, Save, Github, View, Align, Print },
 });
 </script>
 

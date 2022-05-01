@@ -6,30 +6,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onMounted, Ref } from 'vue';
-import { UnwrapNestedRefs } from '@vue/reactivity';
-import { Paper } from '../../classes/Paper';
+import { defineComponent, onMounted } from 'vue';
+import { usePaper, useRuntime } from '../../composables/useApp';
 
 export default defineComponent({
     name: 'Save',
     setup() {
-        // Paper实例注入
-        const paperInstance: UnwrapNestedRefs<Paper> = inject(
-            'paper'
-        ) as UnwrapNestedRefs<Paper>;
-
-        const snackbar = inject('snackbar') as Ref<boolean>;
-        const snackbarText = inject('snackbar:text') as Ref<string>;
+        const runtime = useRuntime();
+        const paper = usePaper();
 
         const save = () => {
-            paperInstance.saveToStorage();
-            snackbarText.value = '已保存';
-            snackbar.value = true;
+            paper.saveToStorage();
+            runtime.snackbar.text = '已保存';
+            runtime.snackbar.show = true;
         };
 
         onMounted(() => {
             window.addEventListener('beforeunload', (e) => {
-                if (paperInstance.isNeedSave()) {
+                if (paper.isNeedSave()) {
                     e.preventDefault();
                     e.returnValue = '';
                 }

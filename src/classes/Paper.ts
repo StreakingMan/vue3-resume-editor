@@ -1,5 +1,7 @@
 import { Material, MaterialOptions } from './Material';
 import { uniqueString } from '../utils/uniqueString';
+import {InjectionKey} from "vue";
+import {UnwrapNestedRefs} from "@vue/reactivity";
 
 const LOCAL_STORAGE_KEY = 'paper_cache';
 
@@ -9,6 +11,10 @@ const paperSizeMap = {
         h: 877,
     },
 };
+
+export const paperInjectionKey: InjectionKey<UnwrapNestedRefs<Paper>> = Symbol(
+    'Paper'
+);
 
 export interface PaperOptions {
     size?: 'a4';
@@ -188,6 +194,15 @@ export class Paper {
             });
             this._groupMap.delete(groupId);
         }
+    }
+    // 查询分组元素
+    queryGroupMaterials(groupId: string): Material<any>[] {
+        const group = this._groupMap.get(groupId);
+        const res: Material<any>[] = [];
+        if (group) {
+            group.forEach((m) => res.push(m));
+        }
+        return res;
     }
     // 获取分组边缘矩形
     getGroupRect(

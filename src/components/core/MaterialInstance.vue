@@ -5,7 +5,7 @@
         :style="{
             left: instance.x + 'px',
             top: instance.y + 'px',
-            zIndex: active ? paperInstance.materialList.length + 1 : instance.z,
+            zIndex: active ? paper.materialList.length + 1 : instance.z,
             width: instance.w + 'px',
             height: instance.h + 'px',
         }"
@@ -39,6 +39,7 @@
                         icon
                         class="border-r-0"
                         :rounded="0"
+                        @mousedown="focus"
                     >
                         <v-icon size="x-small">mdi-arrow-all</v-icon>
                         <v-tooltip activator="parent" anchor="top">
@@ -69,33 +70,25 @@
                                             icon: 'mdi-arrange-bring-to-front',
                                             text: '置于顶层',
                                             onClick: () =>
-                                                paperInstance.bringToFront(
-                                                    instance.id
-                                                ),
+                                                paper.bringToFront(instance.id),
                                         },
                                         {
                                             icon: 'mdi-arrange-bring-forward',
                                             text: '上移一层',
                                             onClick: () =>
-                                                paperInstance.bringForward(
-                                                    instance.id
-                                                ),
+                                                paper.bringForward(instance.id),
                                         },
                                         {
                                             icon: 'mdi-arrange-send-backward',
                                             text: '下移一层',
                                             onClick: () =>
-                                                paperInstance.sendBackward(
-                                                    instance.id
-                                                ),
+                                                paper.sendBackward(instance.id),
                                         },
                                         {
                                             icon: 'mdi-arrange-send-to-back',
                                             text: '置于底层',
                                             onClick: () =>
-                                                paperInstance.sendToBack(
-                                                    instance.id
-                                                ),
+                                                paper.sendToBack(instance.id),
                                         },
                                     ]"
                                     :key="i"
@@ -173,11 +166,10 @@
 import {
     computed,
     defineComponent,
-    inject,
     provide,
-    Ref,
+    reactive,
     ref,
-    toRefs,
+    PropType, toRef,
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import MImage from '../materials/MImage.vue';
@@ -187,9 +179,14 @@ import { CTRL_DOT_SIZE, UNIT_SIZE } from './config';
 import MaterialConfig from './MaterialConfigPopover.vue';
 import { prototypeMap } from '../materials/prototypes';
 import { CtrlDotType } from '../materials/config';
-import { Material } from '../../classes/Material';
+import {
+    Material,
+    MaterialInjection,
+    materialInjectionKey,
+} from '../../classes/Material';
 import { Paper } from '../../classes/Paper';
 import MDivider from '../materials/MDivider.vue';
+import { usePaper, useRuntime } from '../../composables/useApp';
 
 const ctrlDots: CtrlDotType[] = [
     'tl',
@@ -225,58 +222,43 @@ export default defineComponent({
     components: { MDivider, MaterialConfig, MText, MImage, MList },
     props: {
         item: {
-            type: Object,
+            type: Object as PropType<Material<any>>,
             default: null,
             require: true,
         },
     },
     emits: ['update:item'],
     setup(props) {
-        // 数据源
-        const { item: instance } = toRefs<{ item: Material<any> }>(
-            props as any
-        );
-        provide('m-instance', props.item);
+        const runtime = useRuntime();
+        const paper = usePaper();
 
-        // 按键
-        const shift: Ref<boolean> = inject('keyboard:shift') as Ref<boolean>;
+        const material = reactive({
+            instance: props.item,
+            hover: ref(false),
+            active: computed(() =>
+                runtime.activeMaterialSet.has(props.item.id)
+            ),
+        });
+        provide(materialInjectionKey, material);
 
-        // 状态维护
-        const focusMaterialList = inject('focus:materialList') as Ref<
-            Material<any>['id'][]
-        >;
-        const hover = ref(false);
         const focus = (e: MouseEvent) => {
             // 没按空格时阻止冒泡
-            if (!space.value) e.stopPropagation();
-            // 按住shift点击元素则切换选中状态
-            if (shift.value) {
-                const findIdx = focusMaterialList.value.findIndex(
-                    (m) => m === instance.value.id
-                );
-                if (findIdx === -1) {
-                    focusMaterialList.value.push(instance.value.id);
-                } else {
-                    focusMaterialList.value.splice(findIdx, 1);
+            if (!runtime.keyboardStatus.space) e.stopPropagation();
+
+            if (runtime.keyboardStatus.shift) {
+                // 按住shift点击元素则切换选中状态
+                if (!runtime.activeMaterialSet.delete(material.instance.id)) {
+                    runtime.activeMaterialSet.add(material.instance.id);
                 }
             } else {
-                focusMaterialList.value = [instance.value.id];
+                // 否则重置为该元素
+                runtime.activeMaterialSet.clear();
+                runtime.activeMaterialSet.add(material.instance.id);
             }
         };
         const blur = () => {
-            focusMaterialList.value = [];
+            runtime.activeMaterialSet.clear();
         };
-        const active = computed(() => {
-            return focusMaterialList.value.includes(instance.value.id);
-        });
-        provide('m-instance:active', active);
-        provide('m-instance:hover', hover);
-
-        // 缩放值注入
-        const scale: Ref<number> = inject('scale', ref(1));
-
-        // 空格键状态注入
-        const space: Ref<boolean> = inject('keyboard:space', ref(false));
 
         // 位置信息缓存
         const posInfoCache = {
@@ -288,16 +270,19 @@ export default defineComponent({
         // 所有激活元素的位置缓存
         const posInfoCacheMap = new Map();
 
+        // 元素移动
         const moveHandlerRef = ref(null);
         useMouseDrag({
             onStart() {
-                if (space.value) return false;
-                // 若当前实例不在激活列表中，则重置激活列表
-                if (!focusMaterialList.value.includes(instance.value.id)) {
-                    focusMaterialList.value = [instance.value.id];
+                if (runtime.keyboardStatus.space) return false;
+                // 拖动非激活元素时，重置激活集合
+                if (!runtime.activeMaterialSet.has(material.instance.id)) {
+                    runtime.activeMaterialSet.clear();
+                    runtime.activeMaterialSet.add(material.instance.id);
                 }
-                for (const mId of focusMaterialList.value) {
-                    const mInstance = paperInstance.queryMaterial(mId);
+                // 拖动的元素挂载了分组时，批量移动
+                for (const mId of runtime.activeMaterialSet) {
+                    const mInstance = paper.queryMaterial(mId);
                     if (!mInstance) continue;
                     const { x, y } = mInstance;
                     posInfoCacheMap.set(mId, {
@@ -307,14 +292,14 @@ export default defineComponent({
                 }
             },
             onDrag({ transX, transY }: MouseEvtInfo) {
-                for (const mId of focusMaterialList.value) {
-                    const mInstance = paperInstance.queryMaterial(mId);
+                for (const mId of runtime.activeMaterialSet) {
+                    const mInstance = paper.queryMaterial(mId);
                     if (!mInstance) continue;
                     const posInfoCache = posInfoCacheMap.get(mId);
                     mInstance.x =
-                        posInfoCache.itemStartX + transX / scale.value;
+                        posInfoCache.itemStartX + transX / runtime.scale.value;
                     mInstance.y =
-                        posInfoCache.itemStartY + transY / scale.value;
+                        posInfoCache.itemStartY + transY / runtime.scale.value;
                 }
             },
             onFinish() {
@@ -327,8 +312,8 @@ export default defineComponent({
         const clickingDot = ref<CtrlDotType | null>(null);
         const { onMousedown: onDotMousedown } = useMouseDrag({
             onStart() {
-                if (!(active.value || hover.value)) return;
-                const { x, y, w, h } = instance.value;
+                if (!(material.active || material.hover)) return;
+                const { x, y, w, h } = material.instance;
                 posInfoCache.itemStartX = x;
                 posInfoCache.itemStartY = y;
                 posInfoCache.itemStartW = w;
@@ -350,17 +335,17 @@ export default defineComponent({
                     newH = itemStartH;
 
                 if (clickingDot.value.includes('b')) {
-                    newH = itemStartH + transY / scale.value;
+                    newH = itemStartH + transY / runtime.scale.value;
                 } else if (clickingDot.value.includes('t')) {
-                    newY = itemStartY + transY / scale.value;
-                    newH = itemStartH - transY / scale.value;
+                    newY = itemStartY + transY / runtime.scale.value;
+                    newH = itemStartH - transY / runtime.scale.value;
                 }
 
                 if (clickingDot.value.includes('r')) {
-                    newW = itemStartW + transX / scale.value;
+                    newW = itemStartW + transX / runtime.scale.value;
                 } else if (clickingDot.value.includes('l')) {
-                    newX = itemStartX + transX / scale.value;
-                    newW = itemStartW - transX / scale.value;
+                    newX = itemStartX + transX / runtime.scale.value;
+                    newW = itemStartW - transX / runtime.scale.value;
                 }
 
                 if (newH < UNIT_SIZE) newH = UNIT_SIZE;
@@ -372,10 +357,10 @@ export default defineComponent({
                     newY = itemStartY + itemStartH - UNIT_SIZE;
                 }
 
-                instance.value.x = newX;
-                instance.value.y = newY;
-                instance.value.w = newW;
-                instance.value.h = newH;
+                material.instance.x = newX;
+                material.instance.y = newY;
+                material.instance.w = newW;
+                material.instance.h = newH;
             },
             onFinish() {
                 clickingDot.value = null;
@@ -389,32 +374,30 @@ export default defineComponent({
         // 可用控制点
         const ableCtrlDots = computed(() => {
             const dragHandlers =
-                prototypeMap[instance.value.componentName].dragHandlers;
+                prototypeMap[material.instance.componentName].dragHandlers;
             if (dragHandlers instanceof Function) {
-                return dragHandlers(instance.value.config);
+                return dragHandlers(material.instance.config);
             } else {
                 return dragHandlers;
             }
         });
 
-        // Paper实例注入
-        const paperInstance: Paper = inject('paper') as Paper;
         const removeMaterialInstance = () => {
-            paperInstance.removeMaterial(instance.value.id);
+            paper.removeMaterial(material.instance.id);
         };
 
         return {
-            paperInstance,
+            hover: toRef(material, 'hover'),
+            active: toRef(material, 'active'),
+            instance: toRef(material, 'instance'),
+            scale: toRef(runtime.scale, 'value'),
+            paper,
             moveHandlerRef,
-            instance,
             dots: ctrlDots,
             ableCtrlDots,
-            scale,
             styleMap,
             clickingDot,
             onDotMousedown,
-            active,
-            hover,
             focus,
             blur,
             CTRL_DOT_SIZE,

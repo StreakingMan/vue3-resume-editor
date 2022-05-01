@@ -13,6 +13,7 @@ import {
 } from './config';
 import MDivider from './MDivider.vue';
 import { Paper } from '../../classes/Paper';
+import { UnwrapNestedRefs } from '@vue/reactivity';
 
 export interface ProtoInfo<T> {
     label: string;
@@ -21,7 +22,7 @@ export interface ProtoInfo<T> {
     genInitOptions: (options: {
         x: number;
         y: number;
-        paperInstance: Paper;
+        paperInstance: UnwrapNestedRefs<Paper>;
     }) => MaterialOptions<T>;
 }
 

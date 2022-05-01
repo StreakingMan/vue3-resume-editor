@@ -111,11 +111,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, watch } from 'vue';
+import { defineComponent, inject, toRefs, watch } from 'vue';
 import { ProtoInfo } from './prototypes';
 import { M_DIVIDER_NAME } from './config';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
 import { Material } from '../../classes/Material';
+import { useMaterial } from '../../composables/useApp';
 
 interface MDividerConfig {
     direction: 'horizontal' | 'vertical';
@@ -149,7 +150,7 @@ export default defineComponent({
     components: { MaterialConfigPopover },
     protoInfo,
     setup() {
-        const instance = inject('m-instance') as Material<MDividerConfig>;
+        const { instance } = useMaterial<MDividerConfig>();
 
         // 方向改变中心旋转
         watch(

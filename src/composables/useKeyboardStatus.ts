@@ -1,6 +1,6 @@
 import { onUnmounted, ref, Ref } from 'vue';
 
-interface KeyboardStatus {
+export interface KeyboardStatus {
     space: Ref<boolean>;
     ctrl: Ref<boolean>;
     alt: Ref<boolean>;

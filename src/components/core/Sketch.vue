@@ -1,6 +1,6 @@
 <template>
     <div
-        ref="wrapper"
+        ref="wrapperDiv"
         class="sketch__wrapper"
         :style="{
             cursor,
@@ -12,7 +12,7 @@
                 padding: `${paddingY}px ${paddingX}px`,
             }"
         >
-            <Paper ref="paper"></Paper>
+            <Paper ref="paperRef"></Paper>
         </div>
     </div>
 </template>
@@ -29,30 +29,31 @@ import {
     Ref,
     onMounted,
     computed,
+    toRef,
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import { UnwrapNestedRefs } from '@vue/reactivity';
+import { useRuntime } from '../../composables/useApp';
 export default defineComponent({
     name: 'Sketch',
     components: { Paper },
     setup() {
-        const wrapper = ref<HTMLDivElement | null>(null);
+        const runtime = useRuntime();
+        const paperRef = ref<InstanceType<typeof Paper> | null>(null);
         let paperDiv = ref<HTMLDivElement | null>(null);
-        const paper = ref<InstanceType<typeof Paper> | null>(null);
-        const paddingX = ref(0);
-        const paddingY = ref(0);
+
         const grabbing = ref(false);
 
         // 调整Sketch 使paper居中
         const adjustSketch = async () => {
-            if (!wrapper.value || !paperDiv.value) return;
+            if (!runtime.sketch.wrapperDiv || !paperDiv.value) return;
             // 此时sketch铺满全屏，取屏幕大小计算边距
             const {
                 innerWidth: windowWidth,
                 innerHeight: windowHeight,
             } = window;
-            paddingX.value = Math.floor(windowWidth * 0.8);
-            paddingY.value = Math.floor(windowHeight * 0.8);
+            runtime.sketch.paddingX = Math.floor(windowWidth * 0.8);
+            runtime.sketch.paddingY = Math.floor(windowHeight * 0.8);
 
             // 更改padding值，视图更新后再调整scroll值
             // TODO 这里有时候走不下去，待查明
@@ -61,15 +62,15 @@ export default defineComponent({
                 width: paperWidth,
                 height: paperHeight,
             } = paperDiv.value.getBoundingClientRect();
-            wrapper.value.scrollLeft =
-                (paperWidth + paddingX.value * 2 - windowWidth) / 2;
-            wrapper.value.scrollTop =
-                (paperHeight + paddingY.value * 2 - windowHeight) / 2;
+            runtime.sketch.wrapperDiv.scrollLeft =
+                (paperWidth + runtime.sketch.paddingX * 2 - windowWidth) / 2;
+            runtime.sketch.wrapperDiv.scrollTop =
+                (paperHeight + runtime.sketch.paddingY * 2 - windowHeight) / 2;
         };
 
         onMounted(() => {
-            if (!paper?.value?.paper) return;
-            paperDiv = ref<HTMLDivElement>(paper.value.paper);
+            if (!paperRef?.value?.paperRef) return;
+            paperDiv = ref<HTMLDivElement>(paperRef.value.paperRef);
             adjustSketch();
             window.addEventListener('resize', adjustSketch);
         });
@@ -78,92 +79,89 @@ export default defineComponent({
             window.removeEventListener('resize', adjustSketch);
         });
 
-        const space: Ref<boolean> = inject('keyboard:space') as Ref<boolean>;
-        const ctrl: Ref<boolean> = inject('keyboard:ctrl') as Ref<boolean>;
         let scrollTopCache: number, scrollLeftCache: number;
         useMouseDrag({
             onStart: () => {
-                if (!space.value || !wrapper.value) return false;
-                scrollLeftCache = wrapper.value.scrollLeft;
-                scrollTopCache = wrapper.value.scrollTop;
+                if (!runtime.keyboardStatus.space || !runtime.sketch.wrapperDiv)
+                    return false;
+                scrollLeftCache = runtime.sketch.wrapperDiv.scrollLeft;
+                scrollTopCache = runtime.sketch.wrapperDiv.scrollTop;
             },
             onDrag: ({ transX, transY }: MouseEvtInfo) => {
-                if (!wrapper.value) return false;
-                wrapper.value.scrollLeft = scrollLeftCache - transX;
-                wrapper.value.scrollTop = scrollTopCache - transY;
+                if (!runtime.sketch.wrapperDiv) return false;
+                runtime.sketch.wrapperDiv.scrollLeft = scrollLeftCache - transX;
+                runtime.sketch.wrapperDiv.scrollTop = scrollTopCache - transY;
                 grabbing.value = true;
             },
             onFinish: () => {
                 grabbing.value = false;
             },
-            bindElementRef: wrapper,
+            bindElementRef: toRef(runtime.sketch, 'wrapperDiv'),
         });
 
-        const scale: Ref<number> = inject('scale') as Ref<number>;
-        const scalePosition: UnwrapNestedRefs<{
-            x: number;
-            y: number;
-        }> = inject('scale:position') as UnwrapNestedRefs<{
-            x: number;
-            y: number;
-        }>;
-        watch(scale, async (newScale, oldScale) => {
-            // 缩放后，调整边距
-            const {
-                innerWidth: windowWidth,
-                innerHeight: windowHeight,
-            } = window;
-            // 这里实际上时paperInstance的w h
-            const {
-                clientWidth: paperInitWidth,
-                clientHeight: paperInitHeight,
-            } = paperDiv.value as HTMLDivElement;
-            const {
-                width: paperWidth,
-                height: paperHeight,
-                x: paperX,
-                y: paperY,
-            } = (paperDiv.value as HTMLDivElement).getBoundingClientRect();
+        watch(
+            () => runtime.scale.value,
+            async (newScale, oldScale) => {
+                // 缩放后，调整边距
+                const {
+                    innerWidth: windowWidth,
+                    innerHeight: windowHeight,
+                } = window;
+                // 这里实际上时paperInstance的w h
+                const {
+                    clientWidth: paperInitWidth,
+                    clientHeight: paperInitHeight,
+                } = paperDiv.value as HTMLDivElement;
+                const {
+                    width: paperWidth,
+                    height: paperHeight,
+                    x: paperX,
+                    y: paperY,
+                } = (paperDiv.value as HTMLDivElement).getBoundingClientRect();
 
-            paddingX.value = Math.floor(
-                windowWidth * 0.8 + (paperWidth - paperInitWidth) / 2
-            );
-            paddingY.value = Math.floor(
-                windowHeight * 0.8 + (paperHeight - paperInitHeight) / 2
-            );
+                runtime.sketch.paddingX = Math.floor(
+                    windowWidth * 0.8 + (paperWidth - paperInitWidth) / 2
+                );
+                runtime.sketch.paddingY = Math.floor(
+                    windowHeight * 0.8 + (paperHeight - paperInitHeight) / 2
+                );
 
-            // 以鼠标为中心进行缩放
-            if (wrapper.value) {
-                const oldWidth = (paperWidth * oldScale) / newScale;
-                const oldHeight = (paperHeight * oldScale) / newScale;
-                const transWidth =
-                    paperWidth * ((newScale - oldScale) / newScale);
-                const transHeight =
-                    paperHeight * ((newScale - oldScale) / newScale);
-                const offsetX =
-                    (transWidth * (scalePosition.x - paperX)) / oldWidth;
-                const offsetY =
-                    (transHeight * (scalePosition.y - paperY)) / oldHeight;
-                wrapper.value.scrollLeft += offsetX;
-                wrapper.value.scrollTop += offsetY;
+                // 以鼠标为中心进行缩放
+                if (runtime.sketch.wrapperDiv) {
+                    const oldWidth = (paperWidth * oldScale) / newScale;
+                    const oldHeight = (paperHeight * oldScale) / newScale;
+                    const transWidth =
+                        paperWidth * ((newScale - oldScale) / newScale);
+                    const transHeight =
+                        paperHeight * ((newScale - oldScale) / newScale);
+                    const offsetX =
+                        (transWidth * (runtime.scale.position.x - paperX)) /
+                        oldWidth;
+                    const offsetY =
+                        (transHeight * (runtime.scale.position.y - paperY)) /
+                        oldHeight;
+                    runtime.sketch.wrapperDiv.scrollLeft += offsetX;
+                    runtime.sketch.wrapperDiv.scrollTop += offsetY;
+                }
             }
-        });
+        );
 
+        // 光标样式
         const cursor = computed(() => {
-            if (space.value) {
+            if (runtime.keyboardStatus.space) {
                 return grabbing.value ? 'grabbing' : 'grab';
             }
-            if (ctrl.value) {
+            if (runtime.keyboardStatus.ctrl) {
                 return 'zoom-in';
             }
             return 'default';
         });
 
         return {
-            paddingX,
-            paddingY,
-            paper,
-            wrapper,
+            wrapperDiv: toRef(runtime.sketch, 'wrapperDiv'),
+            paddingX: toRef(runtime.sketch, 'paddingX'),
+            paddingY: toRef(runtime.sketch, 'paddingY'),
+            paperRef,
             cursor,
         };
     },

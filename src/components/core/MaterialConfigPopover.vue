@@ -44,41 +44,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, Ref } from 'vue';
-import { Paper } from '../../classes/Paper';
-import { Material } from '../../classes/Material';
+import { defineComponent, toRef } from 'vue';
+import { useMaterial, useRuntime } from '../../composables/useApp';
 
 export default defineComponent({
     name: 'MaterialConfigPopover',
     components: {},
     setup() {
-        // Sketch组件注入
-        const sketch: Ref = inject('sketch', ref({}));
-
-        // 缩放值注入
-        const scale: Ref<number> = inject('scale', ref(1));
-
-        // Paper实例注入
-        const paperInstance: Paper = inject('paper') as Paper;
-
-        // 当前操作
-        const focusMaterialList: Ref = inject('focus:materialList') as Ref<
-            Material<any>['id'][]
-        >;
-
-        // 元素实例
-        const instance: Material<any> = inject(
-            'm-instance',
-            {}
-        ) as Material<any>;
-        const active = inject('m-instance:active');
-        const hover = inject('m-instance:hover');
+        const runtime = useRuntime();
+        const material = useMaterial();
 
         return {
-            hover,
-            active,
-            scale,
-            instance,
+            scale: toRef(runtime.scale, 'value'),
+            hover: toRef(material, 'hover'),
+            active: toRef(material, 'active'),
+            instance: toRef(material, 'instance'),
         };
     },
     data: () => ({

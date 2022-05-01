@@ -93,6 +93,7 @@ import { Material } from '../../classes/Material';
 import { ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
 import { M_IMAGE_NAME } from './config';
+import { useMaterial } from '../../composables/useApp';
 
 interface MImageConfig {
     url: string;
@@ -128,7 +129,7 @@ export default defineComponent({
     components: { MaterialConfigPopover },
     protoInfo,
     setup() {
-        const instance = inject('m-instance') as Material<MImageConfig>;
+        const { instance } = useMaterial<MImageConfig>();
 
         watch(
             () => ({

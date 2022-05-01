@@ -42,19 +42,15 @@
 
 <script lang="ts">
 import { defineComponent, inject, ref } from 'vue';
-import { UnwrapNestedRefs } from '@vue/reactivity';
-import { Paper } from '../../classes/Paper';
 import { downloadJSON } from '../../utils/download';
+import { usePaper } from '../../composables/useApp';
 
 export default defineComponent({
     name: 'ImportExport',
     setup() {
-        // Paper实例注入
-        const paperInstance: UnwrapNestedRefs<Paper> = inject(
-            'paper'
-        ) as UnwrapNestedRefs<Paper>;
+        const paper = usePaper();
         const exportPaperJSON = () => {
-            downloadJSON(paperInstance, `${exportFilename.value}.json`);
+            downloadJSON(paper, `${exportFilename.value}.json`);
             exportDialog.value = false;
         };
         const exportDialog = ref(false);
@@ -69,7 +65,7 @@ export default defineComponent({
                 if (!evt.target) return;
                 if (evt.target.readyState === FileReader.DONE) {
                     const data = JSON.parse(evt.target.result as string);
-                    paperInstance.loadData(data);
+                    paper.loadData(data);
                 }
             };
             // 包含中文内容用gbk编码

@@ -1,5 +1,17 @@
 import { uniqueString } from '../utils/uniqueString';
 import { MaterialComponentNameType } from '../components/materials/config';
+import { InjectionKey } from 'vue';
+import { UnwrapNestedRefs } from '@vue/reactivity';
+
+export interface MaterialInjection {
+    instance: Material<any>,
+    active: boolean,
+    hover: boolean
+}
+
+export const materialInjectionKey: InjectionKey<
+    UnwrapNestedRefs<MaterialInjection>
+> = Symbol('Material');
 
 export interface MaterialOptions<T> {
     componentName: MaterialComponentNameType;

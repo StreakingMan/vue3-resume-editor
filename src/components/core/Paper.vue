@@ -1,14 +1,13 @@
 <template>
     <div
         id="paper"
-        ref="paper"
+        ref="paperRef"
         class="paper"
         :style="[
-            (paperInstance.cellSize < 10 || !showGrid) &&
-                'background-image: none',
+            (paper.cellSize < 10 || !showGrid) && 'background-image: none',
             {
-                backgroundColor: paperInstance.background,
-                backgroundSize: `${paperInstance.cellSize}px ${paperInstance.cellSize}px,${paperInstance.cellSize}px ${paperInstance.cellSize}px`,
+                backgroundColor: paper.background,
+                backgroundSize: `${paper.cellSize}px ${paper.cellSize}px,${paper.cellSize}px ${paper.cellSize}px`,
             },
         ]"
     >
@@ -30,60 +29,44 @@
 <script lang="ts">
 import {
     defineComponent,
-    inject,
     ref,
     computed,
-    Ref,
     watch,
     onMounted,
-    toRefs,
+    toRef,
+    Ref,
 } from 'vue';
-
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import MaterialInstance from './MaterialInstance.vue';
-import { UnwrapNestedRefs } from '@vue/reactivity';
 import { Paper } from '../../classes/Paper';
+import { usePaper, useRuntime } from '../../composables/useApp';
 import { Material } from '../../classes/Material';
 
 export default defineComponent({
     name: 'Paper',
     components: { MaterialInstance },
     setup() {
-        // 按键状态注入
-        const space: Ref<boolean> = inject('keyboard:space') as Ref<boolean>;
-        const ctrl: Ref<boolean> = inject('keyboard:ctrl') as Ref<boolean>;
-        const paper = ref<HTMLDivElement>();
+        const runtime = useRuntime();
+        const paper = usePaper();
+        const paperRef = ref<HTMLDivElement | null>(null);
 
-        // Paper实例注入
-        const paperInstance: UnwrapNestedRefs<Paper> = inject(
-            'paper'
-        ) as UnwrapNestedRefs<Paper>;
-        const { materialList } = toRefs(paperInstance);
         onMounted(() => {
-            if (!paper.value) return;
-            paper.value.style.width = paperInstance.w + 'px';
-            paper.value.style.height = paperInstance.h + 'px';
+            // 初始化尺寸
+            if (!paperRef.value) return;
+            paperRef.value.style.width = paper.w + 'px';
+            paperRef.value.style.height = paper.h + 'px';
         });
+
+        // 缩放值监听设置
         watch(
-            () => materialList.value.length,
-            (v) => {
-                //console.log(v);
+            () => runtime.scale.value,
+            async (v) => {
+                if (!paperRef.value) return;
+                paperRef.value.style.transform = `scale(${v})`;
             }
         );
 
-        // 选中元素注入
-        const focusMaterialList = inject('focus:materialList') as Ref<
-            Material<any>['id'][]
-        >;
-
-        // 缩放值注入
-        const scale = inject('scale') as Ref<number>;
-
-        watch(scale, async (v) => {
-            if (!paper.value) return;
-            paper.value.style.transform = `scale(${v})`;
-        });
-        // 选择框
+        // 选择框拖拽
         const selectorX = ref(0);
         const selectorY = ref(0);
         const selectorW = ref(0);
@@ -91,27 +74,31 @@ export default defineComponent({
         const onSelectStart = (info: MouseEvtInfo) => {
             selectorW.value = 0;
             selectorH.value = 0;
-            if (!paper.value) return false;
-            if (space.value || ctrl.value) return false;
+            if (!paperRef.value) return false;
+            if (runtime.keyboardStatus.space || runtime.keyboardStatus.ctrl)
+                return false;
             const { startX, startY } = info;
-            const { x, y } = paper.value.getBoundingClientRect();
-            selectorX.value = (startX - x) / scale.value;
-            selectorY.value = (startY - y) / scale.value;
+            const { x, y } = paperRef.value.getBoundingClientRect();
+            selectorX.value = (startX - x) / runtime.scale.value;
+            selectorY.value = (startY - y) / runtime.scale.value;
         };
         const onSelectDrag = (info: MouseEvtInfo) => {
             const { transX, transY } = info;
-            selectorW.value = transX / scale.value;
-            selectorH.value = transY / scale.value;
+            selectorW.value = transX / runtime.scale.value;
+            selectorH.value = transY / runtime.scale.value;
         };
         const onSelectFinish = (/*info: MouseEvtInfo*/) => {
-            focusMaterialList.value = paperInstance
+            runtime.activeMaterialSet.clear();
+            paper
                 .getSelectRangeMaterial({
                     x: selectorX.value,
                     y: selectorY.value,
                     w: selectorW.value,
                     h: selectorH.value,
                 })
-                .map((m) => m.id);
+                .forEach(({ id }) => {
+                    runtime.activeMaterialSet.add(id);
+                });
             selectorW.value = 0;
             selectorH.value = 0;
         };
@@ -119,10 +106,11 @@ export default defineComponent({
             onStart: onSelectStart,
             onDrag: onSelectDrag,
             onFinish: onSelectFinish,
-            bindElementRef: paper,
+            bindElementRef: paperRef,
             preventDefault: false,
         });
 
+        // 选择框实时样式
         const selectorStyle = computed(() => {
             let left = selectorX.value,
                 top = selectorY.value,
@@ -144,16 +132,16 @@ export default defineComponent({
             };
         });
 
-        const showGrid = inject('showGrid');
+        // TODO 分组边框
 
         return {
-            space,
+            space: toRef(runtime.keyboardStatus, 'space'),
+            showGrid: toRef(runtime, 'showGrid'),
+            paperRef,
             paper,
-            paperInstance,
-            showGrid,
             selecting,
             selectorStyle,
-            materialList,
+            materialList: toRef(paper, 'materialList') as Ref<Material<any>[]>,
         };
     },
 });

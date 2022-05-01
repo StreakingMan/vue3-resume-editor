@@ -5,23 +5,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, Ref } from 'vue';
-import { UnwrapNestedRefs } from '@vue/reactivity';
-import { Paper } from '../../classes/Paper';
+import { defineComponent } from 'vue';
+import { useRuntime } from '../../composables/useApp';
 
 export default defineComponent({
     name: 'Print',
     setup() {
-        // Paper实例注入
-        const paperInstance: UnwrapNestedRefs<Paper> = inject(
-            'paper'
-        ) as UnwrapNestedRefs<Paper>;
-
-        const showGrid = inject('showGrid') as Ref<boolean>;
+        const runtime = useRuntime();
 
         const onPrintClick = () => {
             // 前置工作
-            showGrid.value = false;
+            runtime.showGrid = false;
             // 打印
         };
 

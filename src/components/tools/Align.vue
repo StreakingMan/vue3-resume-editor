@@ -15,10 +15,8 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, Ref } from 'vue';
-import { Material } from '../../classes/Material';
-import { UnwrapNestedRefs } from '@vue/reactivity';
-import { Paper } from '../../classes/Paper';
+import { computed, defineComponent } from 'vue';
+import { usePaper, useRuntime } from '../../composables/useApp';
 
 type AlignCommandType =
     | 'alignHorizontalLeft'
@@ -71,17 +69,11 @@ const alignOptions: Array<{
 export default defineComponent({
     name: 'Align',
     setup() {
-        // Paper实例注入
-        const paperInstance: UnwrapNestedRefs<Paper> = inject(
-            'paper'
-        ) as UnwrapNestedRefs<Paper>;
-
-        const focusMaterialList = inject('focus:materialList') as Ref<
-            Material<any>['id'][]
-        >;
+        const runtime = useRuntime();
+        const paper = usePaper();
 
         const alignOperateDisable = computed(
-            () => focusMaterialList.value.length < 2
+            () => runtime.activeMaterialSet.size < 2
         );
 
         const alignButtons: Array<{
@@ -89,11 +81,10 @@ export default defineComponent({
             onClick: () => void;
         }> = alignOptions.map((opt) => ({
             icon: opt.icon,
-            onClick: () => paperInstance[opt.command](focusMaterialList.value),
+            onClick: () => paper[opt.command]([...runtime.activeMaterialSet]),
         }));
 
         return {
-            paperInstance,
             alignOperateDisable,
             alignButtons,
         };
