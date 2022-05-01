@@ -28,8 +28,10 @@ export default defineComponent({
             const groupIds = [...runtime.activeMaterialSet]
                 .map((mId) => paper.queryMaterial(mId)?.groupId)
                 .filter((groupId) => !!groupId);
-            if (groupIds.length !== runtime.activeMaterialSet.size)
-                return false;
+            if (
+                groupIds.length !== runtime.activeMaterialSet.size
+            )
+                return true;
             return [...new Set(groupIds)].length !== 1;
         });
 

@@ -39,7 +39,6 @@
                         icon
                         class="border-r-0"
                         :rounded="0"
-                        @mousedown="focus"
                     >
                         <v-icon size="x-small">mdi-arrow-all</v-icon>
                         <v-tooltip activator="parent" anchor="top">
@@ -169,7 +168,9 @@ import {
     provide,
     reactive,
     ref,
-    PropType, toRef,
+    PropType,
+    toRef,
+    nextTick,
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import MImage from '../materials/MImage.vue';
@@ -179,12 +180,7 @@ import { CTRL_DOT_SIZE, UNIT_SIZE } from './config';
 import MaterialConfig from './MaterialConfigPopover.vue';
 import { prototypeMap } from '../materials/prototypes';
 import { CtrlDotType } from '../materials/config';
-import {
-    Material,
-    MaterialInjection,
-    materialInjectionKey,
-} from '../../classes/Material';
-import { Paper } from '../../classes/Paper';
+import { Material, materialInjectionKey } from '../../classes/Material';
 import MDivider from '../materials/MDivider.vue';
 import { usePaper, useRuntime } from '../../composables/useApp';
 
@@ -280,16 +276,19 @@ export default defineComponent({
                     runtime.activeMaterialSet.clear();
                     runtime.activeMaterialSet.add(material.instance.id);
                 }
-                // 拖动的元素挂载了分组时，批量移动
-                for (const mId of runtime.activeMaterialSet) {
-                    const mInstance = paper.queryMaterial(mId);
-                    if (!mInstance) continue;
-                    const { x, y } = mInstance;
-                    posInfoCacheMap.set(mId, {
-                        itemStartX: x,
-                        itemStartY: y,
-                    });
-                }
+
+                nextTick().then(() => {
+                    // 拖动的元素挂载了分组时，批量移动
+                    for (const mId of runtime.activeMaterialSet) {
+                        const mInstance = paper.queryMaterial(mId);
+                        if (!mInstance) continue;
+                        const { x, y } = mInstance;
+                        posInfoCacheMap.set(mId, {
+                            itemStartX: x,
+                            itemStartY: y,
+                        });
+                    }
+                });
             },
             onDrag({ transX, transY }: MouseEvtInfo) {
                 for (const mId of runtime.activeMaterialSet) {

@@ -84,17 +84,36 @@ export default defineComponent({
         });
 
         // TODO 激活元素集合控制
-        watch(runtime.activeMaterialSet, (nv, ov) => {
-            // 激活列表增减时，同属分组元素一并操作
-            const { added, removed } = stringArrayDiff([...nv], [...ov]);
-            const needAddGroupIds = added
-                    .map((mId) => paper.queryMaterial(mId)?.groupId)
-                    .filter((groupId) => !!groupId),
-                needRemoveGroupIds = removed
-                    .map((mId) => paper.queryMaterial(mId)?.groupId)
-                    .filter((groupId) => !!groupId);
-            //
-        });
+        watch(
+            () => [...runtime.activeMaterialSet],
+            (nv, ov) => {
+                console.log('激活元素', nv, ov);
+                // 激活列表增减时，同属分组元素一并操作
+                const { added, removed } = stringArrayDiff(ov, nv);
+                const needAddGroupIdSet = [
+                    ...new Set(
+                        added.map((mId) => paper.queryMaterial(mId)?.groupId)
+                    ),
+                ];
+                const needRemoveGroupIdSet = [
+                    ...new Set(
+                        removed.map((mId) => paper.queryMaterial(mId)?.groupId)
+                    ),
+                ];
+                needAddGroupIdSet.forEach((groupId) => {
+                    if (!groupId) return;
+                    paper.queryGroupMaterials(groupId).forEach(({ id }) => {
+                        runtime.activeMaterialSet.add(id);
+                    });
+                });
+                needRemoveGroupIdSet.forEach((groupId) => {
+                    if (!groupId) return;
+                    paper.queryGroupMaterials(groupId).forEach(({ id }) => {
+                        runtime.activeMaterialSet.delete(id);
+                    });
+                });
+            }
+        );
 
         return {
             snackbar: runtime.snackbar,
