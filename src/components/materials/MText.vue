@@ -68,6 +68,7 @@
                     color="primary"
                     class="border mx-2"
                     style="height: 36px"
+                    mandatory
                     divided
                 >
                     <template

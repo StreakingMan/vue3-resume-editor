@@ -21,6 +21,7 @@
                     color="primary"
                     class="border"
                     style="height: 36px"
+                    mandatory
                     divided
                 >
                     <v-btn value="local" variant="text" size="small">

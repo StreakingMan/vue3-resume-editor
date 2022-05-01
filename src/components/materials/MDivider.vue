@@ -28,6 +28,7 @@
                     color="primary"
                     class="border"
                     style="height: 36px"
+                    mandatory
                     divided
                 >
                     <v-btn value="horizontal" variant="text" size="small">
@@ -75,6 +76,7 @@
                     color="primary"
                     class="border"
                     style="height: 36px"
+                    mandatory
                     divided
                 >
                     <v-btn value="solid" variant="text" size="small">
@@ -136,6 +138,7 @@ const protoInfo: ProtoInfo<MDividerConfig> = {
         y: y - paperInstance.cellSize,
         w: 600,
         h: paperInstance.cellSize * 2,
+        cellSize: 1,
         config: {
             direction: 'horizontal',
             color: 'grey',
@@ -157,17 +160,6 @@ export default defineComponent({
             () => ({ direction: instance.config.direction }),
             () => {
                 instance.centerRotate();
-            }
-        );
-        // 根据网格调整宽高
-        watch(
-            () => ({ cellSize: instance.cellSize }),
-            () => {
-                if (instance.config.direction === 'horizontal') {
-                    instance.h = instance.cellSize * 2;
-                } else {
-                    instance.w = instance.cellSize * 2;
-                }
             }
         );
 

@@ -1,7 +1,7 @@
 import { Material, MaterialOptions } from './Material';
 import { uniqueString } from '../utils/uniqueString';
-import {InjectionKey} from "vue";
-import {UnwrapNestedRefs} from "@vue/reactivity";
+import { InjectionKey } from 'vue';
+import { UnwrapNestedRefs } from '@vue/reactivity';
 
 const LOCAL_STORAGE_KEY = 'paper_cache';
 
