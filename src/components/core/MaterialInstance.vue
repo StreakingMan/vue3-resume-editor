@@ -1,16 +1,14 @@
 <template>
     <div
         :key="instance.id"
-        class="material-instance"
+        class="material-instance bor"
         :style="{
             left: instance.x + 'px',
             top: instance.y + 'px',
             zIndex: active ? paper.materialList.length + 1 : instance.z,
             width: instance.w + 'px',
             height: instance.h + 'px',
-        }"
-        :class="{
-            border: active || hover,
+            borderColor: active || hover ? 'rgba(0,0,0,0.3)' : 'transparent',
         }"
         @mouseenter.prevent.stop="hover = true"
         @mouseleave.prevent.stop="hover = false"
@@ -412,6 +410,7 @@ export default defineComponent({
     border: 1px solid transparent;
     box-sizing: content-box;
     user-select: none;
+    transition: border-color 0.3s;
 
     .control-dot {
         box-sizing: border-box;

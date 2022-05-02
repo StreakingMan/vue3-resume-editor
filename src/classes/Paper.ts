@@ -224,7 +224,7 @@ export class Paper {
         return {
             x: minX!,
             y: minY!,
-            w: maxY! - minY!,
+            w: maxX! - minX!,
             h: maxY! - minY!,
         };
     }

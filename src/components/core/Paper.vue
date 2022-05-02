@@ -12,6 +12,17 @@
         ]"
     >
         <v-theme-provider theme="light">
+            <div
+                v-for="(g, i) in groupRects"
+                :key="i"
+                class="group-rect"
+                :style="{
+                    left: g.x+'px',
+                    top: g.y+'px',
+                    width: g.w+'px',
+                    height: g.h+'px',
+                }"
+            ></div>
             <MaterialInstance
                 v-for="(m, i) in materialList"
                 :key="m.id"
@@ -22,6 +33,7 @@
                 class="select-box"
                 :style="selectorStyle"
             ></div>
+
         </v-theme-provider>
     </div>
 </template>
@@ -38,7 +50,6 @@ import {
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import MaterialInstance from './MaterialInstance.vue';
-import { Paper } from '../../classes/Paper';
 import { usePaper, useRuntime } from '../../composables/useApp';
 import { Material } from '../../classes/Material';
 
@@ -133,10 +144,33 @@ export default defineComponent({
         });
 
         // TODO 分组边框
+        const groupRects = computed<
+            Array<{
+                x: number;
+                y: number;
+                w: number;
+                h: number;
+            }>
+        >(() => {
+            const groupIds = new Set<string>();
+            for (const mId of runtime.activeMaterialSet) {
+                const m = paper.queryMaterial(mId);
+                if (m && m?.groupId) {
+                    groupIds.add(m.groupId);
+                }
+            }
+            const rects = [];
+            for (const groupId of groupIds) {
+                const rect = paper.getGroupRect(groupId);
+                if (rect) rects.push(rect);
+            }
+            return rects;
+        });
 
         return {
             space: toRef(runtime.keyboardStatus, 'space'),
             showGrid: toRef(runtime, 'showGrid'),
+            groupRects,
             paperRef,
             paper,
             selecting,
@@ -165,10 +199,16 @@ export default defineComponent({
 
     .select-box {
         position: absolute;
-        border: lightcoral;
         background: lightblue;
         opacity: 0.3;
         z-index: 9;
+    }
+
+    .group-rect {
+        position: absolute;
+        background: lightcoral;
+        opacity: 0.3;
+        z-index: 1;
     }
 }
 </style>

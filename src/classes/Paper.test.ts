@@ -109,12 +109,42 @@ test('分组操作', () => {
         undefined,
         undefined,
     ]);
-    paper.groupMaterials([m1.id, m5.id]);
-    expect(paper.getGroupRect(m1.groupId!)).toEqual({
-        x: 0,
-        y: 0,
-        w: 200,
-        h: 200,
+});
+
+test('获取分组边缘矩形', () => {
+    const paper = new Paper({});
+    paper.addMaterial(
+        makeTestMaterialOptions({
+            groupId: 'test',
+            x: 480,
+            y: 480,
+            w: 100,
+            h: 100,
+        })
+    );
+    paper.addMaterial(
+        makeTestMaterialOptions({
+            groupId: 'test',
+            x: 380,
+            y: 640,
+            w: 100,
+            h: 100,
+        })
+    );
+    paper.addMaterial(
+        makeTestMaterialOptions({
+            groupId: 'test',
+            x: 40,
+            y: 480,
+            w: 200,
+            h: 296,
+        })
+    );
+    expect(paper.getGroupRect('test')).toEqual({
+        x: 40,
+        y: 480,
+        w: 540,
+        h: 296,
     });
 });
 
