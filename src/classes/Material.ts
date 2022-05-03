@@ -2,11 +2,12 @@ import { uniqueString } from '../utils/uniqueString';
 import { MaterialComponentNameType } from '../components/materials/config';
 import { InjectionKey } from 'vue';
 import { UnwrapNestedRefs } from '@vue/reactivity';
+import { calcCellingValue } from '../utils/calcCellingValue';
 
 export interface MaterialInjection {
-    instance: Material<any>,
-    active: boolean,
-    hover: boolean
+    instance: Material<any>;
+    active: boolean;
+    hover: boolean;
 }
 
 export const materialInjectionKey: InjectionKey<
@@ -26,19 +27,14 @@ export interface MaterialOptions<T> {
     cellSize?: number;
 }
 
-const calcCellingValue: (
-    value: number,
-    cellSize: number,
-    ceil?: boolean
-) => number = (value, cellSize, ceil) => {
-    const newValue = Math.round(value);
-    const offset = newValue % cellSize;
-    if (offset > cellSize / 2 || (offset && ceil)) {
-        return newValue - offset + cellSize;
-    } else {
-        return newValue - offset;
-    }
-};
+interface MaterialBaseConfig {
+    padding: number;
+    borderStyle: 'solid' | 'dashed' | 'dotted' | 'none';
+    borderWidth: number;
+    borderColor: string;
+    borderRadius: number;
+    backgroundColor: string;
+}
 
 export class Material<T> {
     private readonly _id: string;

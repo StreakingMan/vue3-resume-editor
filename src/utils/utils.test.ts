@@ -1,5 +1,6 @@
 import { uniqueString } from './uniqueString';
 import { stringArrayDiff } from './stringArrayDiff';
+import { calcCellingValue } from './calcCellingValue';
 
 test('stringArrayDiff', () => {
     expect(stringArrayDiff(['a', 'b', 'c'], ['a', 'b', 'd'])).toEqual({
@@ -62,4 +63,11 @@ test('uniqueString', () => {
     const us2 = uniqueString();
     expect(us1.length).toBe(4);
     expect(us1 === us2).toBe(false);
+});
+
+test('calcCellingValue', () => {
+    expect(calcCellingValue(123, 10)).toBe(120);
+    expect(calcCellingValue(123, 110)).toBe(110);
+    expect(calcCellingValue(123, 1)).toBe(123);
+    expect(calcCellingValue(123, 10, true)).toBe(130);
 });
