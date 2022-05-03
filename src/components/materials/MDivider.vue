@@ -21,26 +21,13 @@
             <slot name="activator"></slot>
         </template>
         <template #config>
-            <div class="d-flex align-center">
-                <div class="text-subtitle-2">方向：</div>
-                <v-btn-toggle
-                    v-model="instance.config.direction"
-                    color="primary"
-                    class="border"
-                    style="height: 36px"
-                    mandatory
-                    divided
-                >
-                    <v-btn value="horizontal" variant="text" size="small">
-                        水平
-                    </v-btn>
-                    <v-btn value="vertical" variant="text" size="small">
-                        垂直
-                    </v-btn>
-                </v-btn-toggle>
-            </div>
-            <div class="d-flex align-center">
-                <div class="text-subtitle-2">粗细：</div>
+            <ConfigItem title="方向">
+                <ConfigToggle v-model="instance.config.direction">
+                    <ConfigToggleOption label="水平" value="horizontal" />
+                    <ConfigToggleOption label="垂直" value="vertical" />
+                </ConfigToggle>
+            </ConfigItem>
+            <ConfigItem title="粗细">
                 <v-slider
                     v-model="instance.config.lineWidth"
                     min="1"
@@ -51,9 +38,8 @@
                     thumb-color="primary"
                     show-ticks="always"
                 ></v-slider>
-            </div>
-            <div class="d-flex align-center">
-                <div class="text-subtitle-2">颜色：</div>
+            </ConfigItem>
+            <ConfigItem title="颜色">
                 <v-sheet
                     width="24"
                     height="24"
@@ -68,57 +54,24 @@
                         ></v-color-picker>
                     </v-menu>
                 </v-sheet>
-            </div>
-            <div class="d-flex align-center">
-                <div class="text-subtitle-2">样式：</div>
-                <v-btn-toggle
-                    v-model="instance.config.style"
-                    color="primary"
-                    class="border"
-                    style="height: 36px"
-                    mandatory
-                    divided
-                >
-                    <v-btn value="solid" variant="text" size="small">
-                        <div
-                            style="
-                                width: 40px;
-                                height: 0;
-                                border-top: 2px solid black;
-                            "
-                        ></div>
-                    </v-btn>
-                    <v-btn value="dotted" variant="text" size="small">
-                        <div
-                            style="
-                                width: 40px;
-                                height: 0;
-                                border-top: 2px dotted black;
-                            "
-                        ></div>
-                    </v-btn>
-                    <v-btn value="dashed" variant="text" size="small">
-                        <div
-                            style="
-                                width: 40px;
-                                height: 0;
-                                border-top: 2px dashed black;
-                            "
-                        ></div>
-                    </v-btn>
-                </v-btn-toggle>
-            </div>
+            </ConfigItem>
+            <ConfigItem title="样式">
+                <BorderStyle v-model="instance.config.style" />
+            </ConfigItem>
         </template>
     </MaterialConfigPopover>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, toRefs, watch } from 'vue';
+import { defineComponent, watch } from 'vue';
 import { ProtoInfo } from './prototypes';
 import { M_DIVIDER_NAME } from './config';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
-import { Material } from '../../classes/Material';
 import { useMaterial } from '../../composables/useApp';
+import ConfigItem from '../config-widgets/ConfigItem.vue';
+import BorderStyle from '../config-widgets/BorderStyle.vue';
+import ConfigToggle from '../config-widgets/ConfigToggle.vue';
+import ConfigToggleOption from '../config-widgets/ConfigToggleOption.vue';
 
 interface MDividerConfig {
     direction: 'horizontal' | 'vertical';
@@ -150,7 +103,13 @@ const protoInfo: ProtoInfo<MDividerConfig> = {
 
 export default defineComponent({
     name: 'MDivider',
-    components: { MaterialConfigPopover },
+    components: {
+        ConfigToggleOption,
+        ConfigToggle,
+        BorderStyle,
+        ConfigItem,
+        MaterialConfigPopover,
+    },
     protoInfo,
     setup() {
         const { instance } = useMaterial<MDividerConfig>();

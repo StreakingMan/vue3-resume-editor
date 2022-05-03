@@ -14,29 +14,21 @@
             <slot name="activator"></slot>
         </template>
         <template #config>
-            <div class="d-flex align-center mb-2">
-                <div class="text-subtitle-2">类型：</div>
-                <v-btn-toggle
-                    v-model="instance.config.type"
-                    color="primary"
-                    class="border"
-                    style="height: 36px"
-                    mandatory
-                    divided
-                >
-                    <v-btn value="local" variant="text" size="small">
-                        <v-icon> mdi-laptop </v-icon>
-                        本地
-                    </v-btn>
-                    <v-btn value="web" variant="text" size="small">
-                        <v-icon> mdi-web </v-icon>
-                        网络
-                    </v-btn>
-                </v-btn-toggle>
-            </div>
-
-            <div class="d-flex align-center">
-                <div class="text-subtitle-2">链接：</div>
+            <ConfigItem title="类型" class="mb-2">
+                <ConfigToggle v-model="instance.config.type">
+                    <ConfigToggleOption
+                        label="本地"
+                        value="local"
+                        icon="mdi-laptop"
+                    />
+                    <ConfigToggleOption
+                        label="网络"
+                        value="web"
+                        icon="mdi-web"
+                    />
+                </ConfigToggle>
+            </ConfigItem>
+            <ConfigItem title="链接">
                 <v-text-field
                     v-if="instance.config.type === 'web'"
                     v-model="instance.config.url"
@@ -64,10 +56,9 @@
                         @update:modelValue="(files) => onFileChange(files[0])"
                     ></v-file-input>
                 </template>
-            </div>
+            </ConfigItem>
 
-            <div class="d-flex align-center">
-                <div class="text-subtitle-2">裁切：</div>
+            <ConfigItem title="裁切">
                 <v-switch
                     v-model="instance.config.cut"
                     color="primary"
@@ -83,18 +74,20 @@
                         </div>
                     </template>
                 </v-switch>
-            </div>
+            </ConfigItem>
         </template>
     </MaterialConfigPopover>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, nextTick, watch } from 'vue';
-import { Material } from '../../classes/Material';
+import { defineComponent, nextTick, watch } from 'vue';
 import { ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
 import { M_IMAGE_NAME } from './config';
 import { useMaterial } from '../../composables/useApp';
+import ConfigItem from '../config-widgets/ConfigItem.vue';
+import ConfigToggle from '../config-widgets/ConfigToggle.vue';
+import ConfigToggleOption from '../config-widgets/ConfigToggleOption.vue';
 
 interface MImageConfig {
     url: string;
@@ -127,7 +120,12 @@ const protoInfo: ProtoInfo<MImageConfig> = {
 
 export default defineComponent({
     name: M_IMAGE_NAME,
-    components: { MaterialConfigPopover },
+    components: {
+        ConfigToggleOption,
+        ConfigToggle,
+        ConfigItem,
+        MaterialConfigPopover,
+    },
     protoInfo,
     setup() {
         const { instance } = useMaterial<MImageConfig>();

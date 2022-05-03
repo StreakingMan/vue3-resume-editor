@@ -15,8 +15,7 @@
             <slot name="activator"></slot>
         </template>
         <template #config>
-            <div class="d-flex align-center">
-                <div class="text-subtitle-2">尺寸：</div>
+            <ConfigItem title="字号">
                 <v-slider
                     v-model="instance.config.typo"
                     :min="0"
@@ -35,10 +34,9 @@
                         </div>
                     </template>
                 </v-slider>
-            </div>
+            </ConfigItem>
 
-            <div class="d-flex align-center">
-                <div class="text-subtitle-2">字重：</div>
+            <ConfigItem title="字重">
                 <v-slider
                     v-model="instance.config.fontWeight"
                     :min="0"
@@ -59,105 +57,53 @@
                         </div>
                     </template>
                 </v-slider>
-            </div>
+            </ConfigItem>
 
-            <div class="d-flex align-center">
-                <div class="text-subtitle-2">对齐：</div>
-                <v-btn-toggle
-                    v-model="instance.config.align"
-                    color="primary"
-                    class="border mx-2"
-                    style="height: 36px"
-                    mandatory
-                    divided
-                >
+            <ConfigItem title="对齐">
+                <ConfigToggle v-model="instance.config.align" class="mx-2">
                     <template
                         v-for="{ icon, value } of textAlignOptions"
                         :key="value"
                     >
-                        <v-btn
-                            :value="value"
-                            variant="text"
-                            :icon="icon"
-                            size="small"
-                        ></v-btn>
+                        <ConfigToggleOption :value="value" :icon="icon" />
                     </template>
-                </v-btn-toggle>
-            </div>
+                </ConfigToggle>
+            </ConfigItem>
 
-            <div class="d-flex align-center">
-                <div class="text-subtitle-2">字色：</div>
-                <v-menu>
-                    <template #activator="{ props }">
-                        <v-sheet
-                            width="24"
-                            height="24"
-                            class="border rounded ma-2"
-                            :color="instance.config.color"
-                            v-bind="props"
-                            style="cursor: pointer"
-                        >
-                        </v-sheet>
-                    </template>
-                    <v-color-picker
-                        v-model="instance.config.color"
-                        show-swatches
-                    ></v-color-picker>
-                </v-menu>
-            </div>
+            <ConfigItem title="字色">
+                <v-sheet
+                    width="24"
+                    height="24"
+                    class="border rounded ma-2"
+                    :color="instance.config.color"
+                    style="cursor: pointer"
+                >
+                    <v-menu activator="parent" anchor="bottom">
+                        <v-color-picker
+                            v-model="instance.config.color"
+                            show-swatches
+                        ></v-color-picker>
+                    </v-menu>
+                </v-sheet>
+            </ConfigItem>
         </template>
     </MaterialConfigPopover>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, nextTick, ref, watch } from 'vue';
-import { Material } from '../../classes/Material';
+import { computed, defineComponent, nextTick, ref, watch } from 'vue';
 import { ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
-import { M_TEXT_NAME } from './config';
-import {useMaterial} from "../../composables/useApp";
-
-const typographyClass = [
-    'text-h1',
-    'text-h2',
-    'text-h3',
-    'text-h4',
-    'text-h5',
-    'text-h6',
-    'text-subtitle-1',
-    'text-subtitle-2',
-    'text-body-1',
-    'text-body-2',
-    'text-button',
-    'text-caption',
-    'text-overline',
-];
-const fontWeightClass = [
-    'font-weight-black',
-    'font-weight-bold',
-    'font-weight-medium',
-    'font-weight-regular',
-    'font-weight-light',
-    'font-weight-thin',
-    'font-italic',
-];
-const textAlignOptions: Array<{
-    icon: string;
-    value: MTextConfig['align'];
-}> = [
-    {
-        icon: 'mdi-format-align-left',
-        value: 'left',
-    },
-    {
-        icon: 'mdi-format-align-center',
-        value: 'center',
-    },
-    {
-        icon: 'mdi-format-align-right',
-        value: 'right',
-    },
-];
+import {
+    fontWeightClass,
+    M_TEXT_NAME,
+    textAlignOptions,
+    typographyClass,
+} from './config';
+import { useMaterial } from '../../composables/useApp';
+import ConfigItem from '../config-widgets/ConfigItem.vue';
+import ConfigToggle from '../config-widgets/ConfigToggle.vue';
+import ConfigToggleOption from '../config-widgets/ConfigToggleOption.vue';
 
 interface MTextConfig {
     content: string;
@@ -189,7 +135,12 @@ const protoInfo: ProtoInfo<MTextConfig> = {
 
 export default defineComponent({
     name: M_TEXT_NAME,
-    components: { MaterialConfigPopover },
+    components: {
+        ConfigToggleOption,
+        ConfigToggle,
+        ConfigItem,
+        MaterialConfigPopover,
+    },
     protoInfo,
     setup() {
         const { instance } = useMaterial<MTextConfig>();

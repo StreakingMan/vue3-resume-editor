@@ -218,7 +218,7 @@ export default defineComponent({
         item: {
             type: Object as PropType<Material<any>>,
             default: null,
-            require: true,
+            required: true,
         },
     },
     emits: ['update:item'],
