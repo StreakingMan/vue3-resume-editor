@@ -65,7 +65,12 @@
                         has-null
                     />
                 </ConfigItem>
-                <template v-if="instance.config.borderStyle !== 'none'">
+                <template
+                    v-if="
+                        instance.config.borderStyle &&
+                        instance.config.borderStyle !== 'none'
+                    "
+                >
                     <ConfigItem title="边框粗细">
                         <v-slider
                             v-model="instance.config.borderWidth"

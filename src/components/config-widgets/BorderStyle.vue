@@ -19,7 +19,7 @@
     </ConfigToggle>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue';
 import ConfigToggle from './ConfigToggle.vue';
 import ConfigToggleOption from './ConfigToggleOption.vue';
@@ -45,12 +45,10 @@ export default defineComponent({
             get() {
                 return this.modelValue;
             },
-            set(value) {
+            set(value: string) {
                 this.$emit('update:modelValue', value);
             },
         },
     },
 });
 </script>
-
-<style scoped></style>

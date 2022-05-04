@@ -181,6 +181,7 @@ import { CtrlDotType } from '../materials/config';
 import { Material, materialInjectionKey } from '../../classes/Material';
 import MDivider from '../materials/MDivider.vue';
 import { usePaper, useRuntime } from '../../composables/useApp';
+import MRect from '../materials/MRect.vue';
 
 const ctrlDots: CtrlDotType[] = [
     'tl',
@@ -213,7 +214,7 @@ const styleMap: Record<CtrlDotType, string> = {
 
 export default defineComponent({
     name: 'MaterialInstance',
-    components: { MDivider, MaterialConfig, MText, MImage, MList },
+    components: { MRect, MDivider, MaterialConfig, MText, MImage, MList },
     props: {
         item: {
             type: Object as PropType<Material<any>>,

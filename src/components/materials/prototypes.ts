@@ -2,16 +2,19 @@ import { MaterialOptions } from '../../classes/Material';
 import MText from './MText.vue';
 import MImage from './MImage.vue';
 import MList from './MList.vue';
+import MDivider from './MDivider.vue';
+import MRect from './MRect.vue';
 import {
     CtrlDotFunction,
     CtrlDotType,
     M_DIVIDER_NAME,
     M_IMAGE_NAME,
     M_LIST_NAME,
+    M_RECT_NAME,
     M_TEXT_NAME,
     MaterialComponentNameType,
 } from './config';
-import MDivider from './MDivider.vue';
+
 import { Paper } from '../../classes/Paper';
 import { UnwrapNestedRefs } from '@vue/reactivity';
 
@@ -36,4 +39,5 @@ export const prototypeMap: PrototypeMap = {
     [M_IMAGE_NAME]: { ...MImage.protoInfo, tempStyle: '' },
     [M_LIST_NAME]: { ...MList.protoInfo, tempStyle: '' },
     [M_DIVIDER_NAME]: { ...MDivider.protoInfo, tempStyle: '' },
+    [M_RECT_NAME]: { ...MRect.protoInfo, tempStyle: '' },
 };

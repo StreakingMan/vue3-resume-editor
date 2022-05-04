@@ -13,7 +13,7 @@
     </v-sheet>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -31,7 +31,7 @@ export default defineComponent({
             get() {
                 return this.modelValue;
             },
-            set(value) {
+            set(value: string) {
                 this.$emit('update:modelValue', value);
             },
         },
