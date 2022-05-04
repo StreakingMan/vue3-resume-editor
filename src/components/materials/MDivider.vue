@@ -40,20 +40,7 @@
                 ></v-slider>
             </ConfigItem>
             <ConfigItem title="颜色">
-                <v-sheet
-                    width="24"
-                    height="24"
-                    class="border rounded ma-2 ml-0"
-                    :color="instance.config.color"
-                    style="cursor: pointer"
-                >
-                    <v-menu activator="parent">
-                        <v-color-picker
-                            v-model="instance.config.color"
-                            show-swatches
-                        ></v-color-picker>
-                    </v-menu>
-                </v-sheet>
+                <Color v-model="instance.config.color" />
             </ConfigItem>
             <ConfigItem title="样式">
                 <BorderStyle v-model="instance.config.style" />
@@ -72,8 +59,10 @@ import ConfigItem from '../config-widgets/ConfigItem.vue';
 import BorderStyle from '../config-widgets/BorderStyle.vue';
 import ConfigToggle from '../config-widgets/ConfigToggle.vue';
 import ConfigToggleOption from '../config-widgets/ConfigToggleOption.vue';
+import Color from '../config-widgets/Color.vue';
+import { MaterialBaseConfig } from '../../classes/Material';
 
-interface MDividerConfig {
+interface MDividerConfig extends MaterialBaseConfig {
     direction: 'horizontal' | 'vertical';
     color: string;
     lineWidth: number;
@@ -104,6 +93,7 @@ const protoInfo: ProtoInfo<MDividerConfig> = {
 export default defineComponent({
     name: 'MDivider',
     components: {
+        Color,
         ConfigToggleOption,
         ConfigToggle,
         BorderStyle,

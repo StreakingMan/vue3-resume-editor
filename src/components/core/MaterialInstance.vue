@@ -1,7 +1,7 @@
 <template>
     <div
         :key="instance.id"
-        class="material-instance bor"
+        class="material-instance"
         :style="{
             left: instance.x + 'px',
             top: instance.y + 'px',
@@ -15,13 +15,13 @@
         @mousedown="focus"
     >
         <div
-            class="w-100 h-100"
+            class="w-100 h-100 material-inner"
             :style="{
-                padding: instance.config.padding || 0 + 'px',
+                padding: instance.config.padding + 'px',
                 borderStyle: instance.config.borderStyle,
-                borderWidth: instance.config.borderWidth || 0 + 'px',
+                borderWidth: instance.config.borderWidth + 'px',
                 borderColor: instance.config.borderColor,
-                borderRadius: instance.config.borderRadius || 0 + 'px',
+                borderRadius: instance.config.borderRadius + 'px',
                 backgroundColor: instance.config.backgroundColor,
             }"
         >
@@ -417,5 +417,10 @@ export default defineComponent({
         position: absolute;
         transition: background-color 0.5s, opacity 0.5s;
     }
+}
+
+.material-inner {
+    box-sizing: border-box;
+    overflow: hidden;
 }
 </style>

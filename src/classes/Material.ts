@@ -14,7 +14,16 @@ export const materialInjectionKey: InjectionKey<
     UnwrapNestedRefs<MaterialInjection>
 > = Symbol('Material');
 
-export interface MaterialOptions<T> {
+export interface MaterialBaseConfig {
+    padding?: number;
+    borderStyle?: 'solid' | 'dashed' | 'dotted' | 'none';
+    borderWidth?: number;
+    borderColor?: string;
+    borderRadius?: number;
+    backgroundColor?: string;
+}
+
+export interface MaterialOptions<T extends MaterialBaseConfig> {
     componentName: MaterialComponentNameType;
     _id?: string;
     x: number;
@@ -27,16 +36,7 @@ export interface MaterialOptions<T> {
     cellSize?: number;
 }
 
-interface MaterialBaseConfig {
-    padding: number;
-    borderStyle: 'solid' | 'dashed' | 'dotted' | 'none';
-    borderWidth: number;
-    borderColor: string;
-    borderRadius: number;
-    backgroundColor: string;
-}
-
-export class Material<T> {
+export class Material<T extends MaterialBaseConfig> {
     private readonly _id: string;
     get id(): string {
         return this._id;

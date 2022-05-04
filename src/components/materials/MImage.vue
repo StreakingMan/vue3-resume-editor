@@ -88,8 +88,9 @@ import { useMaterial } from '../../composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import ConfigToggle from '../config-widgets/ConfigToggle.vue';
 import ConfigToggleOption from '../config-widgets/ConfigToggleOption.vue';
+import { MaterialBaseConfig } from '../../classes/Material';
 
-interface MImageConfig {
+interface MImageConfig extends MaterialBaseConfig {
     url: string;
     aspectRatio?: number;
     type: 'local' | 'web';

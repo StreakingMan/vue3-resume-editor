@@ -30,7 +30,7 @@ export default defineComponent({
     props: {
         modelValue: {
             type: String,
-            default: 'solid',
+            default: 'none',
             required: true,
         },
         hasNull: {

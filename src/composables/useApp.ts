@@ -2,7 +2,11 @@ import { inject, reactive } from 'vue';
 import { Runtime, runtimeInjectionKey } from '../classes/Runtime';
 import { UnwrapNestedRefs } from '@vue/reactivity';
 import { Paper, paperInjectionKey } from '../classes/Paper';
-import { Material, materialInjectionKey } from '../classes/Material';
+import {
+    Material,
+    MaterialBaseConfig,
+    materialInjectionKey,
+} from '../classes/Material';
 
 export function useRuntime(): UnwrapNestedRefs<Runtime> {
     return inject(runtimeInjectionKey, reactive(new Runtime()));
@@ -12,7 +16,7 @@ export function usePaper(): UnwrapNestedRefs<Paper> {
     return inject(paperInjectionKey, reactive(new Paper({})));
 }
 
-export function useMaterial<T>(): UnwrapNestedRefs<{
+export function useMaterial<T extends MaterialBaseConfig>(): UnwrapNestedRefs<{
     instance: Material<T>;
     active: boolean;
     hover: boolean;

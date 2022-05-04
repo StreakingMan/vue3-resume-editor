@@ -104,8 +104,9 @@ import { useMaterial } from '../../composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import ConfigToggle from '../config-widgets/ConfigToggle.vue';
 import ConfigToggleOption from '../config-widgets/ConfigToggleOption.vue';
+import { MaterialBaseConfig } from '../../classes/Material';
 
-interface MTextConfig {
+interface MTextConfig extends MaterialBaseConfig {
     content: string;
     typo: number;
     fontWeight: number;
@@ -154,6 +155,8 @@ export default defineComponent({
         });
         watch(
             () => ({
+                padding: instance.config.padding,
+                borderWidth: instance.config.borderWidth,
                 w: instance.w,
                 content: instance.config.content,
                 typo: instance.config.typo,
@@ -164,6 +167,17 @@ export default defineComponent({
                 if (eleRef.value) {
                     // 自适应内容高度
                     instance.h = eleRef.value.clientHeight;
+                    const {
+                        padding,
+                        borderStyle,
+                        borderWidth,
+                    } = instance.config;
+                    if (padding) {
+                        instance.h += padding * 2;
+                    }
+                    if (borderStyle !== 'none' && borderWidth) {
+                        instance.h += borderWidth * 2;
+                    }
                 }
             }
         );
