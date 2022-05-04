@@ -72,6 +72,22 @@
             </v-sheet>
         </v-menu>
     </v-btn>
+
+    <v-btn icon>
+        <v-icon>mdi-trash-can</v-icon>
+        <v-tooltip activator="parent" anchor="bottom">清空页面</v-tooltip>
+        <v-menu activator="parent" anchor="bottom">
+            <v-sheet class="pa-4 rounded" width="200">
+                <div class="text-subtitle-2">
+                    该操作将清空页面所有元素，确认清空？
+                </div>
+                <div class="d-flex">
+                    <v-spacer />
+                    <v-btn color="primary" @click="paper.clear()">确认</v-btn>
+                </div>
+            </v-sheet>
+        </v-menu>
+    </v-btn>
 </template>
 
 <script lang="ts">

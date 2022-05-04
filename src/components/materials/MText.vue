@@ -7,7 +7,6 @@
             :style="{ color: instance.config.color }"
             wrap="hard"
             placeholder="请输入文本"
-            @mousedown.stop
         />
     </div>
     <MaterialConfigPopover>

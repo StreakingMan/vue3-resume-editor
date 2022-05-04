@@ -8,7 +8,6 @@
             zIndex: active ? paper.materialList.length + 1 : instance.z,
             width: instance.w + 'px',
             height: instance.h + 'px',
-            borderColor: active || hover ? 'rgba(0,0,0,0.3)' : 'transparent',
         }"
         @mouseenter.prevent.stop="hover = true"
         @mouseleave.prevent.stop="hover = false"
@@ -408,7 +407,6 @@ export default defineComponent({
 <style scoped lang="scss">
 .material-instance {
     position: absolute;
-    border: 1px solid transparent;
     box-sizing: content-box;
     user-select: none;
     transition: border-color 0.3s;

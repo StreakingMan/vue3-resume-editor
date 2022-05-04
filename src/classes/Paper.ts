@@ -159,6 +159,11 @@ export class Paper {
     queryMaterial(id: Material<any>['id']): Material<any> | undefined {
         return this._materialMap.get(id);
     }
+    clear(): void {
+        this.materialList = [];
+        this._groupMap.clear();
+        this._materialMap.clear();
+    }
     // 编组操作
     groupMaterials(ids: Material<any>['id'][]): void {
         const newGroupId = uniqueString();
