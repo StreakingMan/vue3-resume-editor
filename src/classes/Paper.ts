@@ -59,11 +59,12 @@ export class Paper {
         this._groupMap = new Map();
         if (cellSize) this.cellSize = cellSize;
     }
-    loadFromStorage(): void {
+    loadFromStorage(): boolean {
         const jsonString = window.localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (!jsonString) return;
+        if (!jsonString) return false;
         const data = JSON.parse(jsonString);
         this.loadData(data);
+        return true;
     }
     loadData(data: {
         background: string;

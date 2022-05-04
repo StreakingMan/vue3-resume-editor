@@ -49,6 +49,7 @@ import Toolbar from './components/tools/Toolbar.vue';
 import { stringArrayDiff } from './utils/stringArrayDiff';
 import { Runtime, runtimeInjectionKey } from './classes/Runtime';
 import sketch from './components/core/Sketch.vue';
+import { template } from './components/templates/template';
 
 export default defineComponent({
     name: 'App',
@@ -79,7 +80,9 @@ export default defineComponent({
         const paper = reactive(new Paper({}));
         provide(paperInjectionKey, paper);
         onMounted(() => {
-            paper.loadFromStorage();
+            if (!paper.loadFromStorage()) {
+                paper.loadData(template);
+            }
             console.log(paper);
         });
 

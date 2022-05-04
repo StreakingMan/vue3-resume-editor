@@ -107,7 +107,7 @@
                 </v-slider>
             </ConfigItem>
 
-            <ConfigItem title="字号">
+            <ConfigItem title="字型">
                 <v-slider
                     v-model="instance.config.typo"
                     :min="0"
