@@ -42,6 +42,7 @@
                                 : instance.w / 2
                         "
                         color="primary"
+                        thumb-label
                         hide-details
                     ></v-slider>
                 </ConfigItem>
@@ -56,6 +57,7 @@
                                 : instance.w / 2
                         "
                         color="primary"
+                        thumb-label
                         hide-details
                     ></v-slider>
                 </ConfigItem>
@@ -80,6 +82,7 @@
                             color="primary"
                             show-ticks="always"
                             hide-details
+                            thumb-label
                         ></v-slider>
                     </ConfigItem>
                     <ConfigItem title="边框颜色">

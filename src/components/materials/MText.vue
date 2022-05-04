@@ -71,20 +71,7 @@
             </ConfigItem>
 
             <ConfigItem title="字色">
-                <v-sheet
-                    width="24"
-                    height="24"
-                    class="border rounded ma-2"
-                    :color="instance.config.color"
-                    style="cursor: pointer"
-                >
-                    <v-menu activator="parent" anchor="bottom">
-                        <v-color-picker
-                            v-model="instance.config.color"
-                            show-swatches
-                        ></v-color-picker>
-                    </v-menu>
-                </v-sheet>
+                <Color v-model="instance.config.color" />
             </ConfigItem>
         </template>
     </MaterialConfigPopover>
@@ -105,6 +92,7 @@ import ConfigItem from '../config-widgets/ConfigItem.vue';
 import ConfigToggle from '../config-widgets/ConfigToggle.vue';
 import ConfigToggleOption from '../config-widgets/ConfigToggleOption.vue';
 import { MaterialBaseConfig } from '../../classes/Material';
+import Color from '../config-widgets/Color.vue';
 
 interface MTextConfig extends MaterialBaseConfig {
     content: string;
@@ -137,6 +125,7 @@ const protoInfo: ProtoInfo<MTextConfig> = {
 export default defineComponent({
     name: M_TEXT_NAME,
     components: {
+        Color,
         ConfigToggleOption,
         ConfigToggle,
         ConfigItem,
