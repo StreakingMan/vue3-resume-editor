@@ -85,6 +85,7 @@ export class Paper {
             this.addMaterial({
                 componentName: m.componentName,
                 _id: m._id,
+                _freePosition: m._freePosition,
                 x: m._x,
                 y: m._y,
                 z: m.z,

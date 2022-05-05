@@ -7,7 +7,8 @@ export const makeTestMaterial: (rect: {
     h: number;
     z?: number;
     cellSize?: number;
-}) => Material<any> = ({ x, y, w, h, z, cellSize = 1 }) => {
+    _freePosition?: boolean;
+}) => Material<any> = ({ x, y, w, h, z, _freePosition, cellSize = 1 }) => {
     return new Material<any>({
         x,
         y,
@@ -15,6 +16,7 @@ export const makeTestMaterial: (rect: {
         w,
         h,
         cellSize,
+        _freePosition,
         componentName: 'MText',
         config: {},
     });
@@ -58,6 +60,20 @@ test('网格吸附', () => {
         x: 120,
         y: 460,
         w: 790,
+        h: 101,
+    });
+    const m4 = makeTestMaterial({
+        x: 123,
+        y: 456,
+        w: 789,
+        h: 101,
+        cellSize: 10,
+        _freePosition: true,
+    });
+    expect({ x: m4.x, y: m4.y, w: m4.w, h: m4.h }).toEqual({
+        x: 123,
+        y: 456,
+        w: 789,
         h: 101,
     });
 });

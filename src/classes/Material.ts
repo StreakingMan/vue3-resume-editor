@@ -26,6 +26,7 @@ export interface MaterialBaseConfig {
 export interface MaterialOptions<T extends MaterialBaseConfig> {
     componentName: MaterialComponentNameType;
     _id?: string;
+    _freePosition?: boolean;
     x: number;
     y: number;
     z?: number;
@@ -46,16 +47,16 @@ export class Material<T extends MaterialBaseConfig> {
     public config: T;
     public cellSize = 10; // 网格尺寸
     public z: number;
+    private _freePosition = false; // 不受网格系统束缚
 
     private _x = 0;
     get x(): number {
         return this._x;
     }
     set x(value: number) {
-        this._x =
-            this.componentName === 'MDivider'
-                ? value
-                : calcCellingValue(value, this.cellSize);
+        this._x = this._freePosition
+            ? value
+            : calcCellingValue(value, this.cellSize);
     }
 
     private _y = 0;
@@ -63,10 +64,9 @@ export class Material<T extends MaterialBaseConfig> {
         return this._y;
     }
     set y(value: number) {
-        this._y =
-            this.componentName === 'MDivider'
-                ? value
-                : calcCellingValue(value, this.cellSize);
+        this._y = this._freePosition
+            ? value
+            : calcCellingValue(value, this.cellSize);
     }
 
     private _w = 100;
@@ -74,10 +74,9 @@ export class Material<T extends MaterialBaseConfig> {
         return this._w;
     }
     set w(value: number) {
-        this._w =
-            this.componentName === 'MDivider'
-                ? value
-                : calcCellingValue(value, this.cellSize, true);
+        this._w = this._freePosition
+            ? value
+            : calcCellingValue(value, this.cellSize, true);
     }
 
     private _h = 100;
@@ -93,6 +92,7 @@ export class Material<T extends MaterialBaseConfig> {
         const {
             componentName,
             _id,
+            _freePosition,
             x,
             y,
             z,
@@ -106,6 +106,9 @@ export class Material<T extends MaterialBaseConfig> {
             this._id = _id;
         } else {
             this._id = uniqueString();
+        }
+        if (_freePosition !== undefined) {
+            this._freePosition = _freePosition;
         }
         if (cellSize) this.cellSize = cellSize;
         this.componentName = componentName;
