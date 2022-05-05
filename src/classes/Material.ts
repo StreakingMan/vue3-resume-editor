@@ -52,7 +52,10 @@ export class Material<T extends MaterialBaseConfig> {
         return this._x;
     }
     set x(value: number) {
-        this._x = calcCellingValue(value, this.cellSize);
+        this._x =
+            this.componentName === 'MDivider'
+                ? value
+                : calcCellingValue(value, this.cellSize);
     }
 
     private _y = 0;
@@ -60,7 +63,10 @@ export class Material<T extends MaterialBaseConfig> {
         return this._y;
     }
     set y(value: number) {
-        this._y = calcCellingValue(value, this.cellSize);
+        this._y =
+            this.componentName === 'MDivider'
+                ? value
+                : calcCellingValue(value, this.cellSize);
     }
 
     private _w = 100;
@@ -68,7 +74,10 @@ export class Material<T extends MaterialBaseConfig> {
         return this._w;
     }
     set w(value: number) {
-        this._w = calcCellingValue(value, this.cellSize, true);
+        this._w =
+            this.componentName === 'MDivider'
+                ? value
+                : calcCellingValue(value, this.cellSize, true);
     }
 
     private _h = 100;
