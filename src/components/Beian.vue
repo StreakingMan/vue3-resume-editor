@@ -15,11 +15,14 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .beian {
     position: fixed;
     right: 8px;
     bottom: 8px;
     z-index: 100;
+    @media print {
+        display: none;
+    }
 }
 </style>

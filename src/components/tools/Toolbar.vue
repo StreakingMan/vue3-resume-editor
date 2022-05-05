@@ -43,4 +43,9 @@ export default defineComponent({
 .toolbar {
     //
 }
+:global(.v-toolbar) {
+    @media print {
+        display: none !important;
+    }
+}
 </style>

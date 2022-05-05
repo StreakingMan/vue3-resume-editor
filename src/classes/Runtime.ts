@@ -9,6 +9,8 @@ export const runtimeInjectionKey: InjectionKey<
 
 // App类主要维护运行时的东西
 export class Runtime {
+    // 抽屉
+    public drawer = ref(true);
     // 键盘状态
     public keyboardStatus = useKeyboardStatus();
     // 辅助网格显示

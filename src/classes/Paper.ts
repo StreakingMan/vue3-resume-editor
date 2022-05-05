@@ -5,10 +5,12 @@ import { UnwrapNestedRefs } from '@vue/reactivity';
 
 const LOCAL_STORAGE_KEY = 'paper_cache';
 
+const a4Ratio = 210 / 297;
+
 const paperSizeMap = {
     a4: {
-        w: 620,
-        h: 877,
+        w: 776,
+        h: 776 / a4Ratio,
     },
 };
 

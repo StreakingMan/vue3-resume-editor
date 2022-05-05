@@ -39,7 +39,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, provide, reactive, onMounted, watch } from 'vue';
+import {
+    defineComponent,
+    provide,
+    reactive,
+    onMounted,
+    watch,
+    toRef,
+} from 'vue';
 import useMouseWheel from './composables/useMouseWheel';
 import { Paper, paperInjectionKey } from './classes/Paper';
 import Beian from './components/Beian.vue';
@@ -120,15 +127,10 @@ export default defineComponent({
 
         return {
             snackbar: runtime.snackbar,
-            ctrl: runtime.keyboardStatus.ctrl,
-            space: runtime.keyboardStatus.space,
+            drawer: toRef(runtime, 'drawer'),
             sketch,
         };
     },
-    data: () => ({
-        drawer: true,
-    }),
-    methods: {},
 });
 </script>
 
@@ -137,6 +139,12 @@ body {
     &::-webkit-scrollbar {
         display: none;
     }
+
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+}
+@page {
+    margin: 0;
 }
 #app {
     //

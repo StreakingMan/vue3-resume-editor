@@ -122,8 +122,10 @@ export default defineComponent({
                 size: instance.config.size,
                 padding: instance.config.padding,
                 borderWidth: instance.config.borderWidth,
+                borderStyle: instance.config.borderStyle,
             }),
-            ({ size, padding = 0, borderWidth = 0 }) => {
+            ({ size, padding = 0, borderWidth = 0, borderStyle }) => {
+                if (borderStyle === 'none') borderWidth = 0;
                 instance.w = size + padding * 2 + borderWidth * 2;
                 instance.h = size + padding * 2 + borderWidth * 2;
             }

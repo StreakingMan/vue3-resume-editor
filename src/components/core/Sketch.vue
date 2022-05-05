@@ -25,14 +25,11 @@ import {
     ref,
     nextTick,
     watch,
-    inject,
-    Ref,
     onMounted,
     computed,
     toRef,
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
-import { UnwrapNestedRefs } from '@vue/reactivity';
 import { useRuntime } from '../../composables/useApp';
 export default defineComponent({
     name: 'Sketch',

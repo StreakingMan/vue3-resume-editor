@@ -17,10 +17,10 @@
                 :key="i"
                 class="group-rect"
                 :style="{
-                    left: g.x+'px',
-                    top: g.y+'px',
-                    width: g.w+'px',
-                    height: g.h+'px',
+                    left: g.x + 'px',
+                    top: g.y + 'px',
+                    width: g.w + 'px',
+                    height: g.h + 'px',
                 }"
             ></div>
             <MaterialInstance
@@ -33,7 +33,6 @@
                 class="select-box"
                 :style="selectorStyle"
             ></div>
-
         </v-theme-provider>
     </div>
 </template>
@@ -209,6 +208,10 @@ export default defineComponent({
         background: lightcoral;
         opacity: 0.3;
         z-index: 1;
+    }
+
+    @media print {
+        border-radius: 0;
     }
 }
 </style>
