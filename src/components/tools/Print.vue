@@ -17,14 +17,7 @@ export default defineComponent({
         const onPrintClick = async () => {
             // 前置工作
             runtime.drawer = false;
-            runtime.showGrid = false;
             runtime.activeMaterialSet.clear();
-            runtime.scale.value = 1;
-            await nextTick();
-            if (runtime.sketch.wrapperDiv) {
-                runtime.sketch.wrapperDiv.scrollLeft = runtime.sketch.paddingX;
-                runtime.sketch.wrapperDiv.scrollTop = runtime.sketch.paddingY;
-            }
             // 打印
             // 等待蒙层消失，这里貌似无法感知，先用setTimeout
             setTimeout(() => {

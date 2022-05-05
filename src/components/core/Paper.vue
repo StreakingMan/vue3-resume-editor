@@ -212,6 +212,8 @@ export default defineComponent({
 
     @media print {
         border-radius: 0;
+        transform: scale(1) !important;
+        background-image: none;
     }
 }
 </style>

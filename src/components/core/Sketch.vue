@@ -189,6 +189,9 @@ export default defineComponent({
     }
     &__inner {
         position: absolute;
+        @media print {
+            padding: 0 !important;
+        }
     }
 }
 </style>
