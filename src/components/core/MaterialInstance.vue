@@ -44,6 +44,23 @@
                         </v-tooltip>
                     </v-btn>
 
+                    <!-- 复制 -->
+                    <v-btn
+                        variant="outlined"
+                        color="primary"
+                        size="x-small"
+                        :disabled="!(active || hover)"
+                        icon
+                        class="border-r-0"
+                        :rounded="0"
+                        @click="() => paper.copyMaterial(instance.id)"
+                    >
+                        <v-icon size="x-small">mdi-content-copy</v-icon>
+                        <v-tooltip activator="parent" anchor="top">
+                            复制
+                        </v-tooltip>
+                    </v-btn>
+
                     <!-- 层级 -->
                     <v-btn
                         variant="outlined"
@@ -55,7 +72,7 @@
                         :rounded="0"
                         title="层级调整"
                     >
-                        <v-icon size="x-small">mdi-vector-arrange-above</v-icon>
+                        <v-icon size="x-small">mdi-layers-triple</v-icon>
                         <v-tooltip activator="parent" anchor="top">
                             层级调整
                         </v-tooltip>

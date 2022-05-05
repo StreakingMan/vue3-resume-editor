@@ -232,7 +232,7 @@ export default defineComponent({
                     !value ||
                     !value.length ||
                     value[0].size < 1000000 ||
-                    '图片大小最大 2 MB!'
+                    '图片大小最大 1 MB!'
                 );
             },
         ],

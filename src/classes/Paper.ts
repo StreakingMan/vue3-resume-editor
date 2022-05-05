@@ -84,20 +84,7 @@ export class Paper {
         this._materialMap.clear();
         this._groupMap.clear();
         materialList.forEach((m) => {
-            this.addMaterial({
-                componentName: m.componentName,
-                _id: m._id,
-                _freePosition: m._freePosition,
-                _freeSize: m._freeSize,
-                x: m._x,
-                y: m._y,
-                z: m.z,
-                w: m._w,
-                h: m._h,
-                cellSize: m.cellSize,
-                config: m.config,
-                groupId: m.groupId,
-            });
+            this.addMaterialFromJSON(m);
         });
     }
     isNeedSave(): boolean {
@@ -108,6 +95,22 @@ export class Paper {
     }
     saveToStorage(): void {
         window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this));
+    }
+    addMaterialFromJSON(m: any): void {
+        this.addMaterial({
+            componentName: m.componentName,
+            _id: m._id,
+            _freePosition: m._freePosition,
+            _freeSize: m._freeSize,
+            x: m._x,
+            y: m._y,
+            z: m.z,
+            w: m._w,
+            h: m._h,
+            cellSize: m.cellSize,
+            config: m.config,
+            groupId: m.groupId,
+        });
     }
     addMaterial({
         z,
@@ -134,6 +137,15 @@ export class Paper {
             }
         }
         return this.materialList;
+    }
+    copyMaterial(id: Material<any>['id']): void {
+        const m = this._materialMap.get(id);
+        if (!m) return;
+        const copy = JSON.parse(JSON.stringify(m));
+        delete copy._id;
+        delete copy.z;
+        copy._y = copy._y + copy._h;
+        this.addMaterialFromJSON(copy);
     }
     removeMaterial(idOrIds: Material<any>['id'] | Material<any>['id'][]): void {
         const deleteFunc: (id: Material<any>['id']) => void = (id) => {
