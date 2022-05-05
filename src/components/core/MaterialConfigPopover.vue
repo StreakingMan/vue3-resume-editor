@@ -29,7 +29,9 @@
         </template>
         <v-sheet rounded width="400" class="px-6 py-8">
             <slot name="config"></slot>
-            <template v-if="instance.componentName !== 'MDivider'">
+            <template
+                v-if="!['MDivider', 'MRating'].includes(instance.componentName)"
+            >
                 <v-divider class="my-3 mx-n6"></v-divider>
                 <ConfigItem title="内边距">
                     <v-slider

@@ -3,13 +3,15 @@ export const M_IMAGE_NAME = 'MImage';
 export const M_LIST_NAME = 'MList';
 export const M_DIVIDER_NAME = 'MDivider';
 export const M_RECT_NAME = 'MRect';
+export const M_RATING_NAME = 'MRating';
 
 export type MaterialComponentNameType =
     | 'MText'
     | 'MImage'
     | 'MList'
     | 'MDivider'
-    | 'MRect';
+    | 'MRect'
+    | 'MRating';
 export type CtrlDotType = 'tl' | 'tm' | 'tr' | 'mr' | 'br' | 'bm' | 'bl' | 'ml';
 export type CtrlDotFunction<T> = (config: T) => CtrlDotType[];
 

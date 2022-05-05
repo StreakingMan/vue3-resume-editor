@@ -3,6 +3,7 @@
         :key="instance.id"
         class="material-instance"
         :style="{
+            backgroundColor: hover || active ? 'rgba(128,128,128,0.2)' : '',
             left: instance.x + 'px',
             top: instance.y + 'px',
             zIndex: active ? paper.materialList.length + 1 : instance.z,
@@ -130,29 +131,23 @@
         </div>
 
         <div
-            v-for="dot in dots"
+            v-for="dot in ableCtrlDots"
             :key="dot"
             :style="[
                 `transform: scale(${1 / scale});${styleMap[dot]}`,
-                !ableCtrlDots.includes(dot) ? 'cursor: not-allowed;' : '',
                 {
-                    zIndex: ableCtrlDots.includes(dot) ? 2 : 1,
                     opacity:
                         (clickingDot && clickingDot !== dot) ||
                         !(active || hover)
                             ? 0
-                            : ableCtrlDots.includes(dot)
-                            ? 1
-                            : 0.15,
+                            : 1,
                     width: CTRL_DOT_SIZE + 'px',
                     height: CTRL_DOT_SIZE + 'px',
                 },
             ]"
             class="control-dot bg-primary"
             @mousedown.stop.prevent="
-                ableCtrlDots.includes(dot) &&
-                    (clickingDot = dot) &&
-                    onDotMousedown($event)
+                (clickingDot = dot) && onDotMousedown($event)
             "
         ></div>
     </div>
@@ -181,6 +176,7 @@ import { Material, materialInjectionKey } from '../../classes/Material';
 import MDivider from '../materials/MDivider.vue';
 import { usePaper, useRuntime } from '../../composables/useApp';
 import MRect from '../materials/MRect.vue';
+import MRating from '../materials/MRating.vue';
 
 const ctrlDots: CtrlDotType[] = [
     'tl',
@@ -213,7 +209,15 @@ const styleMap: Record<CtrlDotType, string> = {
 
 export default defineComponent({
     name: 'MaterialInstance',
-    components: { MRect, MDivider, MaterialConfig, MText, MImage, MList },
+    components: {
+        MRating,
+        MRect,
+        MDivider,
+        MaterialConfig,
+        MText,
+        MImage,
+        MList,
+    },
     props: {
         item: {
             type: Object as PropType<Material<any>>,
