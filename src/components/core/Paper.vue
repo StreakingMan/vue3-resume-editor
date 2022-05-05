@@ -214,6 +214,7 @@ export default defineComponent({
         border-radius: 0;
         transform: scale(1) !important;
         background-image: none;
+        overflow: hidden !important;
     }
 }
 </style>

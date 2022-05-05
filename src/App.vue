@@ -143,9 +143,6 @@ body {
     -webkit-print-color-adjust: exact;
     color-adjust: exact;
 }
-@page {
-    margin: 0;
-}
 #app {
     //
 }

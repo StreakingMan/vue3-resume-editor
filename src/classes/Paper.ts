@@ -9,8 +9,8 @@ const a4Ratio = 210 / 297;
 
 const paperSizeMap = {
     a4: {
-        w: 776,
-        h: 776 / a4Ratio,
+        w: 793,
+        h: 793 / a4Ratio,
     },
 };
 

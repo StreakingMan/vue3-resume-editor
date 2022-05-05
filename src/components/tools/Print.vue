@@ -33,5 +33,8 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-//
+@page {
+    size: a4;
+    margin: 0;
+}
 </style>
