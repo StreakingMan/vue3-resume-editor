@@ -177,6 +177,7 @@ import MDivider from '../materials/MDivider.vue';
 import { usePaper, useRuntime } from '../../composables/useApp';
 import MRect from '../materials/MRect.vue';
 import MRating from '../materials/MRating.vue';
+import MIcon from '../materials/MIcon.vue';
 
 const ctrlDots: CtrlDotType[] = [
     'tl',
@@ -210,6 +211,7 @@ const styleMap: Record<CtrlDotType, string> = {
 export default defineComponent({
     name: 'MaterialInstance',
     components: {
+        MIcon,
         MRating,
         MRect,
         MDivider,

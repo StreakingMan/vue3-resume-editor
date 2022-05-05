@@ -27,6 +27,7 @@ export interface MaterialOptions<T extends MaterialBaseConfig> {
     componentName: MaterialComponentNameType;
     _id?: string;
     _freePosition?: boolean;
+    _freeSize?: boolean;
     x: number;
     y: number;
     z?: number;
@@ -47,7 +48,8 @@ export class Material<T extends MaterialBaseConfig> {
     public config: T;
     public cellSize = 10; // 网格尺寸
     public z: number;
-    private _freePosition = false; // 不受网格系统束缚
+    private readonly _freePosition?: boolean; // 不受网格系统束缚
+    private readonly _freeSize?: boolean; // 不受网格系统束缚
 
     private _x = 0;
     get x(): number {
@@ -74,7 +76,7 @@ export class Material<T extends MaterialBaseConfig> {
         return this._w;
     }
     set w(value: number) {
-        this._w = this._freePosition
+        this._w = this._freeSize
             ? value
             : calcCellingValue(value, this.cellSize, true);
     }
@@ -93,6 +95,7 @@ export class Material<T extends MaterialBaseConfig> {
             componentName,
             _id,
             _freePosition,
+            _freeSize,
             x,
             y,
             z,
@@ -107,9 +110,8 @@ export class Material<T extends MaterialBaseConfig> {
         } else {
             this._id = uniqueString();
         }
-        if (_freePosition !== undefined) {
-            this._freePosition = _freePosition;
-        }
+        this._freePosition = _freePosition;
+        this._freeSize = _freeSize;
         if (cellSize) this.cellSize = cellSize;
         this.componentName = componentName;
         this.config = config;

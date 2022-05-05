@@ -81,6 +81,7 @@ const protoInfo: ProtoInfo<MDividerConfig> = {
         w: 600,
         h: paperInstance.cellSize * 2,
         _freePosition: true,
+        _freeSize: true,
         config: {
             direction: 'horizontal',
             color: 'grey',

@@ -3,6 +3,7 @@ import {
     CtrlDotFunction,
     CtrlDotType,
     M_DIVIDER_NAME,
+    M_ICON_NAME,
     M_IMAGE_NAME,
     M_LIST_NAME,
     M_RATING_NAME,
@@ -18,6 +19,7 @@ import MList from './MList.vue';
 import MDivider from './MDivider.vue';
 import MRect from './MRect.vue';
 import MRating from './MRating.vue';
+import MIcon from './MIcon.vue';
 
 export interface ProtoInfo<T> {
     label: string;
@@ -40,6 +42,7 @@ export const prototypeMap: PrototypeMap = {
     [M_IMAGE_NAME]: { ...MImage.protoInfo, tempStyle: '' },
     [M_LIST_NAME]: { ...MList.protoInfo, tempStyle: '' },
     [M_RATING_NAME]: { ...MRating.protoInfo, tempStyle: '' },
+    [M_ICON_NAME]: { ...MIcon.protoInfo, tempStyle: '' },
     [M_DIVIDER_NAME]: { ...MDivider.protoInfo, tempStyle: '' },
     [M_RECT_NAME]: { ...MRect.protoInfo, tempStyle: '' },
 };

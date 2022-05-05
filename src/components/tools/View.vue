@@ -74,7 +74,7 @@
     </v-btn>
 
     <v-btn icon>
-        <v-icon>mdi-trash-can</v-icon>
+        <v-icon>mdi-broom</v-icon>
         <v-tooltip activator="parent" anchor="bottom">清空页面</v-tooltip>
         <v-menu activator="parent" anchor="bottom">
             <v-sheet class="pa-4 rounded" width="200">

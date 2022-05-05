@@ -1,5 +1,8 @@
 <template>
     <v-row no-gutters class="pa-6">
+        <v-col cols="12" class="mb-2">
+            <div class="text-subtitle-1">基础元素</div>
+        </v-col>
         <v-col v-for="(proto, name) in prototypes" :key="name" cols="4">
             <v-sheet
                 class="border sheet"
