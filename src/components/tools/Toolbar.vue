@@ -10,8 +10,16 @@
     <Save />
     <v-divider vertical class="mx-4"></v-divider>
     <Github />
-    <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
+    <v-btn
+        icon
+        href="https://next.vuetifyjs.com/"
+        target="_blank"
+        rel="nofollow"
+    >
+        <v-icon>mdi-vuetify</v-icon>
+        <v-tooltip activator="parent" anchor="bottom">
+            powered by vuetify@3.0.0-beta.1
+        </v-tooltip>
     </v-btn>
 </template>
 

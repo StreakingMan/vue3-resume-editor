@@ -7,13 +7,13 @@
     >
         <v-icon>mdi-github</v-icon>
         <v-tooltip activator="parent" anchor="bottom">
-            star, issue or pr!
+            Star, Issue or PR!
         </v-tooltip>
     </v-btn>
 </template>
 
 <script>
 export default {
-    name: 'Github'
+    name: 'Github',
 };
 </script>

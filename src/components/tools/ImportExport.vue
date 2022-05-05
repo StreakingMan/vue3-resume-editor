@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { downloadJSON } from '../../utils/download';
 import { usePaper } from '../../composables/useApp';
 
