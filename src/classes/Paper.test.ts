@@ -224,3 +224,185 @@ test('对齐操作:右对齐', () => {
         800,
     ]);
 });
+
+test('对齐操作:水平居中对齐', () => {
+    const paper = new Paper({});
+    const mOptions1 = makeTestMaterialOptions({
+        x: 0,
+        y: 0,
+        w: 100,
+        h: 100,
+    });
+    const mOptions2 = makeTestMaterialOptions({
+        x: 300,
+        y: 300,
+        w: 100,
+        h: 100,
+    });
+    const mOptions3 = makeTestMaterialOptions({
+        x: 600,
+        y: 400,
+        w: 200,
+        h: 200,
+    });
+    paper.addMaterial(mOptions1);
+    paper.addMaterial(mOptions2);
+    paper.addMaterial(mOptions3);
+    const [m1, m2, m3] = paper.materialList;
+    paper.alignHorizontalCenter([m1.id, m2.id, m3.id]);
+    expect([m1.x, m2.x, m3.x]).toEqual([250, 250, 200]);
+});
+
+test('对齐操作:水平均匀分布', () => {
+    const paper = new Paper({});
+    const mOptions1 = makeTestMaterialOptions({
+        x: 0,
+        y: 0,
+        w: 100,
+        h: 100,
+    });
+    const mOptions2 = makeTestMaterialOptions({
+        x: 100,
+        y: 300,
+        w: 100,
+        h: 100,
+    });
+    const mOptions3 = makeTestMaterialOptions({
+        x: 120,
+        y: 400,
+        w: 200,
+        h: 200,
+    });
+    const mOptions4 = makeTestMaterialOptions({
+        x: 300,
+        y: 400,
+        w: 200,
+        h: 200,
+    });
+    paper.addMaterial(mOptions1);
+    paper.addMaterial(mOptions2);
+    paper.addMaterial(mOptions3);
+    paper.addMaterial(mOptions4);
+    const [m1, m2, m3, m4] = paper.materialList;
+    paper.alignHorizontalDistribute([m1.id, m2.id, m3.id, m4.id]);
+    expect([m1.x, m2.x, m3.x, m4.x]).toEqual([0, 100, 200, 300]);
+});
+
+test('对齐操作:顶端对齐', () => {
+    const paper = new Paper({});
+    const mOptions1 = makeTestMaterialOptions({
+        x: 0,
+        y: 150,
+        w: 100,
+        h: 100,
+    });
+    const mOptions2 = makeTestMaterialOptions({
+        x: 300,
+        y: 300,
+        w: 100,
+        h: 100,
+    });
+    const mOptions3 = makeTestMaterialOptions({
+        x: 600,
+        y: 400,
+        w: 200,
+        h: 200,
+    });
+    paper.addMaterial(mOptions1);
+    paper.addMaterial(mOptions2);
+    paper.addMaterial(mOptions3);
+    const [m1, m2, m3] = paper.materialList;
+    paper.alignVerticalTop([m1.id, m2.id, m3.id]);
+    expect([m1.y, m2.y, m3.y]).toEqual([150, 150, 150]);
+});
+
+test('对齐操作:底端对齐', () => {
+    const paper = new Paper({});
+    const mOptions1 = makeTestMaterialOptions({
+        x: 0,
+        y: 150,
+        w: 100,
+        h: 100,
+    });
+    const mOptions2 = makeTestMaterialOptions({
+        x: 300,
+        y: 300,
+        w: 100,
+        h: 200,
+    });
+    const mOptions3 = makeTestMaterialOptions({
+        x: 600,
+        y: 400,
+        w: 200,
+        h: 100,
+    });
+    paper.addMaterial(mOptions1);
+    paper.addMaterial(mOptions2);
+    paper.addMaterial(mOptions3);
+    const [m1, m2, m3] = paper.materialList;
+    paper.alignVerticalBottom([m1.id, m2.id, m3.id]);
+    expect([m1.y, m2.y, m3.y]).toEqual([500, 400, 500]);
+});
+
+test('对齐操作:垂直居中对齐', () => {
+    const paper = new Paper({});
+    const mOptions1 = makeTestMaterialOptions({
+        x: 0,
+        y: 100,
+        w: 100,
+        h: 100,
+    });
+    const mOptions2 = makeTestMaterialOptions({
+        x: 300,
+        y: 300,
+        w: 100,
+        h: 100,
+    });
+    const mOptions3 = makeTestMaterialOptions({
+        x: 600,
+        y: 400,
+        w: 200,
+        h: 200,
+    });
+    paper.addMaterial(mOptions1);
+    paper.addMaterial(mOptions2);
+    paper.addMaterial(mOptions3);
+    const [m1, m2, m3] = paper.materialList;
+    paper.alignVerticalCenter([m1.id, m2.id, m3.id]);
+    expect([m1.y, m2.y, m3.y]).toEqual([200, 200, 150]);
+});
+
+test('对齐操作:垂直均匀分布', () => {
+    const paper = new Paper({});
+    const mOptions1 = makeTestMaterialOptions({
+        x: 0,
+        y: 0,
+        w: 100,
+        h: 100,
+    });
+    const mOptions2 = makeTestMaterialOptions({
+        x: 100,
+        y: 100,
+        w: 100,
+        h: 100,
+    });
+    const mOptions3 = makeTestMaterialOptions({
+        x: 120,
+        y: 150,
+        w: 200,
+        h: 200,
+    });
+    const mOptions4 = makeTestMaterialOptions({
+        x: 300,
+        y: 330,
+        w: 200,
+        h: 200,
+    });
+    paper.addMaterial(mOptions1);
+    paper.addMaterial(mOptions2);
+    paper.addMaterial(mOptions3);
+    paper.addMaterial(mOptions4);
+    const [m1, m2, m3, m4] = paper.materialList;
+    paper.alignVerticalDistribute([m1.id, m2.id, m3.id, m4.id]);
+    expect([m1.y, m2.y, m3.y, m4.y]).toEqual([0, 110, 220, 330]);
+});
