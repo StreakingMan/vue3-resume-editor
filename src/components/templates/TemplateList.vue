@@ -8,6 +8,12 @@
             :key="idx"
             :template="temp"
         />
+        <a
+            class="text-subtitle-1 text-white"
+            href="https://github.com/StreakingMan/vue3-resume-editor#%E5%8F%82%E4%B8%8E%E8%B4%A1%E7%8C%AE"
+            target="_blank"
+            >提交PR 分享你的模板！</a
+        >
     </div>
 </template>
 

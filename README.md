@@ -31,7 +31,7 @@ vue3+ts 学习项目，web 简历编辑器，轻松制作一份精美简历
   - [画布操作](#画布操作)
   - [画布移动&缩放](#画布移动&缩放)
   - [使用模板](#使用模板)
-  - [打印/另存 PDF](#打印/另存 PDF)
+  - [打印/另存PDF](#打印/另存PDF)
 - [TODO](#TODO)
 - [参与贡献](#参与贡献)
 
@@ -79,7 +79,7 @@ vue3+ts 学习项目，web 简历编辑器，轻松制作一份精美简历
 
 ![](src/assets/previews/use-template.gif)
 
-### 打印/另存 PDF
+### 打印/另存PDF
 
 ![](src/assets/previews/print.gif)
 

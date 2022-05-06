@@ -33,12 +33,31 @@
             <Beian />
             <v-btn
                 class="position-fixed"
+                style="right: 24px; bottom: 128px"
+                color="success"
+                icon
+                size="x-large"
+                href="https://github.com/StreakingMan/vue3-resume-editor#%E5%8A%9F%E8%83%BD%E6%BC%94%E7%A4%BA"
+                target="_blank"
+            >
+                <v-icon>mdi-help</v-icon>
+                <v-tooltip activator="parent" anchor="start"
+                    >使用文档</v-tooltip
+                >
+            </v-btn>
+            <v-btn
+                class="position-fixed"
                 style="right: 24px; bottom: 48px"
                 color="primary"
-                icon="mdi-file"
+                icon
                 size="x-large"
                 @click="bottomDrawer = !bottomDrawer"
-            ></v-btn>
+            >
+                <v-icon>mdi-file</v-icon>
+                <v-tooltip activator="parent" anchor="start"
+                    >模板预设</v-tooltip
+                >
+            </v-btn>
         </v-main>
         <v-snackbar
             v-model="snackbar.show"
@@ -150,7 +169,7 @@ export default defineComponent({
             }
         );
 
-        // TODO 激活元素集合控制
+        // 激活元素集合控制
         watch(
             () => [...runtime.activeMaterialSet],
             (nv, ov) => {
