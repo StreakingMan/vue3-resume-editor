@@ -4,10 +4,10 @@
             <div
                 class="activator"
                 :style="{
-                    transform: `translateY(${
-                        active || hover ? -100 : 0
-                    }%) scale(${1 / scale})`,
-                    opacity: active || hover ? 1 : 0,
+                    transform: `translateY(${active ? -100 : 0}%) scale(${
+                        1 / scale
+                    })`,
+                    opacity: active ? 1 : 0,
                 }"
             >
                 <slot name="activator"></slot>
@@ -16,7 +16,7 @@
                     variant="outlined"
                     color="primary"
                     size="x-small"
-                    :disabled="!(active || hover)"
+                    :disabled="!active"
                     icon
                     :rounded="0"
                 >

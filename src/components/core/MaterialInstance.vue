@@ -33,7 +33,7 @@
                         variant="outlined"
                         color="primary"
                         size="x-small"
-                        :disabled="!(active || hover)"
+                        :disabled="!active"
                         icon
                         class="border-r-0"
                         :rounded="0"
@@ -49,7 +49,7 @@
                         variant="outlined"
                         color="primary"
                         size="x-small"
-                        :disabled="!(active || hover)"
+                        :disabled="!active"
                         icon
                         class="border-r-0"
                         :rounded="0"
@@ -66,7 +66,7 @@
                         variant="outlined"
                         color="primary"
                         size="x-small"
-                        :disabled="!(active || hover)"
+                        :disabled="!active"
                         icon
                         class="border-r-0"
                         :rounded="0"
@@ -131,7 +131,7 @@
                         variant="outlined"
                         color="error"
                         size="x-small"
-                        :disabled="!(active || hover)"
+                        :disabled="!active"
                         icon
                         class="border-r-0"
                         :rounded="0"
