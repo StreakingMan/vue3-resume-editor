@@ -1,4 +1,4 @@
-import useKeyboardStatus from '../composables/useKeyboardStatus';
+import { KeyboardStatus } from '../composables/useKeyboardStatus';
 import { InjectionKey, reactive, ref } from 'vue';
 import { UnwrapNestedRefs } from '@vue/reactivity';
 import { Material } from './Material';
@@ -12,7 +12,14 @@ export class Runtime {
     // 抽屉
     public drawer = ref(true);
     // 键盘状态
-    public keyboardStatus = useKeyboardStatus();
+    public keyboardStatus: KeyboardStatus = {
+        space: ref(false),
+        ctrl: ref(false),
+        ctrlC: ref(false),
+        ctrlV: ref(false),
+        alt: ref(false),
+        shift: ref(false),
+    };
     // 辅助网格显示
     public showGrid = ref(true);
     // 缩放值和缩放中心
@@ -22,6 +29,8 @@ export class Runtime {
     });
     // 激活元素集合
     public activeMaterialSet = ref<Set<Material<any>['id']>>(new Set());
+    // 复制标记，按ctrlC时将激活列表复制一份
+    public copyMaterialSet = ref<Set<Material<any>['id']>>(new Set());
     // 提示条
     public snackbar = reactive({
         show: false,

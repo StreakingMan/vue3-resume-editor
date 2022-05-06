@@ -8,6 +8,7 @@ export interface MaterialInjection {
     instance: Material<any>;
     active: boolean;
     hover: boolean;
+    clicked: boolean;
 }
 
 export const materialInjectionKey: InjectionKey<

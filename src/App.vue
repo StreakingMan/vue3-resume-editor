@@ -57,6 +57,7 @@ import { stringArrayDiff } from './utils/stringArrayDiff';
 import { Runtime, runtimeInjectionKey } from './classes/Runtime';
 import sketch from './components/core/Sketch.vue';
 import template1 from './components/templates/resume-template-1.json';
+import useKeyboardStatus from './composables/useKeyboardStatus';
 
 export default defineComponent({
     name: 'App',
@@ -82,6 +83,25 @@ export default defineComponent({
                 }
             },
         });
+        const { space, ctrl, ctrlC, ctrlV, alt, shift } = useKeyboardStatus();
+        watch(
+            () => ({
+                space: space.value,
+                ctrl: ctrl.value,
+                ctrlC: ctrlC.value,
+                ctrlV: ctrlV.value,
+                alt: alt.value,
+                shift: shift.value,
+            }),
+            () => {
+                runtime.keyboardStatus.space = space.value;
+                runtime.keyboardStatus.ctrl = ctrl.value;
+                runtime.keyboardStatus.ctrlC = ctrlC.value;
+                runtime.keyboardStatus.ctrlV = ctrlV.value;
+                runtime.keyboardStatus.alt = alt.value;
+                runtime.keyboardStatus.shift = shift.value;
+            }
+        );
 
         // Paper实例
         const paper = reactive(new Paper({}));
@@ -93,11 +113,34 @@ export default defineComponent({
             console.log(paper);
         });
 
+        // 复制粘贴
+        watch(
+            () => ({
+                ctrlC: runtime.keyboardStatus.ctrlC,
+                ctrlV: runtime.keyboardStatus.ctrlV,
+            }),
+            ({ ctrlC, ctrlV }) => {
+                if (ctrlC) {
+                    runtime.copyMaterialSet = new Set(
+                        runtime.activeMaterialSet
+                    );
+                }
+                if (ctrlV) {
+                    paper.copyMaterial([...runtime.copyMaterialSet]);
+                    runtime.copyMaterialSet.clear();
+                }
+            }
+        );
+
         // TODO 激活元素集合控制
         watch(
             () => [...runtime.activeMaterialSet],
             (nv, ov) => {
                 console.log('激活元素', nv, ov);
+                if (!nv.length) {
+                    runtime.copyMaterialSet.clear();
+                }
+
                 // 激活列表增减时，同属分组元素一并操作
                 const { added, removed } = stringArrayDiff(ov, nv);
                 const needAddGroupIdSet = [

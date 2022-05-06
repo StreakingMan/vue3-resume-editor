@@ -142,7 +142,6 @@ export default defineComponent({
             };
         });
 
-        // TODO 分组边框
         const groupRects = computed<
             Array<{
                 x: number;

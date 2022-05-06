@@ -4,10 +4,10 @@
             <div
                 class="activator"
                 :style="{
-                    transform: `translateY(${active ? -100 : 0}%) scale(${
+                    transform: `translateY(${show ? -100 : 0}%) scale(${
                         1 / scale
                     })`,
-                    opacity: active ? 1 : 0,
+                    opacity: show ? 1 : 0,
                 }"
             >
                 <slot name="activator"></slot>
@@ -16,9 +16,10 @@
                     variant="outlined"
                     color="primary"
                     size="x-small"
-                    :disabled="!active"
+                    :disabled="!show"
                     icon
                     :rounded="0"
+                    @mousedown.stop
                 >
                     <v-icon size="x-small">mdi-cog</v-icon>
                     <v-tooltip activator="parent" anchor="top">
@@ -100,7 +101,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRef } from 'vue';
+import { computed, defineComponent, toRef } from 'vue';
 import { useMaterial, useRuntime } from '../../composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import BorderStyle from '../config-widgets/BorderStyle.vue';
@@ -113,10 +114,11 @@ export default defineComponent({
         const runtime = useRuntime();
         const material = useMaterial();
 
+        const show = computed(() => material.active && material.clicked);
+
         return {
             scale: toRef(runtime.scale, 'value'),
-            hover: toRef(material, 'hover'),
-            active: toRef(material, 'active'),
+            show,
             instance: toRef(material, 'instance'),
         };
     },

@@ -28,7 +28,6 @@
                 :style="{ height: itemHeights[idx] + 'px !important' }"
                 wrap="hard"
                 placeholder="请输入文本"
-                @mousedown.stop
                 @input="(e) => (instance.config.items[idx] = e.target.value)"
             ></textarea>
         </div>

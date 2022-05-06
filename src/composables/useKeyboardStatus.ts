@@ -3,6 +3,8 @@ import { onUnmounted, ref, Ref } from 'vue';
 export interface KeyboardStatus {
     space: Ref<boolean>;
     ctrl: Ref<boolean>;
+    ctrlC: Ref<boolean>;
+    ctrlV: Ref<boolean>;
     alt: Ref<boolean>;
     shift: Ref<boolean>;
 }
@@ -10,6 +12,8 @@ export interface KeyboardStatus {
 export default function useKeyboardStatus(): KeyboardStatus {
     const space = ref(false);
     const ctrl = ref(false);
+    const ctrlC = ref(false);
+    const ctrlV = ref(false);
     const alt = ref(false);
     const shift = ref(false);
 
@@ -38,6 +42,12 @@ export default function useKeyboardStatus(): KeyboardStatus {
             case 'ShiftRight':
                 shift.value = pressed;
                 break;
+            case 'KeyC':
+                ctrlC.value = pressed && e.ctrlKey;
+                break;
+            case 'KeyV':
+                ctrlV.value = pressed && e.ctrlKey;
+                break;
             case 'AltLeft':
             case 'AltRight':
                 alt.value = pressed;
@@ -55,6 +65,8 @@ export default function useKeyboardStatus(): KeyboardStatus {
     return {
         space,
         ctrl,
+        ctrlC,
+        ctrlV,
         alt,
         shift,
     };

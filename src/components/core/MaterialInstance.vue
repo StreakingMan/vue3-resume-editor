@@ -33,7 +33,7 @@
                         variant="outlined"
                         color="primary"
                         size="x-small"
-                        :disabled="!active"
+                        :disabled="!clicked"
                         icon
                         class="border-r-0"
                         :rounded="0"
@@ -49,11 +49,11 @@
                         variant="outlined"
                         color="primary"
                         size="x-small"
-                        :disabled="!active"
+                        :disabled="!clicked"
                         icon
                         class="border-r-0"
                         :rounded="0"
-                        @click="() => paper.copyMaterial(instance.id)"
+                        @mousedown.stop="() => paper.copyMaterial(instance.id)"
                     >
                         <v-icon size="x-small">mdi-content-copy</v-icon>
                         <v-tooltip activator="parent" anchor="top">
@@ -66,11 +66,12 @@
                         variant="outlined"
                         color="primary"
                         size="x-small"
-                        :disabled="!active"
+                        :disabled="!clicked"
                         icon
                         class="border-r-0"
                         :rounded="0"
                         title="层级调整"
+                        @mousedown.stop
                     >
                         <v-icon size="x-small">mdi-layers-triple</v-icon>
                         <v-tooltip activator="parent" anchor="top">
@@ -131,11 +132,12 @@
                         variant="outlined"
                         color="error"
                         size="x-small"
-                        :disabled="!active"
+                        :disabled="!clicked"
                         icon
                         class="border-r-0"
                         :rounded="0"
                         title="双击删除"
+                        @mousedown.stop
                         @dblclick="removeMaterialInstance"
                     >
                         <v-icon size="x-small">mdi-trash-can</v-icon>
@@ -180,6 +182,7 @@ import {
     PropType,
     toRef,
     nextTick,
+    watch,
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import MImage from '../materials/MImage.vue';
@@ -251,14 +254,23 @@ export default defineComponent({
 
         const material = reactive({
             instance: props.item,
-            hover: ref(false),
+            hover: false,
             active: computed(() =>
                 runtime.activeMaterialSet.has(props.item.id)
             ),
+            clicked: false,
         });
         provide(materialInjectionKey, material);
 
+        watch(
+            () => material.active,
+            () => {
+                if (!material.active) material.clicked = false;
+            }
+        );
+
         const focus = (e: MouseEvent) => {
+            material.clicked = true;
             // 没按空格时阻止冒泡
             if (!runtime.keyboardStatus.space) e.stopPropagation();
 
@@ -410,6 +422,7 @@ export default defineComponent({
             hover: toRef(material, 'hover'),
             active: toRef(material, 'active'),
             instance: toRef(material, 'instance'),
+            clicked: toRef(material, 'clicked'),
             scale: toRef(runtime.scale, 'value'),
             paper,
             moveHandlerRef,

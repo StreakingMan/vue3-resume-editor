@@ -138,22 +138,51 @@ export class Paper {
         }
         return this.materialList;
     }
-    copyMaterial(id: Material<any>['id']): void {
-        const m = this._materialMap.get(id);
-        if (!m) return;
-        const copy = JSON.parse(JSON.stringify(m));
-        delete copy._id;
-        delete copy.z;
-        copy._y = copy._y + copy._h;
-        this.addMaterialFromJSON(copy);
+    copyMaterial(idOrIds: Material<any>['id'] | Material<any>['id'][]): void {
+        const addFunc: (id: Material<any>['id']) => void = (id) => {
+            const m = this._materialMap.get(id);
+            if (!m) return;
+            const copy = JSON.parse(JSON.stringify(m));
+            let offset = copy._h;
+            if (copy.groupId) {
+                offset = this.getGroupRect(copy.groupId)?.h || copy._h;
+            }
+            delete copy._id;
+            delete copy.z;
+            delete copy.groupId;
+            copy._y = copy._y + offset;
+            this.addMaterialFromJSON(copy);
+        };
+        if (Array.isArray(idOrIds)) {
+            for (const id of idOrIds) {
+                addFunc(id);
+            }
+        } else {
+            addFunc(idOrIds);
+        }
     }
     removeMaterial(idOrIds: Material<any>['id'] | Material<any>['id'][]): void {
         const deleteFunc: (id: Material<any>['id']) => void = (id) => {
             const findIdx = this.materialList.findIndex((m) => m.id === id);
             if (findIdx !== -1) {
+                // 删除分组缓存
+                const groupId = this._materialMap.get(id)!.groupId;
+                if (this._groupMap.has(groupId)) {
+                    const mSet = this._groupMap.get(groupId);
+                    if (mSet) {
+                        mSet.delete(id);
+                        if (mSet.size < 2) {
+                            const mlist = this.queryGroupMaterials(groupId!);
+                            this._groupMap.delete(groupId);
+                            mlist.forEach((m) => (m.groupId = undefined));
+                        }
+                    }
+                }
+
                 // 调整层级，后面的递补
                 const zMap = this.currentZMap;
                 let startZ = this._materialMap.get(id)!.z;
+
                 while (startZ < this.materialList.length) {
                     const nextInstance = zMap.get(startZ + 1);
                     if (nextInstance) {

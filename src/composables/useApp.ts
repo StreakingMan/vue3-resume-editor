@@ -20,6 +20,7 @@ export function useMaterial<T extends MaterialBaseConfig>(): UnwrapNestedRefs<{
     instance: Material<T>;
     active: boolean;
     hover: boolean;
+    clicked: boolean;
 }> {
     return inject(
         materialInjectionKey,
@@ -34,6 +35,7 @@ export function useMaterial<T extends MaterialBaseConfig>(): UnwrapNestedRefs<{
             }),
             active: false,
             hover: false,
+            clicked: false,
         })
     );
 }
