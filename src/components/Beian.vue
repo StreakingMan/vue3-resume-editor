@@ -16,13 +16,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '@/styles/mixins.scss';
+
 .beian {
     position: fixed;
     right: 8px;
     bottom: 8px;
     z-index: 100;
-    @media print {
-        display: none;
-    }
+    @include printNone;
 }
 </style>
