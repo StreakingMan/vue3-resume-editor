@@ -1,3 +1,7 @@
+<div style="display: flex;justify-content: center">
+    <img alt="icon" style="width:300px" src="public/favicon.svg"/>
+</div>
+
 # Vue3 Resume Editor
 
 ![version](https://img.shields.io/github/package-json/v/StreakingMan/vue3-resume-editor)
