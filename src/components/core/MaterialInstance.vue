@@ -388,6 +388,7 @@ export default defineComponent({
         box-sizing: border-box;
         position: absolute;
         transition: background-color 0.5s, opacity 0.5s;
+        z-index: 2;
     }
 }
 

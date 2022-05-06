@@ -3,7 +3,7 @@
         <v-app-bar app>
             <v-app-bar-nav-icon
                 icon="mdi-widgets"
-                @click.stop="drawer = !drawer"
+                @click.stop="leftDrawer = !leftDrawer"
             />
             <v-app-bar-title>
                 <span class="font-weight-black">Vue3简历编辑器</span>
@@ -12,7 +12,15 @@
             <v-spacer />
             <Toolbar />
         </v-app-bar>
-        <v-navigation-drawer v-model="drawer" width="300" temporary app>
+        <v-navigation-drawer
+            v-model="bottomDrawer"
+            temporary
+            app
+            position="bottom"
+        >
+            <TemplateList />
+        </v-navigation-drawer>
+        <v-navigation-drawer v-model="leftDrawer" width="300" temporary app>
             <div class="w-100 h-100 d-flex flex-column">
                 <MaterialPrototype class="flex-grow-0" />
                 <div class="flex-grow-1 overflow-y-auto">
@@ -23,6 +31,14 @@
         <v-main class="bg-grey-darken-4">
             <Sketch ref="sketch" />
             <Beian />
+            <v-btn
+                class="position-fixed"
+                style="right: 24px; bottom: 48px"
+                color="primary"
+                icon="mdi-file"
+                size="x-large"
+                @click="bottomDrawer = !bottomDrawer"
+            ></v-btn>
         </v-main>
         <v-snackbar
             v-model="snackbar.show"
@@ -58,10 +74,12 @@ import { Runtime, runtimeInjectionKey } from './classes/Runtime';
 import sketch from './components/core/Sketch.vue';
 import template1 from './components/templates/resume-template-1.json';
 import useKeyboardStatus from './composables/useKeyboardStatus';
+import TemplateList from './components/templates/TemplateList.vue';
 
 export default defineComponent({
     name: 'App',
     components: {
+        TemplateList,
         Toolbar,
         MaterialPrototype,
         Sketch,
@@ -170,7 +188,8 @@ export default defineComponent({
 
         return {
             snackbar: runtime.snackbar,
-            drawer: toRef(runtime, 'drawer'),
+            leftDrawer: toRef(runtime, 'leftDrawer'),
+            bottomDrawer: toRef(runtime, 'bottomDrawer'),
             sketch,
         };
     },
@@ -195,6 +214,7 @@ body {
 ::-webkit-scrollbar {
     background-color: transparent;
     width: 8px;
+    height: 8px;
 }
 ::-webkit-scrollbar-thumb {
     background-color: rgba(128, 128, 128, 0.3);

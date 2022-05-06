@@ -29,6 +29,7 @@
                 wrap="hard"
                 placeholder="请输入文本"
                 @input="(e) => (instance.config.items[idx] = e.target.value)"
+                @keydown.stop
             ></textarea>
         </div>
     </div>
@@ -314,6 +315,7 @@ export default defineComponent({
             resize: none;
             word-break: break-word;
             white-space: pre-wrap;
+            width: 100%;
         }
     }
     &.placeholder {

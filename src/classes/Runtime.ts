@@ -10,7 +10,8 @@ export const runtimeInjectionKey: InjectionKey<
 // App类主要维护运行时的东西
 export class Runtime {
     // 抽屉
-    public drawer = ref(true);
+    public leftDrawer = ref(true);
+    public bottomDrawer = ref(false);
     // 键盘状态
     public keyboardStatus: KeyboardStatus = {
         space: ref(false),

@@ -268,6 +268,7 @@
         {
             "_id": "YUUD",
             "componentName": "MText",
+            "groupId": "TwAx",
             "config": {
                 "content": "教育经历",
                 "typo": 5,
@@ -286,6 +287,7 @@
         {
             "_id": "k8At",
             "componentName": "MDivider",
+            "groupId": "TwAx",
             "config": {
                 "direction": "horizontal",
                 "color": "grey",
@@ -296,14 +298,15 @@
             "z": 17,
             "_freePosition": true,
             "_freeSize": true,
-            "_x": -47.35652173913044,
+            "_x": 19.643478260869557,
             "_y": 278.49999999999994,
-            "_w": 573.3565217391304,
+            "_w": 506.35652173913036,
             "_h": 24
         },
         {
             "_id": "wn9p",
             "componentName": "MText",
+            "groupId": "3m16",
             "config": {
                 "content": "工作经历",
                 "typo": 5,
@@ -321,6 +324,7 @@
         {
             "_id": "QtcS",
             "componentName": "MDivider",
+            "groupId": "3m16",
             "config": {
                 "direction": "horizontal",
                 "color": "grey",
@@ -331,14 +335,15 @@
             "z": 19,
             "_freePosition": true,
             "_freeSize": true,
-            "_x": -53.44347826086958,
+            "_x": 18.556521739130417,
             "_y": 366.5000000000001,
-            "_w": 581.8434782608696,
+            "_w": 509.8434782608696,
             "_h": 24
         },
         {
             "_id": "W8sf",
             "componentName": "MText",
+            "groupId": "TwAx",
             "config": {
                 "content": "家里蹲大学",
                 "typo": 9,
@@ -356,6 +361,7 @@
         {
             "_id": "LIAs",
             "componentName": "MText",
+            "groupId": "TwAx",
             "config": {
                 "content": "本科",
                 "typo": 9,
@@ -373,6 +379,7 @@
         {
             "_id": "vIRG",
             "componentName": "MText",
+            "groupId": "TwAx",
             "config": {
                 "content": "2015.9-2019.6",
                 "typo": 9,
@@ -390,6 +397,7 @@
         {
             "_id": "2CUV",
             "componentName": "MText",
+            "groupId": "TwAx",
             "config": {
                 "content": "社会大学",
                 "typo": 9,
@@ -407,6 +415,7 @@
         {
             "_id": "dbz0",
             "componentName": "MText",
+            "groupId": "TwAx",
             "config": {
                 "content": "研究生",
                 "typo": 9,
@@ -424,6 +433,7 @@
         {
             "_id": "lrzz",
             "componentName": "MText",
+            "groupId": "TwAx",
             "config": {
                 "content": "2019.9-2022.6",
                 "typo": 9,
@@ -859,6 +869,7 @@
         {
             "_id": "sOrG",
             "componentName": "MText",
+            "groupId": "3m16",
             "config": {
                 "content": "xx公司",
                 "typo": 9,
@@ -876,6 +887,7 @@
         {
             "_id": "hKUH",
             "componentName": "MText",
+            "groupId": "3m16",
             "config": {
                 "content": "前端开发",
                 "typo": 9,
@@ -893,6 +905,7 @@
         {
             "_id": "05WQ",
             "componentName": "MText",
+            "groupId": "3m16",
             "config": {
                 "content": "工作经历介绍工作经历介绍工作经历介绍工作经历介绍，工作经历介绍工作经历介绍，工作经历介绍工作经历介绍，工作经历介绍工作经历介绍，工作经历介绍工作经历介绍，工作经历介绍工作经历介绍，工作经历介绍工作经历介绍",
                 "typo": 9,
@@ -910,6 +923,7 @@
         {
             "_id": "bjI4",
             "componentName": "MText",
+            "groupId": "3m16",
             "config": {
                 "content": "2022.x-2022.x",
                 "typo": 9,
@@ -927,6 +941,7 @@
         {
             "_id": "QEwd",
             "componentName": "MList",
+            "groupId": "3m16",
             "config": {
                 "items": [
                     "列表项目1",
@@ -957,6 +972,7 @@
         {
             "_id": "CrFO",
             "componentName": "MText",
+            "groupId": "3m16",
             "config": {
                 "content": "xx公司",
                 "typo": 9,
@@ -974,6 +990,7 @@
         {
             "_id": "Sb1x",
             "componentName": "MText",
+            "groupId": "3m16",
             "config": {
                 "content": "前端开发",
                 "typo": 9,
@@ -991,6 +1008,7 @@
         {
             "_id": "0S70",
             "componentName": "MText",
+            "groupId": "3m16",
             "config": {
                 "content": "2022.x-2022.x",
                 "typo": 9,
@@ -1008,6 +1026,7 @@
         {
             "_id": "1iUY",
             "componentName": "MText",
+            "groupId": "3m16",
             "config": {
                 "content": "工作经历介绍工作经历介绍工作经历介绍工作经历介绍，工作经历介绍工作经历介绍，工作经历介绍工作经历介绍，工作经历介绍工作经历介绍，工作经历介绍工作经历介绍，工作经历介绍工作经历介绍，工作经历介绍工作经历介绍",
                 "typo": 9,
@@ -1025,6 +1044,7 @@
         {
             "_id": "Uue1",
             "componentName": "MList",
+            "groupId": "3m16",
             "config": {
                 "items": [
                     "列表项目1",
@@ -1055,6 +1075,7 @@
         {
             "_id": "GB0q",
             "componentName": "MDivider",
+            "groupId": "3m16",
             "config": {
                 "direction": "horizontal",
                 "color": "#00000040",
@@ -1065,14 +1086,15 @@
             "z": 61,
             "_freePosition": true,
             "_freeSize": true,
-            "_x": 16.086956521739133,
+            "_x": 18.086956521739133,
             "_y": 549.2826086956522,
-            "_w": 509.56521739130426,
+            "_w": 507.56521739130426,
             "_h": 24
         },
         {
             "_id": "DCRI",
             "componentName": "MText",
+            "groupId": "Blz6",
             "config": {
                 "content": "项目经历",
                 "typo": 5,
@@ -1090,6 +1112,7 @@
         {
             "_id": "83Vt",
             "componentName": "MDivider",
+            "groupId": "Blz6",
             "config": {
                 "direction": "horizontal",
                 "color": "grey",
@@ -1100,9 +1123,9 @@
             "z": 63,
             "_freePosition": true,
             "_freeSize": true,
-            "_x": -49.09565217391306,
-            "_y": 769.630434782609,
-            "_w": 581.8434782608696,
+            "_x": 18.90434782608694,
+            "_y": 768.630434782609,
+            "_w": 511.8434782608696,
             "_h": 24
         },
         {
@@ -1140,6 +1163,7 @@
         {
             "_id": "XmMH",
             "componentName": "MText",
+            "groupId": "Blz6",
             "config": {
                 "content": "xx项目",
                 "typo": 9,
@@ -1157,6 +1181,7 @@
         {
             "_id": "YjaG",
             "componentName": "MText",
+            "groupId": "Blz6",
             "config": {
                 "content": "主要开发",
                 "typo": 9,
@@ -1174,6 +1199,7 @@
         {
             "_id": "IcHg",
             "componentName": "MText",
+            "groupId": "Blz6",
             "config": {
                 "content": "2022.x-2022.x",
                 "typo": 9,
@@ -1191,6 +1217,7 @@
         {
             "_id": "Jyi1",
             "componentName": "MText",
+            "groupId": "Blz6",
             "config": {
                 "content": "项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍",
                 "typo": 9,
@@ -1208,6 +1235,7 @@
         {
             "_id": "ghM5",
             "componentName": "MList",
+            "groupId": "Blz6",
             "config": {
                 "items": [
                     "列表项目1",
@@ -1238,6 +1266,7 @@
         {
             "_id": "BpI6",
             "componentName": "MText",
+            "groupId": "Blz6",
             "config": {
                 "content": "xx项目",
                 "typo": 9,
@@ -1255,6 +1284,7 @@
         {
             "_id": "cSgq",
             "componentName": "MDivider",
+            "groupId": "Blz6",
             "config": {
                 "direction": "horizontal",
                 "color": "#00000040",
@@ -1265,14 +1295,15 @@
             "z": 72,
             "_freePosition": true,
             "_freeSize": true,
-            "_x": 12.821650399290151,
-            "_y": 919.4050576752443,
-            "_w": 509.56521739130426,
+            "_x": 17.82165039929015,
+            "_y": 918.4050576752443,
+            "_w": 502.56521739130426,
             "_h": 24
         },
         {
             "_id": "rW8G",
             "componentName": "MText",
+            "groupId": "Blz6",
             "config": {
                 "content": "主要开发",
                 "typo": 9,
@@ -1290,6 +1321,7 @@
         {
             "_id": "YKSb",
             "componentName": "MText",
+            "groupId": "Blz6",
             "config": {
                 "content": "2022.x-2022.x",
                 "typo": 9,
@@ -1307,6 +1339,7 @@
         {
             "_id": "yqAI",
             "componentName": "MText",
+            "groupId": "Blz6",
             "config": {
                 "content": "项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍",
                 "typo": 9,
@@ -1324,6 +1357,7 @@
         {
             "_id": "vdGC",
             "componentName": "MList",
+            "groupId": "Blz6",
             "config": {
                 "items": [
                     "列表项目1",
