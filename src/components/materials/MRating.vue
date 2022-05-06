@@ -11,7 +11,7 @@
         half-increments
         density="compact"
     ></v-rating>
-    <MaterialConfigPopover>
+    <MaterialConfigPopover v-if="clicked">
         <template #activator>
             <slot name="activator"></slot>
         </template>
@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, ref, watch } from 'vue';
+import { defineComponent, nextTick, ref, toRef, watch } from 'vue';
 import { MaterialBaseConfig } from '../../classes/Material';
 import { ProtoInfo } from './prototypes';
 import { M_RATING_NAME } from './config';
@@ -101,7 +101,8 @@ export default defineComponent({
     components: { Color, ConfigItem, MaterialConfigPopover },
     protoInfo,
     setup() {
-        const { instance } = useMaterial<MRatingConfig>();
+        const material = useMaterial<MRatingConfig>();
+        const { instance } = material;
         const ratingRef = ref<HTMLDivElement | null>(null);
         watch(
             () => ({ size: instance.config.size }),
@@ -117,6 +118,7 @@ export default defineComponent({
         return {
             ratingRef,
             instance,
+            clicked: toRef(material, 'clicked'),
         };
     },
     data: () => ({ styleTypeIconMap }),

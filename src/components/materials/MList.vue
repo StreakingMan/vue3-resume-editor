@@ -58,7 +58,7 @@
             <div>{{ item }}</div>
         </div>
     </div>
-    <MaterialConfigPopover>
+    <MaterialConfigPopover v-if="clicked">
         <template #activator>
             <slot name="activator"></slot>
         </template>
@@ -164,6 +164,7 @@ import {
     nextTick,
     onMounted,
     ref,
+    toRef,
     watch,
 } from 'vue';
 import { MaterialBaseConfig } from '../../classes/Material';
@@ -251,7 +252,8 @@ export default defineComponent({
     },
     protoInfo,
     setup() {
-        const { instance, active, hover } = useMaterial<MListConfig>();
+        const material = useMaterial<MListConfig>();
+        const { instance } = material;
         const classNames = computed(() => {
             return [
                 typographyClass[instance.config.typo],
@@ -289,10 +291,9 @@ export default defineComponent({
         return {
             setItemRef,
             itemHeights,
-            active,
-            hover,
             classNames,
             instance,
+            clicked: toRef(material, 'clicked'),
         };
     },
     data: () => ({

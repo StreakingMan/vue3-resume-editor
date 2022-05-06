@@ -16,7 +16,7 @@
             }"
         ></div>
     </div>
-    <MaterialConfigPopover>
+    <MaterialConfigPopover v-if="clicked">
         <template #activator>
             <slot name="activator"></slot>
         </template>
@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watch } from 'vue';
+import { defineComponent, toRef, watch } from 'vue';
 import { ProtoInfo } from './prototypes';
 import { M_DIVIDER_NAME } from './config';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
@@ -103,7 +103,8 @@ export default defineComponent({
     },
     protoInfo,
     setup() {
-        const { instance } = useMaterial<MDividerConfig>();
+        const material = useMaterial<MDividerConfig>();
+        const { instance } = material;
 
         // 方向改变中心旋转
         watch(
@@ -115,6 +116,7 @@ export default defineComponent({
 
         return {
             instance,
+            clicked: toRef(material, 'clicked'),
         };
     },
 });

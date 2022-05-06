@@ -27,29 +27,11 @@
         >
             <component :is="instance.componentName">
                 <template #activator>
-                    <!-- 移动 -->
-                    <v-btn
-                        ref="moveHandlerRef"
-                        variant="outlined"
-                        color="primary"
-                        size="x-small"
-                        :disabled="!clicked"
-                        icon
-                        class="border-r-0"
-                        :rounded="0"
-                    >
-                        <v-icon size="x-small">mdi-arrow-all</v-icon>
-                        <v-tooltip activator="parent" anchor="top">
-                            拖拽移动
-                        </v-tooltip>
-                    </v-btn>
-
                     <!-- 复制 -->
                     <v-btn
                         variant="outlined"
                         color="primary"
                         size="x-small"
-                        :disabled="!clicked"
                         icon
                         class="border-r-0"
                         :rounded="0"
@@ -66,7 +48,6 @@
                         variant="outlined"
                         color="primary"
                         size="x-small"
-                        :disabled="!clicked"
                         icon
                         class="border-r-0"
                         :rounded="0"
@@ -132,7 +113,6 @@
                         variant="outlined"
                         color="error"
                         size="x-small"
-                        :disabled="!clicked"
                         icon
                         class="border-r-0"
                         :rounded="0"
@@ -181,7 +161,6 @@ import {
     ref,
     PropType,
     toRef,
-    nextTick,
     watch,
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
@@ -296,49 +275,8 @@ export default defineComponent({
             itemStartW: 0,
             itemStartH: 0,
         };
-        // 所有激活元素的位置缓存
-        const posInfoCacheMap = new Map();
 
-        // 元素移动
-        const moveHandlerRef = ref(null);
-        useMouseDrag({
-            onStart() {
-                if (runtime.keyboardStatus.space) return false;
-                // 拖动非激活元素时，重置激活集合
-                if (!runtime.activeMaterialSet.has(material.instance.id)) {
-                    runtime.activeMaterialSet.clear();
-                    runtime.activeMaterialSet.add(material.instance.id);
-                }
 
-                nextTick().then(() => {
-                    // 拖动的元素挂载了分组时，批量移动
-                    for (const mId of runtime.activeMaterialSet) {
-                        const mInstance = paper.queryMaterial(mId);
-                        if (!mInstance) continue;
-                        const { x, y } = mInstance;
-                        posInfoCacheMap.set(mId, {
-                            itemStartX: x,
-                            itemStartY: y,
-                        });
-                    }
-                });
-            },
-            onDrag({ transX, transY }: MouseEvtInfo) {
-                for (const mId of runtime.activeMaterialSet) {
-                    const mInstance = paper.queryMaterial(mId);
-                    if (!mInstance) continue;
-                    const posInfoCache = posInfoCacheMap.get(mId);
-                    mInstance.x =
-                        posInfoCache.itemStartX + transX / runtime.scale.value;
-                    mInstance.y =
-                        posInfoCache.itemStartY + transY / runtime.scale.value;
-                }
-            },
-            onFinish() {
-                posInfoCacheMap.clear();
-            },
-            bindElementRef: moveHandlerRef,
-        });
 
         // 缩放控制点
         const clickingDot = ref<CtrlDotType | null>(null);
@@ -425,7 +363,6 @@ export default defineComponent({
             clicked: toRef(material, 'clicked'),
             scale: toRef(runtime.scale, 'value'),
             paper,
-            moveHandlerRef,
             dots: ctrlDots,
             ableCtrlDots,
             styleMap,

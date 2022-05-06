@@ -4,19 +4,31 @@
             <div
                 class="activator"
                 :style="{
-                    transform: `translateY(${show ? -100 : 0}%) scale(${
-                        1 / scale
-                    })`,
-                    opacity: show ? 1 : 0,
+                    transform: `translateY(-100%) scale(${1 / scale})`,
                 }"
             >
+                <!-- 移动 -->
+                <v-btn
+                    ref="moveHandlerRef"
+                    variant="outlined"
+                    color="primary"
+                    size="x-small"
+                    icon
+                    class="border-r-0"
+                    :rounded="0"
+                >
+                    <v-icon size="x-small">mdi-arrow-all</v-icon>
+                    <v-tooltip activator="parent" anchor="top">
+                        拖拽移动
+                    </v-tooltip>
+                </v-btn>
                 <slot name="activator"></slot>
+                <!-- 配置面板 -->
                 <v-btn
                     v-bind="props"
                     variant="outlined"
                     color="primary"
                     size="x-small"
-                    :disabled="!show"
                     icon
                     :rounded="0"
                     @mousedown.stop
@@ -101,25 +113,68 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, toRef } from 'vue';
-import { useMaterial, useRuntime } from '../../composables/useApp';
+import { defineComponent, nextTick, ref, toRef } from 'vue';
+import { useMaterial, usePaper, useRuntime } from '../../composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import BorderStyle from '../config-widgets/BorderStyle.vue';
 import Color from '../config-widgets/Color.vue';
+import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 
 export default defineComponent({
     name: 'MaterialConfigPopover',
     components: { Color, BorderStyle, ConfigItem },
     setup() {
         const runtime = useRuntime();
+        const paper = usePaper();
         const material = useMaterial();
 
-        const show = computed(() => material.active && material.clicked);
+        // 所有激活元素的位置缓存
+        const posInfoCacheMap = new Map();
+        // 元素移动
+        const moveHandlerRef = ref(null);
+        useMouseDrag({
+            onStart() {
+                if (runtime.keyboardStatus.space) return false;
+                // 拖动非激活元素时，重置激活集合
+                if (!runtime.activeMaterialSet.has(material.instance.id)) {
+                    runtime.activeMaterialSet.clear();
+                    runtime.activeMaterialSet.add(material.instance.id);
+                }
+
+                nextTick().then(() => {
+                    // 拖动的元素挂载了分组时，批量移动
+                    for (const mId of runtime.activeMaterialSet) {
+                        const mInstance = paper.queryMaterial(mId);
+                        if (!mInstance) continue;
+                        const { x, y } = mInstance;
+                        posInfoCacheMap.set(mId, {
+                            itemStartX: x,
+                            itemStartY: y,
+                        });
+                    }
+                });
+            },
+            onDrag({ transX, transY }: MouseEvtInfo) {
+                for (const mId of runtime.activeMaterialSet) {
+                    const mInstance = paper.queryMaterial(mId);
+                    if (!mInstance) continue;
+                    const posInfoCache = posInfoCacheMap.get(mId);
+                    mInstance.x =
+                        posInfoCache.itemStartX + transX / runtime.scale.value;
+                    mInstance.y =
+                        posInfoCache.itemStartY + transY / runtime.scale.value;
+                }
+            },
+            onFinish() {
+                posInfoCacheMap.clear();
+            },
+            bindElementRef: moveHandlerRef,
+        });
 
         return {
             scale: toRef(runtime.scale, 'value'),
-            show,
-            instance: toRef(material, 'instance'),
+            moveHandlerRef,
+            instance: material.instance,
         };
     },
     data: () => ({

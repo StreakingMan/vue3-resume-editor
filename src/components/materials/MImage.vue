@@ -9,7 +9,7 @@
     >
     </v-img>
 
-    <MaterialConfigPopover>
+    <MaterialConfigPopover v-if="clicked">
         <template #activator>
             <slot name="activator"></slot>
         </template>
@@ -80,7 +80,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, watch } from 'vue';
+import {defineComponent, nextTick, toRef, watch} from 'vue';
 import { ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
 import { M_IMAGE_NAME } from './config';
@@ -129,7 +129,8 @@ export default defineComponent({
     },
     protoInfo,
     setup() {
-        const { instance } = useMaterial<MImageConfig>();
+        const material = useMaterial<MImageConfig>();
+        const { instance } = material;
 
         watch(
             () => ({
@@ -223,6 +224,7 @@ export default defineComponent({
             onFileChange,
             onUrlChange,
             instance,
+            clicked: toRef(material, 'clicked'),
         };
     },
     data: () => ({
