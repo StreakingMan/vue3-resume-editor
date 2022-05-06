@@ -32,7 +32,7 @@
             <Sketch ref="sketch" />
             <Beian />
             <v-btn
-                class="position-fixed"
+                class="position-fixed print-none"
                 style="right: 24px; bottom: 128px"
                 color="success"
                 icon
@@ -46,7 +46,7 @@
                 >
             </v-btn>
             <v-btn
-                class="position-fixed"
+                class="position-fixed print-none"
                 style="right: 24px; bottom: 48px"
                 color="primary"
                 icon
@@ -214,6 +214,14 @@ export default defineComponent({
     },
 });
 </script>
+
+<style lang="scss" scoped>
+@import '@/styles/mixins.scss';
+
+.print-none {
+    @include printNone;
+}
+</style>
 
 <style lang="scss">
 body {
