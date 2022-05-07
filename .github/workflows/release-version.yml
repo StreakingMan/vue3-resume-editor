@@ -1,0 +1,24 @@
+name: release-version
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-github-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: git_tag
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GIT_VERSION: ${{ steps.git_tag.outputs.VERSION }}
+        with:
+          tag_name: ${{ env.GIT_VERSION }}
+          release_name: Release ${{ env.GIT_VERSION }}
+          draft: false
+          prerelease: false
+          body: "[${{ env.GIT_VERSION }} changelog](https://github.com/${{ github.repository }}/blob/${{ env.GIT_VERSION }}/CHANGELOG.md)"
