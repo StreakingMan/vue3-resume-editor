@@ -386,30 +386,31 @@ export class Paper {
     // 水平居中对齐
     alignHorizontalCenter(ids: Material<any>['id'][]): void {
         if (ids.length < 2) {
-            return
+            return;
         }
 
-        let maxX = Number.MIN_SAFE_INTEGER, minX = Number.MAX_SAFE_INTEGER
+        let maxX = Number.MIN_SAFE_INTEGER,
+            minX = Number.MAX_SAFE_INTEGER;
 
         for (let i = 0; i < ids.length; i++) {
             const m = this._materialMap.get(ids[i]);
 
             if (!m) {
-                continue
+                continue;
             }
 
-            maxX = m.x > maxX ? m.x : maxX
-            minX = m.x > minX ? minX : m.x
+            maxX = m.x + m.w > maxX ? m.x + m.w : maxX;
+            minX = m.x > minX ? minX : m.x;
         }
 
         for (let i = 0; i < ids.length; i++) {
             const m = this._materialMap.get(ids[i]);
 
             if (!m) {
-                continue
+                continue;
             }
 
-            m.x = (maxX + minX) / 2 - m.w / 2
+            m.x = (maxX + minX) / 2 - m.w / 2;
         }
     }
     // 右对齐
@@ -430,30 +431,33 @@ export class Paper {
     // 水平均匀分布
     alignHorizontalDistribute(ids: Material<any>['id'][]): void {
         if (ids.length < 2) {
-            return
+            return;
         }
 
-        let maxX = Number.MIN_SAFE_INTEGER, minX = Number.MAX_SAFE_INTEGER
+        let maxX = Number.MIN_SAFE_INTEGER,
+            minX = Number.MAX_SAFE_INTEGER;
 
-        for (let i = 0; i < ids.length; i++) {
-            const m = this._materialMap.get(ids[i]);
+        const _ids = this.sortIdsByPosition(ids, 'x');
+
+        for (let i = 0; i < _ids.length; i++) {
+            const m = this._materialMap.get(_ids[i]);
 
             if (!m) {
-                continue
+                continue;
             }
 
-            maxX = m.x > maxX ? m.x : maxX
-            minX = m.x > minX ? minX : m.x
+            maxX = m.x > maxX ? m.x : maxX;
+            minX = m.x > minX ? minX : m.x;
         }
 
-        for (let i = 0; i < ids.length; i++) {
-            const m = this._materialMap.get(ids[i]);
+        for (let i = 0; i < _ids.length; i++) {
+            const m = this._materialMap.get(_ids[i]);
 
             if (!m) {
-                continue
+                continue;
             }
 
-            m.x = minX + (maxX - minX) / (ids.length - 1) * i
+            m.x = minX + ((maxX - minX) / (_ids.length - 1)) * i;
         }
     }
     // 顶对齐
@@ -474,30 +478,31 @@ export class Paper {
     // 垂直居中对齐
     alignVerticalCenter(ids: Material<any>['id'][]): void {
         if (ids.length < 2) {
-            return
+            return;
         }
 
-        let maxY = Number.MIN_SAFE_INTEGER, minY = Number.MAX_SAFE_INTEGER
+        let maxY = Number.MIN_SAFE_INTEGER,
+            minY = Number.MAX_SAFE_INTEGER;
 
         for (let i = 0; i < ids.length; i++) {
             const m = this._materialMap.get(ids[i]);
 
             if (!m) {
-                continue
+                continue;
             }
 
-            maxY = m.y > maxY ? m.y : maxY
-            minY = m.y > minY ? minY : m.y
+            maxY = m.y + m.h > maxY ? m.y + m.h : maxY;
+            minY = m.y > minY ? minY : m.y;
         }
 
         for (let i = 0; i < ids.length; i++) {
             const m = this._materialMap.get(ids[i]);
 
             if (!m) {
-                continue
+                continue;
             }
 
-            m.y = (maxY + minY) / 2 - m.h / 2
+            m.y = (maxY + minY) / 2 - m.h / 2;
         }
     }
     // 底对齐
@@ -518,52 +523,70 @@ export class Paper {
 
             maxY = m.y > maxY ? m.y : maxY;
             if (m.y > maxY) {
-                maxY = m.y
+                maxY = m.y;
             }
 
             if (m.h > maxHeight) {
-                maxHeight = m.h
+                maxHeight = m.h;
             }
         }
-
 
         for (let i = 0; i < ids.length; i++) {
             const m = this._materialMap.get(ids[i]);
 
             if (!m) {
-                continue
+                continue;
             }
 
-            m.y = maxY + maxHeight - m.h
+            m.y = maxY + maxHeight - m.h;
         }
     }
     // 垂直均匀分布
     alignVerticalDistribute(ids: Material<any>['id'][]): void {
         if (ids.length < 2) {
-            return
+            return;
         }
 
-        let maxY = Number.MIN_SAFE_INTEGER, minY = Number.MAX_SAFE_INTEGER
+        let maxY = Number.MIN_SAFE_INTEGER,
+            minY = Number.MAX_SAFE_INTEGER;
 
-        for (let i = 0; i < ids.length; i++) {
-            const m = this._materialMap.get(ids[i]);
+        const _ids = this.sortIdsByPosition(ids, 'y');
+        for (let i = 0; i < _ids.length; i++) {
+            const m = this._materialMap.get(_ids[i]);
 
             if (!m) {
-                continue
+                continue;
             }
 
-            maxY = m.y > maxY ? m.y : maxY
-            minY = m.y > minY ? minY : m.y
+            maxY = m.y > maxY ? m.y : maxY;
+            minY = m.y > minY ? minY : m.y;
         }
 
-        for (let i = 0; i < ids.length; i++) {
-            const m = this._materialMap.get(ids[i]);
+        for (let i = 0; i < _ids.length; i++) {
+            const m = this._materialMap.get(_ids[i]);
 
             if (!m) {
-                continue
+                continue;
             }
 
-            m.y = minY + (maxY - minY) / (ids.length - 1) * i
+            m.y = minY + ((maxY - minY) / (_ids.length - 1)) * i;
         }
+    }
+
+    // 仅对ids涉及的material按横/纵坐标排序
+    sortIdsByPosition(
+        ids: Material<any>['id'][],
+        type: 'x' | 'y'
+    ): Material<any>['id'][] {
+        if (ids.length < 2) return ids.slice();
+        return ids.slice().sort((id1, id2) => {
+            const mA = this.queryMaterial(id1);
+            const mB = this.queryMaterial(id2);
+            if (mA && mB) {
+                if (mA[type] > mB[type]) return 1;
+                if (mA[type] === mB[type]) return 0;
+            }
+            return -1;
+        });
     }
 }
