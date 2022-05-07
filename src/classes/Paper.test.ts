@@ -250,7 +250,7 @@ test('对齐操作:水平居中对齐', () => {
     paper.addMaterial(mOptions3);
     const [m1, m2, m3] = paper.materialList;
     paper.alignHorizontalCenter([m1.id, m2.id, m3.id]);
-    expect([m1.x, m2.x, m3.x]).toEqual([250, 250, 200]);
+    expect([m1.x, m2.x, m3.x]).toEqual([350, 350, 300]);
 });
 
 test('对齐操作:水平均匀分布', () => {
@@ -285,6 +285,7 @@ test('对齐操作:水平均匀分布', () => {
     paper.addMaterial(mOptions4);
     const [m1, m2, m3, m4] = paper.materialList;
     paper.alignHorizontalDistribute([m1.id, m2.id, m3.id, m4.id]);
+    expect(paper.sortIdsByPosition([m1.id, m2.id, m3.id, m4.id],"y")).toEqual([m1.id, m2.id, m3.id, m4.id]);
     expect([m1.x, m2.x, m3.x, m4.x]).toEqual([0, 100, 200, 300]);
 });
 
@@ -369,7 +370,7 @@ test('对齐操作:垂直居中对齐', () => {
     paper.addMaterial(mOptions3);
     const [m1, m2, m3] = paper.materialList;
     paper.alignVerticalCenter([m1.id, m2.id, m3.id]);
-    expect([m1.y, m2.y, m3.y]).toEqual([200, 200, 150]);
+    expect([m1.y, m2.y, m3.y]).toEqual([300, 300, 250]);
 });
 
 test('对齐操作:垂直均匀分布', () => {
