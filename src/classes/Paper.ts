@@ -1,6 +1,6 @@
 import { Material, MaterialOptions } from './Material';
 import { uniqueString } from '../utils/uniqueString';
-import { InjectionKey } from 'vue';
+import { InjectionKey, onScopeDispose } from 'vue';
 import { UnwrapNestedRefs } from '@vue/reactivity';
 
 const LOCAL_STORAGE_KEY = 'paper_cache';
@@ -409,7 +409,7 @@ export class Paper {
                 continue
             }
 
-            m.x = (maxX + minX) / 2 - m.w / 2
+            m.x = (maxX + minX) / 2
         }
     }
     // 右对齐
@@ -434,6 +434,8 @@ export class Paper {
         }
 
         let maxX = Number.MIN_SAFE_INTEGER, minX = Number.MAX_SAFE_INTEGER
+
+        this.sortIds(ids, 'y')
 
         for (let i = 0; i < ids.length; i++) {
             const m = this._materialMap.get(ids[i]);
@@ -545,6 +547,7 @@ export class Paper {
 
         let maxY = Number.MIN_SAFE_INTEGER, minY = Number.MAX_SAFE_INTEGER
 
+        this.sortIds(ids, 'x')
         for (let i = 0; i < ids.length; i++) {
             const m = this._materialMap.get(ids[i]);
 
@@ -564,6 +567,28 @@ export class Paper {
             }
 
             m.y = minY + (maxY - minY) / (ids.length - 1) * i
+        }
+    }
+
+    // 仅对ids涉及的material按横/纵坐标排序
+    sortIds(ids: Material<any>['id'][], type: 'x' | 'y'): void {
+        if (ids.length < 2) {
+            return
+        }
+        
+        for (let i = 0; i < ids.length; i++) {
+
+            for (let j = i; j < ids.length - 1; j++) {
+                const a = this._materialMap.get(ids[j])
+                const b = this._materialMap.get(ids[j + 1])
+
+                if (a && b && a[type] > b[type]) {
+                    const tmp = ids[j]
+
+                    ids[j] = ids[j + 1]
+                    ids[j + 1] = tmp
+                }
+            }
         }
     }
 }
