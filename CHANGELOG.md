@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2](https://github.com/StreakingMan/vue3-resume-editor/compare/v0.0.1...v0.0.2) (2022-05-21)
+
+
+### Features
+
+* **app:** del按键删除 ([89c3488](https://github.com/StreakingMan/vue3-resume-editor/commit/89c34888a7a3d20fe76d7fd8efdcb411edbde59d))
+
 ### 0.0.1 (2022-05-07)
 
 
