@@ -10429,10 +10429,10 @@ vuetify-loader@^2.0.0-alpha.9:
     querystring "^0.2.1"
     upath "^2.0.1"
 
-vuetify@^3.0.0-beta.1:
-  version "3.0.0-beta.1"
-  resolved "https://registry.npmmirror.com/vuetify/-/vuetify-3.0.0-beta.1.tgz#8e3e4e41e00f1f6e00cb0a22b6a8f528581ca3f1"
-  integrity sha512-698CB/Xlvxku2Tm4AsFrmQ7LzMXOjleX7A5tbyQTnhPyt0NI1OTkf5zJUoXL3TNi2TN7DglN+adI6AE69e6CeQ==
+vuetify@3.0.0-beta.2:
+  version "3.0.0-beta.2"
+  resolved "https://registry.npmmirror.com/vuetify/-/vuetify-3.0.0-beta.2.tgz#0dc25b653da1339654d7f015ed2074072210cc6b"
+  integrity sha512-mvrg8C+A8Gd3GRmtO1uidxJvd0KDTfN8vT4ARGRpXVteDHMYwbaVmGz/I4KY6gPASPkR1fVpvtz590h++2kuIA==
 
 w3c-hr-time@^1.0.2:
   version "1.0.2"
