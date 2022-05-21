@@ -120,7 +120,15 @@ export default defineComponent({
                 }
             },
         });
-        const { space, ctrl, ctrlC, ctrlV, alt, shift } = useKeyboardStatus();
+        const {
+            space,
+            ctrl,
+            ctrlC,
+            ctrlV,
+            alt,
+            shift,
+            del,
+        } = useKeyboardStatus();
         watch(
             () => ({
                 space: space.value,
@@ -137,6 +145,7 @@ export default defineComponent({
                 runtime.keyboardStatus.ctrlV = ctrlV.value;
                 runtime.keyboardStatus.alt = alt.value;
                 runtime.keyboardStatus.shift = shift.value;
+                runtime.keyboardStatus.del = del.value;
             }
         );
 
@@ -165,6 +174,16 @@ export default defineComponent({
                 if (ctrlV) {
                     paper.copyMaterial([...runtime.copyMaterialSet]);
                     runtime.copyMaterialSet.clear();
+                }
+            }
+        );
+
+        // 按del键删除
+        watch(
+            () => del.value,
+            (v) => {
+                if (v) {
+                    paper.removeMaterial([...runtime.activeMaterialSet]);
                 }
             }
         );

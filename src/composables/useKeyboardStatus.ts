@@ -7,6 +7,7 @@ export interface KeyboardStatus {
     ctrlV: Ref<boolean>;
     alt: Ref<boolean>;
     shift: Ref<boolean>;
+    del: Ref<boolean>;
 }
 
 export default function useKeyboardStatus(): KeyboardStatus {
@@ -16,6 +17,7 @@ export default function useKeyboardStatus(): KeyboardStatus {
     const ctrlV = ref(false);
     const alt = ref(false);
     const shift = ref(false);
+    const del = ref(false);
 
     const captureMethod = (e: KeyboardEvent) => {
         const pressed = e.type === 'keydown';
@@ -52,6 +54,9 @@ export default function useKeyboardStatus(): KeyboardStatus {
             case 'AltRight':
                 alt.value = pressed;
                 break;
+            case 'Delete':
+                del.value = pressed;
+                break;
         }
     };
     onUnmounted(() => {
@@ -69,5 +74,6 @@ export default function useKeyboardStatus(): KeyboardStatus {
         ctrlV,
         alt,
         shift,
+        del
     };
 }
