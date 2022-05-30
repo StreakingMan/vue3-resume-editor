@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3](https://github.com/StreakingMan/vue3-resume-editor/compare/v0.0.2...v0.0.3) (2022-05-30)
+
+
+### Bug Fixes
+
+* v-menu交互配置 ([2399b95](https://github.com/StreakingMan/vue3-resume-editor/commit/2399b95740d9f98c209b97a14619a7220ef8ab2d))
+
 ### [0.0.2](https://github.com/StreakingMan/vue3-resume-editor/compare/v0.0.1...v0.0.2) (2022-05-21)
 
 
