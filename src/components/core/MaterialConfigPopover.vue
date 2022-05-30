@@ -1,5 +1,5 @@
 <template>
-    <v-menu v-model="visible" anchor="end">
+    <v-menu v-model="visible" anchor="end" :close-on-content-click="false">
         <template #activator="{ props }">
             <div
                 class="activator"

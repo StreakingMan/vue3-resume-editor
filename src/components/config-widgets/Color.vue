@@ -7,7 +7,7 @@
         style="cursor: pointer"
     >
         <div v-if="!value" class="no-color"></div>
-        <v-menu activator="parent">
+        <v-menu activator="parent" :close-on-content-click="false">
             <v-color-picker v-model="value" show-swatches></v-color-picker>
         </v-menu>
     </v-sheet>

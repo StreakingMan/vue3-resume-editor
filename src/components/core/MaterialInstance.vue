@@ -276,8 +276,6 @@ export default defineComponent({
             itemStartH: 0,
         };
 
-
-
         // 缩放控制点
         const clickingDot = ref<CtrlDotType | null>(null);
         const { onMousedown: onDotMousedown } = useMouseDrag({

@@ -2,7 +2,11 @@
     <v-btn icon>
         <v-icon>mdi-grid</v-icon>
         <v-tooltip activator="parent" anchor="bottom">辅助网格</v-tooltip>
-        <v-menu activator="parent" anchor="bottom">
+        <v-menu
+            activator="parent"
+            anchor="bottom"
+            :close-on-content-click="false"
+        >
             <v-sheet class="pa-4 rounded print-none" width="200">
                 <div class="d-flex align-center">
                     <div class="text-subtitle-2">显示网格</div>
@@ -38,7 +42,11 @@
     <v-btn icon>
         <v-icon :style="{ color: paper.background }"> mdi-palette </v-icon>
         <v-tooltip activator="parent" anchor="bottom">纸张背景</v-tooltip>
-        <v-menu activator="parent" anchor="bottom">
+        <v-menu
+            activator="parent"
+            anchor="bottom"
+            :close-on-content-click="false"
+        >
             <v-sheet class="pa-4 rounded print-none" width="fit-content">
                 <div class="d-flex align-center">
                     <div class="text-subtitle-2">背景色</div>
@@ -55,7 +63,11 @@
     <v-btn icon>
         <v-icon>mdi-magnify-plus</v-icon>
         <v-tooltip activator="parent" anchor="bottom">缩放视图</v-tooltip>
-        <v-menu activator="parent" anchor="bottom">
+        <v-menu
+            activator="parent"
+            anchor="bottom"
+            :close-on-content-click="false"
+        >
             <v-sheet class="pa-4 rounded print-none" width="200">
                 <div class="d-flex align-center">
                     <div class="text-subtitle-2">比例</div>

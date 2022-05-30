@@ -20,6 +20,7 @@ export class Runtime {
         ctrlV: ref(false),
         alt: ref(false),
         shift: ref(false),
+        del: ref(false),
     };
     // 辅助网格显示
     public showGrid = ref(true);
