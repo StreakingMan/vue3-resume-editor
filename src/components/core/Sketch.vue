@@ -65,15 +65,35 @@ export default defineComponent({
                 (paperHeight + runtime.sketch.paddingY * 2 - windowHeight) / 2;
         };
 
+        // 优化Mac触控板滚动（屏蔽默认行为，重新赋值两个轴的偏移量
+        const handleSketchWheel = (e: WheelEvent) => {
+            if (!runtime.sketch.wrapperDiv || !paperDiv.value) return;
+            e.preventDefault();
+            runtime.sketch.wrapperDiv.scrollLeft += e.deltaX;
+            runtime.sketch.wrapperDiv.scrollTop += e.deltaY;
+        };
+
         onMounted(() => {
             if (!paperRef?.value?.paperRef) return;
             paperDiv = ref<HTMLDivElement>(paperRef.value.paperRef);
             adjustSketch();
             window.addEventListener('resize', adjustSketch);
+            if (runtime.sketch.wrapperDiv) {
+                runtime.sketch.wrapperDiv.addEventListener(
+                    'wheel',
+                    handleSketchWheel
+                );
+            }
         });
 
         onUnmounted(() => {
             window.removeEventListener('resize', adjustSketch);
+            if (runtime.sketch.wrapperDiv) {
+                runtime.sketch.wrapperDiv.removeEventListener(
+                    'wheel',
+                    handleSketchWheel
+                );
+            }
         });
 
         let scrollTopCache: number, scrollLeftCache: number;
