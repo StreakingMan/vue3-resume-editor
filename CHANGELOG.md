@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/StreakingMan/vue3-resume-editor/compare/v0.0.3...v0.0.4) (2022-07-11)
+
+
+### Bug Fixes
+
+* **sketch:** mac触摸板画布移动交互优化 ([2faeb19](https://github.com/StreakingMan/vue3-resume-editor/commit/2faeb19ab42f4692ae872f2ea5508a8a637afa8f))
+
 ### [0.0.3](https://github.com/StreakingMan/vue3-resume-editor/compare/v0.0.2...v0.0.3) (2022-05-30)
 
 
