@@ -16,7 +16,7 @@
             v-model="bottomDrawer"
             temporary
             app
-            position="bottom"
+            location="bottom"
         >
             <TemplateList />
         </v-navigation-drawer>
@@ -74,23 +74,16 @@
 </template>
 
 <script lang="ts">
-import {
-    defineComponent,
-    provide,
-    reactive,
-    onMounted,
-    watch,
-    toRef,
-} from 'vue';
+import {defineComponent, onMounted, provide, reactive, toRef, watch,} from 'vue';
 import useMouseWheel from './composables/useMouseWheel';
-import { Paper, paperInjectionKey } from './classes/Paper';
+import {Paper, paperInjectionKey} from './classes/Paper';
 import Beian from './components/Beian.vue';
 import Sketch from './components/core/Sketch.vue';
+import sketch from './components/core/Sketch.vue';
 import MaterialPrototype from './components/core/MaterialPrototype.vue';
 import Toolbar from './components/tools/Toolbar.vue';
-import { stringArrayDiff } from './utils/stringArrayDiff';
-import { Runtime, runtimeInjectionKey } from './classes/Runtime';
-import sketch from './components/core/Sketch.vue';
+import {stringArrayDiff} from './utils/stringArrayDiff';
+import {Runtime, runtimeInjectionKey} from './classes/Runtime';
 import template1 from './components/templates/resume-template-1.json';
 import useKeyboardStatus from './composables/useKeyboardStatus';
 import TemplateList from './components/templates/TemplateList.vue';
