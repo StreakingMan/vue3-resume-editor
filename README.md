@@ -4,19 +4,18 @@
     </a>
 </p>
 <br/>
-<p align="center">
-    <img src="https://img.shields.io/github/package-json/v/StreakingMan/vue3-resume-editor" alt="version"/>
-    <img src="https://img.shields.io/github/license/StreakingMan/vue3-resume-editor" alt="license" />
-    <img src="https://img.shields.io/github/stars/StreakingMan/vue3-resume-editor?style=social" alt="stars" />
-    <img src="https://img.shields.io/github/forks/StreakingMan/vue3-resume-editor?style=social" alt="forks" />
-    <img src="https://img.shields.io/github/issues/StreaKingman/vue3-resume-editor" alt="issues" />
-    <img src="https://img.shields.io/github/commit-activity/m/StreakingMan/vue3-resume-editor" alt="commit-activity" />
-    <img src="https://img.shields.io/github/last-commit/StreakingMan/vue3-resume-editor" alt="last-commit" />
-    <br />
-    <img src="https://img.shields.io/github/deployments/StreakingMan/vue3-resume-editor/Production?label=proccution%20state" alt="production-state" />
-    <img src="https://img.shields.io/github/deployments/StreakingMan/vue3-resume-editor/Preview?label=preview%20state" alt="preview-state" />
-    <img src="" alt="" />
-</p>
+
+<img src="https://img.shields.io/github/package-json/v/StreakingMan/vue3-resume-editor" alt="version"/>
+<img src="https://img.shields.io/github/license/StreakingMan/vue3-resume-editor" alt="license" />
+<img src="https://img.shields.io/github/stars/StreakingMan/vue3-resume-editor?style=social" alt="stars" />
+<img src="https://img.shields.io/github/forks/StreakingMan/vue3-resume-editor?style=social" alt="forks" />
+<img src="https://img.shields.io/github/issues/StreaKingman/vue3-resume-editor" alt="issues" />
+<img src="https://img.shields.io/github/commit-activity/m/StreakingMan/vue3-resume-editor" alt="commit-activity" />
+<img src="https://img.shields.io/github/last-commit/StreakingMan/vue3-resume-editor" alt="last-commit" />
+
+<img src="https://img.shields.io/github/deployments/StreakingMan/vue3-resume-editor/Production?label=proccution%20state" alt="production-state" />
+<img src="https://img.shields.io/github/deployments/StreakingMan/vue3-resume-editor/Preview?label=preview%20state" alt="preview-state" />
+<a href="https://wallabyjs.com/oss/"><img src="https://img.shields.io/badge/wallaby.js-powered-blue.svg?style=flat&logo=github" alt="" /></a>
 
 # Vue3 Resume Editor
 
