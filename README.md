@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/github/last-commit/StreakingMan/vue3-resume-editor" alt="last-commit" />
     <img src="https://img.shields.io/github/deployments/StreakingMan/vue3-resume-editor/Production?label=proccution%20state" alt="production-state" />
     <img src="https://img.shields.io/github/deployments/StreakingMan/vue3-resume-editor/Preview?label=preview%20state" alt="preview-state" />
-    <a href="https://wallabyjs.com/oss/"><img src="https://img.shields.io/badge/wallaby.js-powered-blue.svg?style=flat&logo=github" alt="" /></a>
+    <a href="https://wallabyjs.com/oss/" target="_blank"><img src="https://img.shields.io/badge/wallaby.js-powered-blue.svg?style=flat&logo=github" alt="" /></a>
 </p>
 
 # Vue3 Resume Editor
