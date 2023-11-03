@@ -18,7 +18,7 @@
     >
         <v-icon>mdi-vuetify</v-icon>
         <v-tooltip activator="parent" anchor="bottom">
-            powered by vuetify@3.0.0-beta.1
+            powered by vuetify
         </v-tooltip>
     </v-btn>
 </template>

@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite';
+import {defineConfig} from 'vite';
 import vue from '@vitejs/plugin-vue';
-import vuetify from '@vuetify/vite-plugin';
+import vuetify from 'vite-plugin-vuetify';
 
 import path from 'path';
 
@@ -8,7 +8,6 @@ import path from 'path';
 export default defineConfig({
     plugins: [
         vue(),
-        // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
         vuetify({
             autoImport: true,
         }),
