@@ -90,16 +90,19 @@
                                     :key="i"
                                     height="30"
                                     :value="i"
-                                    active-color="primary"
+                                    color="primary"
                                     class="pl-0"
                                     @click="onClick"
                                 >
-                                    <v-list-item-avatar start class="mr-1">
-                                        <v-icon
-                                            :icon="icon"
-                                            size="small"
-                                        ></v-icon>
-                                    </v-list-item-avatar>
+                                    <template #prepend>
+                                        <v-avatar>
+                                            <v-icon
+                                                :icon="icon"
+                                                size="small"
+                                            ></v-icon>
+                                        </v-avatar>
+                                    </template>
+
                                     <v-list-item-subtitle
                                         v-text="text"
                                     ></v-list-item-subtitle>
@@ -156,10 +159,10 @@
 import {
     computed,
     defineComponent,
+    PropType,
     provide,
     reactive,
     ref,
-    PropType,
     toRef,
     watch,
 } from 'vue';
@@ -235,7 +238,7 @@ export default defineComponent({
             instance: props.item,
             hover: false,
             active: computed(() =>
-                runtime.activeMaterialSet.has(props.item.id)
+                runtime.activeMaterialSet.has(props.item.id),
             ),
             clicked: false,
         });
@@ -245,7 +248,7 @@ export default defineComponent({
             () => material.active,
             () => {
                 if (!material.active) material.clicked = false;
-            }
+            },
         );
 
         const focus = (e: MouseEvent) => {
@@ -290,12 +293,8 @@ export default defineComponent({
             onDrag({ transX, transY }: MouseEvtInfo) {
                 if (!clickingDot.value) return;
 
-                const {
-                    itemStartX,
-                    itemStartY,
-                    itemStartH,
-                    itemStartW,
-                } = posInfoCache;
+                const { itemStartX, itemStartY, itemStartH, itemStartW } =
+                    posInfoCache;
 
                 let newX = itemStartX,
                     newY = itemStartY,
@@ -385,7 +384,9 @@ export default defineComponent({
     .control-dot {
         box-sizing: border-box;
         position: absolute;
-        transition: background-color 0.5s, opacity 0.5s;
+        transition:
+            background-color 0.5s,
+            opacity 0.5s;
         z-index: 2;
     }
 }
