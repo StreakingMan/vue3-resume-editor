@@ -7,16 +7,15 @@ const LOCAL_STORAGE_KEY = 'paper_cache';
 
 const a4Ratio = 210 / 297;
 
-const paperSizeMap = {
+export const paperSizeMap = {
     a4: {
         w: 793,
         h: 793 / a4Ratio,
     },
 };
 
-export const paperInjectionKey: InjectionKey<UnwrapNestedRefs<Paper>> = Symbol(
-    'Paper'
-);
+export const paperInjectionKey: InjectionKey<UnwrapNestedRefs<Paper>> =
+    Symbol('Paper');
 
 export interface PaperOptions {
     size?: 'a4';
@@ -257,7 +256,7 @@ export class Paper {
     }
     // 获取分组边缘矩形
     getGroupRect(
-        groupId: string
+        groupId: string,
     ): { x: number; y: number; w: number; h: number } | undefined {
         const group = this._groupMap.get(groupId);
         if (!group) return;
@@ -372,7 +371,7 @@ export class Paper {
     alignHorizontalLeft(ids: Material<any>['id'][]): void {
         const setMinX: (index: number, minX?: number) => number = (
             index,
-            minX
+            minX,
         ) => {
             if (index === ids.length) return minX ?? 0;
             const m = this._materialMap.get(ids[index]);
@@ -417,7 +416,7 @@ export class Paper {
     alignHorizontalRight(ids: Material<any>['id'][]): void {
         const setMaxX: (index: number, maxX?: number) => number = (
             index,
-            maxX
+            maxX,
         ) => {
             if (index === ids.length) return maxX ?? 0;
             const m = this._materialMap.get(ids[index]);
@@ -464,7 +463,7 @@ export class Paper {
     alignVerticalTop(ids: Material<any>['id'][]): void {
         const setMinY: (index: number, minY?: number) => number = (
             index,
-            minY
+            minY,
         ) => {
             if (index === ids.length) return minY || 0;
             const m = this._materialMap.get(ids[index]);
@@ -576,7 +575,7 @@ export class Paper {
     // 仅对ids涉及的material按横/纵坐标排序
     sortIdsByPosition(
         ids: Material<any>['id'][],
-        type: 'x' | 'y'
+        type: 'x' | 'y',
     ): Material<any>['id'][] {
         if (ids.length < 2) return ids.slice();
         return ids.slice().sort((id1, id2) => {

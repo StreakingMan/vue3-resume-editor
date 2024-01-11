@@ -1,3 +1,127 @@
+<script lang="ts" setup>
+import { computed, onMounted, provide, reactive, toRef, watch } from 'vue';
+import useMouseWheel from './composables/useMouseWheel';
+import { Paper, paperInjectionKey } from './classes/Paper';
+import Beian from './components/Beian.vue';
+import Sketch from './components/core/Sketch.vue';
+import sketch from './components/core/Sketch.vue';
+import MaterialPrototype from './components/core/MaterialPrototype.vue';
+import Toolbar from './components/tools/Toolbar.vue';
+import { stringArrayDiff } from './utils/stringArrayDiff';
+import { Runtime, runtimeInjectionKey } from './classes/Runtime';
+import template1 from './components/templates/resume-template-1.json';
+import useKeyboardStatus from './composables/useKeyboardStatus';
+import TemplateList from './components/templates/TemplateList.vue';
+
+// 运行时
+const runtime = reactive(new Runtime());
+const leftDrawer = toRef(runtime, 'leftDrawer');
+const bottomDrawer = toRef(runtime, 'bottomDrawer');
+const snackbar = computed(() => runtime.snackbar);
+provide(runtimeInjectionKey, runtime);
+useMouseWheel({
+    onWheel: (wheelDelta, { x, y }) => {
+        // 更新缩放值
+        const scaleValue = runtime.scale.value + wheelDelta;
+        // 缩放范围0.1~5
+        if (0.1 < scaleValue && scaleValue < 5) {
+            runtime.scale.position.x = x;
+            runtime.scale.position.y = y;
+            runtime.scale.value += wheelDelta;
+        }
+    },
+});
+const { space, ctrl, ctrlC, ctrlV, alt, shift, del } = useKeyboardStatus();
+watch(
+    () => ({
+        space: space.value,
+        ctrl: ctrl.value,
+        ctrlC: ctrlC.value,
+        ctrlV: ctrlV.value,
+        alt: alt.value,
+        shift: shift.value,
+    }),
+    () => {
+        runtime.keyboardStatus.space = space.value;
+        runtime.keyboardStatus.ctrl = ctrl.value;
+        runtime.keyboardStatus.ctrlC = ctrlC.value;
+        runtime.keyboardStatus.ctrlV = ctrlV.value;
+        runtime.keyboardStatus.alt = alt.value;
+        runtime.keyboardStatus.shift = shift.value;
+        runtime.keyboardStatus.del = del.value;
+    },
+);
+
+// Paper实例
+const paper = reactive(new Paper({}));
+provide(paperInjectionKey, paper);
+onMounted(() => {
+    if (!paper.loadFromStorage()) {
+        paper.loadData(template1);
+    }
+    console.log(paper);
+});
+
+// 复制粘贴
+watch(
+    () => ({
+        ctrlC: runtime.keyboardStatus.ctrlC,
+        ctrlV: runtime.keyboardStatus.ctrlV,
+    }),
+    ({ ctrlC, ctrlV }) => {
+        if (ctrlC) {
+            runtime.copyMaterialSet = new Set(runtime.activeMaterialSet);
+        }
+        if (ctrlV) {
+            paper.copyMaterial([...runtime.copyMaterialSet]);
+            runtime.copyMaterialSet.clear();
+        }
+    },
+);
+
+// 按del键删除
+watch(
+    () => del.value,
+    (v) => {
+        if (v) {
+            paper.removeMaterial([...runtime.activeMaterialSet]);
+        }
+    },
+);
+
+// 激活元素集合控制
+watch(
+    () => [...runtime.activeMaterialSet],
+    (nv, ov) => {
+        console.log('激活元素', nv, ov);
+        if (!nv.length) {
+            runtime.copyMaterialSet.clear();
+        }
+
+        // 激活列表增减时，同属分组元素一并操作
+        const { added, removed } = stringArrayDiff(ov, nv);
+        const needAddGroupIdSet = [
+            ...new Set(added.map((mId) => paper.queryMaterial(mId)?.groupId)),
+        ];
+        const needRemoveGroupIdSet = [
+            ...new Set(removed.map((mId) => paper.queryMaterial(mId)?.groupId)),
+        ];
+        needAddGroupIdSet.forEach((groupId) => {
+            if (!groupId) return;
+            paper.queryGroupMaterials(groupId).forEach(({ id }) => {
+                runtime.activeMaterialSet.add(id);
+            });
+        });
+        needRemoveGroupIdSet.forEach((groupId) => {
+            if (!groupId) return;
+            paper.queryGroupMaterials(groupId).forEach(({ id }) => {
+                runtime.activeMaterialSet.delete(id);
+            });
+        });
+    },
+);
+</script>
+
 <template>
     <v-app>
         <v-app-bar app>
@@ -20,7 +144,12 @@
         >
             <TemplateList />
         </v-navigation-drawer>
-        <v-navigation-drawer v-model="leftDrawer" width="300" temporary app>
+        <v-navigation-drawer
+            v-model="runtime.leftDrawer"
+            width="300"
+            temporary
+            app
+        >
             <div class="w-100 h-100 d-flex flex-column">
                 <MaterialPrototype class="flex-grow-0" />
                 <div class="flex-grow-1 overflow-y-auto">
@@ -72,160 +201,6 @@
         </v-snackbar>
     </v-app>
 </template>
-
-<script lang="ts">
-import {defineComponent, onMounted, provide, reactive, toRef, watch,} from 'vue';
-import useMouseWheel from './composables/useMouseWheel';
-import {Paper, paperInjectionKey} from './classes/Paper';
-import Beian from './components/Beian.vue';
-import Sketch from './components/core/Sketch.vue';
-import sketch from './components/core/Sketch.vue';
-import MaterialPrototype from './components/core/MaterialPrototype.vue';
-import Toolbar from './components/tools/Toolbar.vue';
-import {stringArrayDiff} from './utils/stringArrayDiff';
-import {Runtime, runtimeInjectionKey} from './classes/Runtime';
-import template1 from './components/templates/resume-template-1.json';
-import useKeyboardStatus from './composables/useKeyboardStatus';
-import TemplateList from './components/templates/TemplateList.vue';
-
-export default defineComponent({
-    name: 'App',
-    components: {
-        TemplateList,
-        Toolbar,
-        MaterialPrototype,
-        Sketch,
-        Beian,
-    },
-    setup() {
-        // 运行时
-        const runtime = reactive(new Runtime());
-        provide(runtimeInjectionKey, runtime);
-        useMouseWheel({
-            onWheel: (wheelDelta, { x, y }) => {
-                // 更新缩放值
-                const scaleValue = runtime.scale.value + wheelDelta;
-                // 缩放范围0.1~5
-                if (0.1 < scaleValue && scaleValue < 5) {
-                    runtime.scale.value += wheelDelta;
-                    runtime.scale.position.x = x;
-                    runtime.scale.position.y = y;
-                }
-            },
-        });
-        const {
-            space,
-            ctrl,
-            ctrlC,
-            ctrlV,
-            alt,
-            shift,
-            del,
-        } = useKeyboardStatus();
-        watch(
-            () => ({
-                space: space.value,
-                ctrl: ctrl.value,
-                ctrlC: ctrlC.value,
-                ctrlV: ctrlV.value,
-                alt: alt.value,
-                shift: shift.value,
-            }),
-            () => {
-                runtime.keyboardStatus.space = space.value;
-                runtime.keyboardStatus.ctrl = ctrl.value;
-                runtime.keyboardStatus.ctrlC = ctrlC.value;
-                runtime.keyboardStatus.ctrlV = ctrlV.value;
-                runtime.keyboardStatus.alt = alt.value;
-                runtime.keyboardStatus.shift = shift.value;
-                runtime.keyboardStatus.del = del.value;
-            }
-        );
-
-        // Paper实例
-        const paper = reactive(new Paper({}));
-        provide(paperInjectionKey, paper);
-        onMounted(() => {
-            if (!paper.loadFromStorage()) {
-                paper.loadData(template1);
-            }
-            console.log(paper);
-        });
-
-        // 复制粘贴
-        watch(
-            () => ({
-                ctrlC: runtime.keyboardStatus.ctrlC,
-                ctrlV: runtime.keyboardStatus.ctrlV,
-            }),
-            ({ ctrlC, ctrlV }) => {
-                if (ctrlC) {
-                    runtime.copyMaterialSet = new Set(
-                        runtime.activeMaterialSet
-                    );
-                }
-                if (ctrlV) {
-                    paper.copyMaterial([...runtime.copyMaterialSet]);
-                    runtime.copyMaterialSet.clear();
-                }
-            }
-        );
-
-        // 按del键删除
-        watch(
-            () => del.value,
-            (v) => {
-                if (v) {
-                    paper.removeMaterial([...runtime.activeMaterialSet]);
-                }
-            }
-        );
-
-        // 激活元素集合控制
-        watch(
-            () => [...runtime.activeMaterialSet],
-            (nv, ov) => {
-                console.log('激活元素', nv, ov);
-                if (!nv.length) {
-                    runtime.copyMaterialSet.clear();
-                }
-
-                // 激活列表增减时，同属分组元素一并操作
-                const { added, removed } = stringArrayDiff(ov, nv);
-                const needAddGroupIdSet = [
-                    ...new Set(
-                        added.map((mId) => paper.queryMaterial(mId)?.groupId)
-                    ),
-                ];
-                const needRemoveGroupIdSet = [
-                    ...new Set(
-                        removed.map((mId) => paper.queryMaterial(mId)?.groupId)
-                    ),
-                ];
-                needAddGroupIdSet.forEach((groupId) => {
-                    if (!groupId) return;
-                    paper.queryGroupMaterials(groupId).forEach(({ id }) => {
-                        runtime.activeMaterialSet.add(id);
-                    });
-                });
-                needRemoveGroupIdSet.forEach((groupId) => {
-                    if (!groupId) return;
-                    paper.queryGroupMaterials(groupId).forEach(({ id }) => {
-                        runtime.activeMaterialSet.delete(id);
-                    });
-                });
-            }
-        );
-
-        return {
-            snackbar: runtime.snackbar,
-            leftDrawer: toRef(runtime, 'leftDrawer'),
-            bottomDrawer: toRef(runtime, 'bottomDrawer'),
-            sketch,
-        };
-    },
-});
-</script>
 
 <style lang="scss" scoped>
 @import '@/styles/mixins.scss';

@@ -1,11 +1,9 @@
 import { KeyboardStatus } from '../composables/useKeyboardStatus';
-import { InjectionKey, reactive, ref } from 'vue';
-import { UnwrapNestedRefs } from '@vue/reactivity';
+import { InjectionKey, reactive, ref, UnwrapNestedRefs } from 'vue';
 import { Material } from './Material';
 
-export const runtimeInjectionKey: InjectionKey<
-    UnwrapNestedRefs<Runtime>
-> = Symbol('Runtime');
+export const runtimeInjectionKey: InjectionKey<UnwrapNestedRefs<Runtime>> =
+    Symbol('Runtime');
 
 // App类主要维护运行时的东西
 export class Runtime {
@@ -39,9 +37,9 @@ export class Runtime {
         text: '',
     });
     // Sketch组件信息
-    public sketch = reactive({
-        wrapperDiv: ref<HTMLDivElement | null>(null),
-        paddingX: 0,
-        paddingY: 0,
+    public sketch = reactive({});
+    // Paper组件信息
+    public paper = reactive({
+        bounds: { x: 0, y: 0, width: 0, height: 0 },
     });
 }

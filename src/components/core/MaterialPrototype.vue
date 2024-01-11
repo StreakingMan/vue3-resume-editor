@@ -45,7 +45,7 @@ export default defineComponent({
         // 原型拖入paper
         const draggingProtoType = ref<MaterialComponentNameType>('MText');
         const { onMousedown: onProtoMousedown } = useMouseDrag({
-            onStart({ startX, startY }) {
+            onStart() {
                 //console.log(draggingProtoType.value);
             },
             onDrag({ transX, transY }: MouseEvtInfo) {
@@ -59,24 +59,13 @@ export default defineComponent({
                 proto.tempStyle = '';
 
                 // 计算释放时相对于paper的位置
-                const { paddingX, paddingY, wrapperDiv } = runtime.sketch;
-                if (!wrapperDiv) return;
-                const { scrollLeft, scrollTop } = wrapperDiv;
-                const x =
-                    (currentX -
-                        (paddingX -
-                            (paper.w * (runtime.scale.value - 1)) / 2 -
-                            scrollLeft)) /
-                    runtime.scale.value;
-                const y =
-                    (currentY -
-                        (paddingY -
-                            (paper.h * (runtime.scale.value - 1)) / 2 -
-                            scrollTop)) /
-                    runtime.scale.value;
+                const { x: paperX, y: paperY } = runtime.paper.bounds;
+
+                const x = (currentX - paperX) / runtime.scale.value;
+                const y = (currentY - paperY) / runtime.scale.value;
                 if (x < 0 || y < 0) return;
                 paper.addMaterial(
-                    proto.genInitOptions({ x, y, paperInstance: paper })
+                    proto.genInitOptions({ x, y, paperInstance: paper }),
                 );
             },
         });
