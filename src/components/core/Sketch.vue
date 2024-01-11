@@ -85,9 +85,23 @@ useMouseDrag({
 });
 
 // 以鼠标为中心进行缩放
+const firstFlag = ref(true);
 watch(
     () => runtime.scale.value,
-    async () => {},
+    async (newScale, oldScale) => {
+        if (firstFlag.value) {
+            firstFlag.value = false;
+            return;
+        }
+        if (!wrapperRef.value) return;
+        const { x, y } = runtime.scale.position;
+        const { x: px, y: py, width: pw, height: ph } = runtime.paper.bounds;
+        const offsetX = (px + pw / 2 - x) * (1 - oldScale / newScale);
+        const offsetY = (py + ph / 2 - y) * (1 - oldScale / newScale);
+
+        wrapperRef.value.scrollLeft -= offsetX;
+        wrapperRef.value.scrollTop -= offsetY;
+    },
 );
 
 // 光标样式
