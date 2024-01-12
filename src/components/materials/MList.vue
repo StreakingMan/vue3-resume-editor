@@ -12,7 +12,7 @@
         <div
             v-for="(item, idx) in instance.config.items.slice(
                 0,
-                instance.config.itemLength
+                instance.config.itemLength,
             )"
             :key="idx"
             class="d-flex align-start"
@@ -44,7 +44,7 @@
         <div
             v-for="(item, idx) in instance.config.items.slice(
                 0,
-                instance.config.itemLength
+                instance.config.itemLength,
             )"
             :key="idx"
             :ref="(el) => setItemRef(el, idx)"
@@ -261,8 +261,8 @@ export default defineComponent({
                 fontWeightClass[instance.config.fontWeight],
             ];
         });
-        let itemRefs: HTMLDivElement[] = [];
-        let itemHeights = ref<number[]>([]);
+        const itemRefs: HTMLDivElement[] = [];
+        const itemHeights = ref<number[]>([]);
         const setItemRef = (el: HTMLDivElement, idx: number) => {
             if (el) {
                 itemRefs[idx] = el;
@@ -270,8 +270,7 @@ export default defineComponent({
         };
         const updateInputsHeight = () => {
             itemRefs.forEach((ref, idx) => {
-                const { height } = ref.getBoundingClientRect();
-                itemHeights.value[idx] = height;
+                itemHeights.value[idx] = ref.clientHeight;
             });
         };
         onMounted(() => {
@@ -287,7 +286,7 @@ export default defineComponent({
                 await nextTick();
                 updateInputsHeight();
                 instance.h = itemHeights.value.reduce((a, b) => a + b);
-            }
+            },
         );
         return {
             setItemRef,
@@ -316,6 +315,7 @@ export default defineComponent({
             word-break: break-word;
             white-space: pre-wrap;
             width: 100%;
+            color: inherit;
         }
     }
     &.placeholder {

@@ -156,11 +156,8 @@ export default defineComponent({
                 if (eleRef.value) {
                     // 自适应内容高度
                     instance.h = eleRef.value.clientHeight;
-                    const {
-                        padding,
-                        borderStyle,
-                        borderWidth,
-                    } = instance.config;
+                    const { padding, borderStyle, borderWidth } =
+                        instance.config;
                     if (padding) {
                         instance.h += padding * 2;
                     }
@@ -168,7 +165,7 @@ export default defineComponent({
                         instance.h += borderWidth * 2;
                     }
                 }
-            }
+            },
         );
         return {
             classNames,
@@ -200,6 +197,7 @@ export default defineComponent({
         left: 0;
         resize: none;
         word-break: break-word;
+        color: inherit;
     }
 }
 </style>

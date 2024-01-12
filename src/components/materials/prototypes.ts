@@ -6,13 +6,14 @@ import {
     M_ICON_NAME,
     M_IMAGE_NAME,
     M_LIST_NAME,
+    M_PIE_NAME,
     M_RATING_NAME,
     M_RECT_NAME,
     M_TEXT_NAME,
     MaterialComponentNameType,
 } from './config';
 import { Paper } from '../../classes/Paper';
-import { UnwrapNestedRefs } from '@vue/reactivity';
+import { UnwrapNestedRefs } from 'vue';
 import MText from './MText.vue';
 import MImage from './MImage.vue';
 import MList from './MList.vue';
@@ -20,6 +21,7 @@ import MDivider from './MDivider.vue';
 import MRect from './MRect.vue';
 import MRating from './MRating.vue';
 import MIcon from './MIcon.vue';
+import MPie from './MPie.vue';
 
 export interface ProtoInfo<T> {
     label: string;
@@ -45,4 +47,5 @@ export const prototypeMap: PrototypeMap = {
     [M_ICON_NAME]: { ...MIcon.protoInfo, tempStyle: '' },
     [M_DIVIDER_NAME]: { ...MDivider.protoInfo, tempStyle: '' },
     [M_RECT_NAME]: { ...MRect.protoInfo, tempStyle: '' },
+    [M_PIE_NAME]: { ...MPie.protoInfo, tempStyle: '' },
 };

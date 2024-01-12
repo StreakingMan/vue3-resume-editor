@@ -16,5 +16,7 @@ module.exports = {
         '@typescript-eslint/ban-ts-comment': 0,
         '@typescript-eslint/no-explicit-any': 0,
         '@typescript-eslint/no-non-null-assertion': 0,
+        'vue/multi-word-component-names': 0,
+        'vue/no-v-text-v-html-on-component': 0,
     },
 };

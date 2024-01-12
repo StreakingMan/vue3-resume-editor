@@ -4,7 +4,7 @@
         ref="paperRef"
         class="paper"
         :style="[
-            (paper.cellSize < 10 || !showGrid) && 'background-image: none',
+            paper.cellSize < 10 || !showGrid ? 'background-image: none' : '',
             {
                 backgroundColor: paper.background,
                 backgroundSize: `${paper.cellSize}px ${paper.cellSize}px,${paper.cellSize}px ${paper.cellSize}px`,
@@ -39,18 +39,19 @@
 
 <script lang="ts">
 import {
-    defineComponent,
-    ref,
     computed,
-    watch,
+    defineComponent,
     onMounted,
-    toRef,
+    ref,
     Ref,
+    toRef,
+    watch,
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import MaterialInstance from './MaterialInstance.vue';
 import { usePaper, useRuntime } from '../../composables/useApp';
 import { Material } from '../../classes/Material';
+import { useElementBounding } from '@vueuse/core';
 
 export default defineComponent({
     name: 'Paper',
@@ -59,6 +60,24 @@ export default defineComponent({
         const runtime = useRuntime();
         const paper = usePaper();
         const paperRef = ref<HTMLDivElement | null>(null);
+
+        const { x, y, width, height } = useElementBounding(paperRef);
+        watch(
+            () => ({
+                x: x.value,
+                y: y.value,
+                width: width.value,
+                height: height.value,
+            }),
+            () => {
+                runtime.paper.bounds = {
+                    x: x.value,
+                    y: y.value,
+                    width: width.value,
+                    height: height.value,
+                };
+            },
+        );
 
         onMounted(() => {
             // 初始化尺寸
@@ -73,7 +92,7 @@ export default defineComponent({
             async (v) => {
                 if (!paperRef.value) return;
                 paperRef.value.style.transform = `scale(${v})`;
-            }
+            },
         );
 
         // 选择框拖拽
@@ -186,7 +205,9 @@ export default defineComponent({
     background-image: linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 0),
         linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 0);
     background-position: initial;
-    background-size: 10px 10px, 10px 10px;
+    background-size:
+        10px 10px,
+        10px 10px;
     background-repeat: initial;
     background-attachment: initial;
     background-origin: initial;

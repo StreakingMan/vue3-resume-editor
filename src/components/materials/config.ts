@@ -5,6 +5,7 @@ export const M_DIVIDER_NAME = 'MDivider';
 export const M_RECT_NAME = 'MRect';
 export const M_RATING_NAME = 'MRating';
 export const M_ICON_NAME = 'MIcon';
+export const M_PIE_NAME = 'MPie';
 
 export type MaterialComponentNameType =
     | 'MText'
@@ -13,7 +14,8 @@ export type MaterialComponentNameType =
     | 'MDivider'
     | 'MRect'
     | 'MRating'
-    | 'MIcon';
+    | 'MIcon'
+    | 'MPie';
 export type CtrlDotType = 'tl' | 'tm' | 'tr' | 'mr' | 'br' | 'bm' | 'bl' | 'ml';
 export type CtrlDotFunction<T> = (config: T) => CtrlDotType[];
 

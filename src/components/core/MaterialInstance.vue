@@ -37,7 +37,7 @@
                         :rounded="0"
                         @mousedown.stop="() => paper.copyMaterial(instance.id)"
                     >
-                        <v-icon size="x-small">mdi-content-copy</v-icon>
+                        <v-icon>mdi-content-copy</v-icon>
                         <v-tooltip activator="parent" anchor="top">
                             复制
                         </v-tooltip>
@@ -54,7 +54,7 @@
                         title="层级调整"
                         @mousedown.stop
                     >
-                        <v-icon size="x-small">mdi-layers-triple</v-icon>
+                        <v-icon>mdi-layers-triple</v-icon>
                         <v-tooltip activator="parent" anchor="top">
                             层级调整
                         </v-tooltip>
@@ -90,16 +90,19 @@
                                     :key="i"
                                     height="30"
                                     :value="i"
-                                    active-color="primary"
+                                    color="primary"
                                     class="pl-0"
                                     @click="onClick"
                                 >
-                                    <v-list-item-avatar start class="mr-1">
-                                        <v-icon
-                                            :icon="icon"
-                                            size="small"
-                                        ></v-icon>
-                                    </v-list-item-avatar>
+                                    <template #prepend>
+                                        <v-avatar>
+                                            <v-icon
+                                                :icon="icon"
+                                                size="small"
+                                            ></v-icon>
+                                        </v-avatar>
+                                    </template>
+
                                     <v-list-item-subtitle
                                         v-text="text"
                                     ></v-list-item-subtitle>
@@ -120,7 +123,7 @@
                         @mousedown.stop
                         @dblclick="removeMaterialInstance"
                     >
-                        <v-icon size="x-small">mdi-trash-can</v-icon>
+                        <v-icon>mdi-trash-can</v-icon>
                         <v-tooltip activator="parent" anchor="top">
                             双击删除
                         </v-tooltip>
@@ -156,10 +159,10 @@
 import {
     computed,
     defineComponent,
+    PropType,
     provide,
     reactive,
     ref,
-    PropType,
     toRef,
     watch,
 } from 'vue';
@@ -177,6 +180,7 @@ import { usePaper, useRuntime } from '../../composables/useApp';
 import MRect from '../materials/MRect.vue';
 import MRating from '../materials/MRating.vue';
 import MIcon from '../materials/MIcon.vue';
+import MPie from '@/components/materials/MPie.vue';
 
 const ctrlDots: CtrlDotType[] = [
     'tl',
@@ -218,6 +222,7 @@ export default defineComponent({
         MText,
         MImage,
         MList,
+        MPie,
     },
     props: {
         item: {
@@ -235,7 +240,7 @@ export default defineComponent({
             instance: props.item,
             hover: false,
             active: computed(() =>
-                runtime.activeMaterialSet.has(props.item.id)
+                runtime.activeMaterialSet.has(props.item.id),
             ),
             clicked: false,
         });
@@ -245,7 +250,7 @@ export default defineComponent({
             () => material.active,
             () => {
                 if (!material.active) material.clicked = false;
-            }
+            },
         );
 
         const focus = (e: MouseEvent) => {
@@ -290,12 +295,8 @@ export default defineComponent({
             onDrag({ transX, transY }: MouseEvtInfo) {
                 if (!clickingDot.value) return;
 
-                const {
-                    itemStartX,
-                    itemStartY,
-                    itemStartH,
-                    itemStartW,
-                } = posInfoCache;
+                const { itemStartX, itemStartY, itemStartH, itemStartW } =
+                    posInfoCache;
 
                 let newX = itemStartX,
                     newY = itemStartY,
@@ -385,7 +386,9 @@ export default defineComponent({
     .control-dot {
         box-sizing: border-box;
         position: absolute;
-        transition: background-color 0.5s, opacity 0.5s;
+        transition:
+            background-color 0.5s,
+            opacity 0.5s;
         z-index: 2;
     }
 }

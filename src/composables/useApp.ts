@@ -1,6 +1,5 @@
-import { inject, reactive } from 'vue';
+import { inject, reactive, UnwrapNestedRefs } from 'vue';
 import { Runtime, runtimeInjectionKey } from '../classes/Runtime';
-import { UnwrapNestedRefs } from '@vue/reactivity';
 import { Paper, paperInjectionKey } from '../classes/Paper';
 import {
     Material,
@@ -36,6 +35,6 @@ export function useMaterial<T extends MaterialBaseConfig>(): UnwrapNestedRefs<{
             active: false,
             hover: false,
             clicked: false,
-        })
+        }),
     );
 }

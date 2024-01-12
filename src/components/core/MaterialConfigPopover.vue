@@ -17,7 +17,7 @@
                     class="border-r-0"
                     :rounded="0"
                 >
-                    <v-icon size="x-small">mdi-arrow-all</v-icon>
+                    <v-icon>mdi-arrow-all</v-icon>
                     <v-tooltip activator="parent" anchor="top">
                         拖拽移动
                     </v-tooltip>
@@ -33,7 +33,7 @@
                     :rounded="0"
                     @mousedown.stop
                 >
-                    <v-icon size="x-small">mdi-cog</v-icon>
+                    <v-icon>mdi-cog</v-icon>
                     <v-tooltip activator="parent" anchor="top">
                         配置面板
                     </v-tooltip>
@@ -188,7 +188,6 @@ export default defineComponent({
     position: absolute;
     right: 0;
     top: 0;
-    transition: 0.3s;
     transform: translateY(-100%);
     transform-origin: right bottom;
     min-width: max-content;
