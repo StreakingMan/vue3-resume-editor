@@ -270,8 +270,7 @@ export default defineComponent({
         };
         const updateInputsHeight = () => {
             itemRefs.forEach((ref, idx) => {
-                const { height } = ref.getBoundingClientRect();
-                itemHeights.value[idx] = height;
+                itemHeights.value[idx] = ref.clientHeight;
             });
         };
         onMounted(() => {
