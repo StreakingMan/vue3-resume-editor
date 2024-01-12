@@ -74,8 +74,8 @@
                     <v-slider
                         v-model="scale"
                         hide-details
-                        min="0.5"
-                        max="2"
+                        :min="SCALE_RANGE[0]"
+                        :max="SCALE_RANGE[1]"
                         tick-size="4"
                         step="0.01"
                     ></v-slider>
@@ -105,9 +105,10 @@
 <script lang="ts">
 import { defineComponent, toRef } from 'vue';
 import { usePaper, useRuntime } from '../../composables/useApp';
+import { SCALE_RANGE } from '@/components/core/config';
 
 export default defineComponent({
-    name: 'View',
+    name: 'Outlook',
     setup() {
         const runtime = useRuntime();
         const paper = usePaper();
@@ -116,6 +117,7 @@ export default defineComponent({
             scale: toRef(runtime.scale, 'value'),
             showGrid: toRef(runtime, 'showGrid'),
             paper,
+            SCALE_RANGE,
         };
     },
 });

@@ -12,6 +12,7 @@ import { Runtime, runtimeInjectionKey } from './classes/Runtime';
 import template1 from './components/templates/resume-template-1.json';
 import useKeyboardStatus from './composables/useKeyboardStatus';
 import TemplateList from './components/templates/TemplateList.vue';
+import { SCALE_RANGE } from '@/components/core/config';
 
 // 运行时
 const runtime = reactive(new Runtime());
@@ -24,7 +25,7 @@ useMouseWheel({
         // 更新缩放值
         const scaleValue = runtime.scale.value + wheelDelta;
         // 缩放范围0.1~5
-        if (0.1 < scaleValue && scaleValue < 5) {
+        if (SCALE_RANGE[0] < scaleValue && scaleValue < SCALE_RANGE[1]) {
             runtime.scale.position.x = x;
             runtime.scale.position.y = y;
             runtime.scale.value += wheelDelta;

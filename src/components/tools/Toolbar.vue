@@ -3,7 +3,7 @@
     <v-divider vertical class="mx-4"></v-divider>
     <Group />
     <v-divider vertical class="mx-4"></v-divider>
-    <View />
+    <Outlook />
     <v-divider vertical class="mx-4"></v-divider>
     <Print />
     <ImportExport />
@@ -27,15 +27,15 @@
 import { defineComponent } from 'vue';
 import Print from './Print.vue';
 import Align from './Align.vue';
-import View from './View.vue';
 import Github from './Github.vue';
 import Save from './Save.vue';
 import ImportExport from './ImportExport.vue';
 import Group from './Group.vue';
+import Outlook from '@/components/tools/Outlook.vue';
 
 export default defineComponent({
     name: 'Toolbar',
-    components: { Group, ImportExport, Save, Github, View, Align, Print },
+    components: { Outlook, Group, ImportExport, Save, Github, Align, Print },
 });
 </script>
 
