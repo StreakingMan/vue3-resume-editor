@@ -37,7 +37,7 @@
                         :rounded="0"
                         @mousedown.stop="() => paper.copyMaterial(instance.id)"
                     >
-                        <v-icon size="x-small">mdi-content-copy</v-icon>
+                        <v-icon>mdi-content-copy</v-icon>
                         <v-tooltip activator="parent" anchor="top">
                             复制
                         </v-tooltip>
@@ -54,7 +54,7 @@
                         title="层级调整"
                         @mousedown.stop
                     >
-                        <v-icon size="x-small">mdi-layers-triple</v-icon>
+                        <v-icon>mdi-layers-triple</v-icon>
                         <v-tooltip activator="parent" anchor="top">
                             层级调整
                         </v-tooltip>
@@ -123,7 +123,7 @@
                         @mousedown.stop
                         @dblclick="removeMaterialInstance"
                     >
-                        <v-icon size="x-small">mdi-trash-can</v-icon>
+                        <v-icon>mdi-trash-can</v-icon>
                         <v-tooltip activator="parent" anchor="top">
                             双击删除
                         </v-tooltip>
@@ -180,6 +180,7 @@ import { usePaper, useRuntime } from '../../composables/useApp';
 import MRect from '../materials/MRect.vue';
 import MRating from '../materials/MRating.vue';
 import MIcon from '../materials/MIcon.vue';
+import MPie from '@/components/materials/MPie.vue';
 
 const ctrlDots: CtrlDotType[] = [
     'tl',
@@ -221,6 +222,7 @@ export default defineComponent({
         MText,
         MImage,
         MList,
+        MPie,
     },
     props: {
         item: {
