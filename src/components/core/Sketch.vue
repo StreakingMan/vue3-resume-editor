@@ -127,6 +127,10 @@ const cursor = computed(() => {
         border-radius: 0;
         background-color: transparent;
 
+        @media print {
+            overflow: hidden !important;
+        }
+
         &::-webkit-scrollbar,
         &::-webkit-scrollbar-corner {
             background-color: transparent;
