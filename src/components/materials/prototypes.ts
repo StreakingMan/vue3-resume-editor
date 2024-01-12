@@ -1,4 +1,4 @@
-import { MaterialOptions } from '../../classes/Material';
+import { MaterialBaseConfig, MaterialOptions } from '../../classes/Material';
 import {
     CtrlDotFunction,
     CtrlDotType,
@@ -23,7 +23,7 @@ import MRating from './MRating.vue';
 import MIcon from './MIcon.vue';
 import MPie from './MPie.vue';
 
-export interface ProtoInfo<T> {
+export interface ProtoInfo<T extends MaterialBaseConfig> {
     label: string;
     icon: string;
     dragHandlers: CtrlDotType[] | CtrlDotFunction<T>;
