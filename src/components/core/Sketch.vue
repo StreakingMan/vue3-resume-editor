@@ -1,28 +1,8 @@
-<template>
-    <div
-        ref="wrapperRef"
-        class="sketch__wrapper"
-        :style="[
-            `--scroll-thumb-color: ${
-                scrolling ? 'rgba(255,255,255,0.3)' : 'transparent'
-            }`,
-            {
-                cursor,
-            },
-        ]"
-    >
-        {{ scrolling }}
-        <div class="sketch__inner">
-            <Paper ref="paperRef" />
-        </div>
-    </div>
-</template>
-
 <script lang="ts" setup>
 import Paper from './Paper.vue';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
-import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
-import { useRuntime } from '../../composables/useApp';
+import useMouseDrag, { MouseEvtInfo } from '@/composables/useMouseDrag';
+import { useRuntime } from '@/composables/useApp';
 import { useDebounceFn } from '@vueuse/core';
 import { paperSizeMap } from '@/classes/Paper';
 
@@ -115,6 +95,26 @@ const cursor = computed(() => {
     return 'default';
 });
 </script>
+
+<template>
+    <div
+        ref="wrapperRef"
+        class="sketch__wrapper"
+        :style="[
+            `--scroll-thumb-color: ${
+                scrolling ? 'rgba(255,255,255,0.3)' : 'transparent'
+            }`,
+            {
+                cursor,
+            },
+        ]"
+    >
+        {{ scrolling }}
+        <div class="sketch__inner">
+            <Paper ref="paperRef" />
+        </div>
+    </div>
+</template>
 
 <style lang="scss" scoped>
 .sketch {

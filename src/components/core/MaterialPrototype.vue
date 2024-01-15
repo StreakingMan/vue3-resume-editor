@@ -5,7 +5,7 @@
         </v-col>
         <v-col v-for="(proto, name) in prototypes" :key="name" cols="4">
             <v-sheet
-                class="border sheet"
+                class="border sheet bg-grey-darken-2 ma-1"
                 :style="proto.tempStyle"
                 @mousedown.prevent.stop="
                     draggingProtoType = name;

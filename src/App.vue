@@ -2,7 +2,7 @@
 import { computed, onMounted, provide, reactive, toRef, watch } from 'vue';
 import useMouseWheel from './composables/useMouseWheel';
 import { Paper, paperInjectionKey } from './classes/Paper';
-import Beian from './components/Beian.vue';
+import BeiAn from './components/BeiAn.vue';
 import Sketch from './components/core/Sketch.vue';
 import sketch from './components/core/Sketch.vue';
 import MaterialPrototype from './components/core/MaterialPrototype.vue';
@@ -125,7 +125,7 @@ watch(
 
 <template>
     <v-app>
-        <v-app-bar app>
+        <v-app-bar flat border class="bg-grey-darken-3">
             <v-app-bar-nav-icon
                 icon="mdi-widgets"
                 @click.stop="leftDrawer = !leftDrawer"
@@ -137,30 +137,27 @@ watch(
             <v-spacer />
             <Toolbar />
         </v-app-bar>
-        <v-navigation-drawer
-            v-model="bottomDrawer"
-            temporary
-            app
-            location="bottom"
-        >
+        <v-navigation-drawer v-model="bottomDrawer" temporary location="bottom">
             <TemplateList />
         </v-navigation-drawer>
         <v-navigation-drawer
             v-model="runtime.leftDrawer"
+            class="bg-grey-darken-3"
             width="300"
             temporary
-            app
+            :elevation="0"
+            :scrim="false"
         >
-            <div class="w-100 h-100 d-flex flex-column">
+            <div class="w-100 h-100 d-fex flex-column">
                 <MaterialPrototype class="flex-grow-0" />
                 <div class="flex-grow-1 overflow-y-auto">
                     <!--                    something-->
                 </div>
             </div>
         </v-navigation-drawer>
-        <v-main class="bg-grey-darken-4">
+        <v-main class="bg-grey-darken-3">
             <Sketch ref="sketch" />
-            <Beian />
+            <BeiAn />
             <v-btn
                 class="position-fixed print-none"
                 style="right: 24px; bottom: 128px"
@@ -171,9 +168,9 @@ watch(
                 target="_blank"
             >
                 <v-icon>mdi-help</v-icon>
-                <v-tooltip activator="parent" anchor="start"
-                    >使用文档</v-tooltip
-                >
+                <v-tooltip activator="parent" anchor="start">
+                    使用文档
+                </v-tooltip>
             </v-btn>
             <v-btn
                 class="position-fixed print-none"
@@ -184,9 +181,9 @@ watch(
                 @click="bottomDrawer = !bottomDrawer"
             >
                 <v-icon>mdi-file</v-icon>
-                <v-tooltip activator="parent" anchor="start"
-                    >模板预设</v-tooltip
-                >
+                <v-tooltip activator="parent" anchor="start">
+                    模板预设
+                </v-tooltip>
             </v-btn>
         </v-main>
         <v-snackbar

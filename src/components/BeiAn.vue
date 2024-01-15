@@ -11,7 +11,7 @@
 
 <script>
 export default {
-    name: 'Beian',
+    name: 'BeiAn',
 };
 </script>
 
