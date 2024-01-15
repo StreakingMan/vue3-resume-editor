@@ -1,21 +1,14 @@
-export const M_TEXT_NAME = 'MText';
-export const M_IMAGE_NAME = 'MImage';
-export const M_LIST_NAME = 'MList';
-export const M_DIVIDER_NAME = 'MDivider';
-export const M_RECT_NAME = 'MRect';
-export const M_RATING_NAME = 'MRating';
-export const M_ICON_NAME = 'MIcon';
-export const M_PIE_NAME = 'MPie';
+export enum MaterialComponentNames {
+    MText = 'MText',
+    MImage = 'MImage',
+    MList = 'MList',
+    MDivider = 'MDivider',
+    MRect = 'MRect',
+    MRating = 'MRating',
+    MIcon = 'MIcon',
+    MPie = 'MPie',
+}
 
-export type MaterialComponentNameType =
-    | 'MText'
-    | 'MImage'
-    | 'MList'
-    | 'MDivider'
-    | 'MRect'
-    | 'MRating'
-    | 'MIcon'
-    | 'MPie';
 export type CtrlDotType = 'tl' | 'tm' | 'tr' | 'mr' | 'br' | 'bm' | 'bl' | 'ml';
 export type CtrlDotFunction<T> = (config: T) => CtrlDotType[];
 

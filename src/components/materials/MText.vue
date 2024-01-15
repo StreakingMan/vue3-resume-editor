@@ -82,15 +82,15 @@ import { ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
 import {
     fontWeightClass,
-    M_TEXT_NAME,
+    MaterialComponentNames,
     textAlignOptions,
     typographyClass,
 } from './config';
-import { useMaterial } from '../../composables/useApp';
+import { useMaterial } from '@/composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import ConfigToggle from '../config-widgets/ConfigToggle.vue';
 import ConfigToggleOption from '../config-widgets/ConfigToggleOption.vue';
-import { MaterialBaseConfig } from '../../classes/Material';
+import { MaterialBaseConfig } from '@/classes/Material';
 import Color from '../config-widgets/Color.vue';
 
 interface MTextConfig extends MaterialBaseConfig {
@@ -110,7 +110,7 @@ const protoInfo: ProtoInfo<MTextConfig> = {
         y: y - 16,
         w: 200,
         h: 32,
-        componentName: M_TEXT_NAME,
+        componentName: MaterialComponentNames.MText,
         config: {
             content: '这是一段文本',
             typo: 5,
@@ -122,7 +122,7 @@ const protoInfo: ProtoInfo<MTextConfig> = {
 };
 
 export default defineComponent({
-    name: M_TEXT_NAME,
+    name: MaterialComponentNames.MText,
     components: {
         Color,
         ConfigToggleOption,

@@ -75,15 +75,15 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, toRef, watch} from 'vue';
-import { MaterialBaseConfig } from '../../classes/Material';
+import { defineComponent, toRef, watch } from 'vue';
+import { MaterialBaseConfig } from '@/classes/Material';
 import { ProtoInfo } from './prototypes';
-import { M_ICON_NAME } from './config';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
-import { useMaterial } from '../../composables/useApp';
+import { useMaterial } from '@/composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import Color from '../config-widgets/Color.vue';
 import { iconInfo } from './iconInfo';
+import { MaterialComponentNames } from '@/components/materials/config';
 
 interface MIconConfig extends MaterialBaseConfig {
     icon: string;
@@ -101,7 +101,7 @@ const protoInfo: ProtoInfo<MIconConfig> = {
         w: 24,
         h: 24,
         _freeSize: true,
-        componentName: M_ICON_NAME,
+        componentName: MaterialComponentNames.MIcon,
         config: {
             icon: 'emoticon-cool-outline',
             size: 24,
@@ -111,7 +111,7 @@ const protoInfo: ProtoInfo<MIconConfig> = {
 };
 
 export default defineComponent({
-    name: M_ICON_NAME,
+    name: MaterialComponentNames.MIcon,
     components: { Color, ConfigItem, MaterialConfigPopover },
     protoInfo,
     setup() {
@@ -128,7 +128,7 @@ export default defineComponent({
                 if (borderStyle === 'none') borderWidth = 0;
                 instance.w = size + padding * 2 + borderWidth * 2;
                 instance.h = size + padding * 2 + borderWidth * 2;
-            }
+            },
         );
 
         return {

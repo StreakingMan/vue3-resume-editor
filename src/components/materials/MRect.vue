@@ -8,12 +8,12 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, toRef} from 'vue';
-import { MaterialBaseConfig } from '../../classes/Material';
+import { defineComponent, toRef } from 'vue';
+import { MaterialBaseConfig } from '@/classes/Material';
 import { ProtoInfo } from './prototypes';
-import { M_RECT_NAME } from './config';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
-import {useMaterial} from "../../composables/useApp";
+import { useMaterial } from '@/composables/useApp';
+import { MaterialComponentNames } from '@/components/materials/config';
 
 const protoInfo: ProtoInfo<MaterialBaseConfig> = {
     label: '矩形',
@@ -24,7 +24,7 @@ const protoInfo: ProtoInfo<MaterialBaseConfig> = {
         y: y - 100,
         w: 200,
         h: 200,
-        componentName: M_RECT_NAME,
+        componentName: MaterialComponentNames.MRect,
         config: {
             backgroundColor: 'rgba(128,128,128)',
         },
@@ -32,7 +32,7 @@ const protoInfo: ProtoInfo<MaterialBaseConfig> = {
 };
 
 export default defineComponent({
-    name: M_RECT_NAME,
+    name: MaterialComponentNames.MRect,
     components: { MaterialConfigPopover },
     protoInfo,
     setup() {

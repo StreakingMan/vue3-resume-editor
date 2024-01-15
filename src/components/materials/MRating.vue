@@ -51,13 +51,13 @@
 
 <script lang="ts">
 import { defineComponent, nextTick, ref, toRef, watch } from 'vue';
-import { MaterialBaseConfig } from '../../classes/Material';
+import { MaterialBaseConfig } from '@/classes/Material';
 import { ProtoInfo } from './prototypes';
-import { M_RATING_NAME } from './config';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
-import { useMaterial } from '../../composables/useApp';
+import { useMaterial } from '@/composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import Color from '../config-widgets/Color.vue';
+import { MaterialComponentNames } from '@/components/materials/config';
 
 interface MRatingConfig extends MaterialBaseConfig {
     style: StyleType;
@@ -86,7 +86,7 @@ const protoInfo: ProtoInfo<MRatingConfig> = {
         y: y - 14,
         w: 140,
         h: 28,
-        componentName: M_RATING_NAME,
+        componentName: MaterialComponentNames.MRating,
         config: {
             style: 'star',
             size: 28,
@@ -97,7 +97,7 @@ const protoInfo: ProtoInfo<MRatingConfig> = {
 };
 
 export default defineComponent({
-    name: M_RATING_NAME,
+    name: MaterialComponentNames.MRating,
     components: { Color, ConfigItem, MaterialConfigPopover },
     protoInfo,
     setup() {
@@ -113,7 +113,7 @@ export default defineComponent({
                     // @ts-ignore
                     instance.h = ratingRef.value.$el.clientHeight;
                 }
-            }
+            },
         );
         return {
             ratingRef,

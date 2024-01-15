@@ -80,15 +80,15 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, nextTick, toRef, watch} from 'vue';
+import { defineComponent, nextTick, toRef, watch } from 'vue';
 import { ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
-import { M_IMAGE_NAME } from './config';
-import { useMaterial } from '../../composables/useApp';
+import { useMaterial } from '@/composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import ConfigToggle from '../config-widgets/ConfigToggle.vue';
 import ConfigToggleOption from '../config-widgets/ConfigToggleOption.vue';
-import { MaterialBaseConfig } from '../../classes/Material';
+import { MaterialBaseConfig } from '@/classes/Material';
+import { MaterialComponentNames } from '@/components/materials/config';
 
 interface MImageConfig extends MaterialBaseConfig {
     url: string;
@@ -105,7 +105,7 @@ const protoInfo: ProtoInfo<MImageConfig> = {
             ? ['tl', 'tr', 'tm', 'ml', 'mr', 'bl', 'bm', 'br']
             : ['br', 'mr', 'bl', 'ml'],
     genInitOptions: ({ x, y }) => ({
-        componentName: M_IMAGE_NAME,
+        componentName: MaterialComponentNames.MImage,
         x: x - 50,
         y: y - 50,
         w: 100,
@@ -120,7 +120,7 @@ const protoInfo: ProtoInfo<MImageConfig> = {
 };
 
 export default defineComponent({
-    name: M_IMAGE_NAME,
+    name: MaterialComponentNames.MImage,
     components: {
         ConfigToggleOption,
         ConfigToggle,
@@ -145,13 +145,13 @@ export default defineComponent({
                 if (aspectRatio && !cut) {
                     instance.h = instance.w / aspectRatio;
                 }
-            }
+            },
         );
 
         const onUrlChange = async () => {
             try {
                 const { width, height, ratio } = await getImageSizeInfo(
-                    instance.config.url
+                    instance.config.url,
                 );
                 instance.config.aspectRatio = ratio;
                 if (width > 200) {
@@ -177,7 +177,7 @@ export default defineComponent({
                 instance.config.url = reader.result as string;
                 try {
                     const { width, height, ratio } = await getImageSizeInfo(
-                        reader.result as string
+                        reader.result as string,
                     );
                     instance.config.aspectRatio = ratio;
                     if (width > 200) {

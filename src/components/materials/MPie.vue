@@ -4,7 +4,7 @@ import { MaterialBaseConfig } from '@/classes/Material';
 import { ProtoInfo } from '@/components/materials/prototypes';
 import {
     fontWeightClass,
-    M_PIE_NAME,
+    MaterialComponentNames,
     typographyClass,
 } from '@/components/materials/config';
 import { useMaterial } from '@/composables/useApp';
@@ -35,7 +35,7 @@ const protoInfo: ProtoInfo<MPieConfig> = {
         y: y - 150,
         w: 250,
         h: 150,
-        componentName: M_PIE_NAME,
+        componentName: MaterialComponentNames.MPie,
         config: {
             pieBorderStyle: 'none',
             pieBorderWidth: 0,
@@ -52,7 +52,7 @@ const protoInfo: ProtoInfo<MPieConfig> = {
 };
 
 export default defineComponent({
-    name: 'MPie',
+    name: MaterialComponentNames.MPie,
     components: { Color, BorderStyle, ConfigItem, MaterialConfigPopover },
     setup() {
         const material = useMaterial<MPieConfig>();
@@ -92,7 +92,6 @@ export default defineComponent({
             return [
                 typographyClass[instance.config.typo],
                 fontWeightClass[instance.config.fontWeight],
-                'text-' + instance.config.align,
             ];
         });
 

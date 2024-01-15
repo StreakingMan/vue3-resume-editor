@@ -52,15 +52,15 @@
 <script lang="ts">
 import { defineComponent, toRef, watch } from 'vue';
 import { ProtoInfo } from './prototypes';
-import { M_DIVIDER_NAME } from './config';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
-import { useMaterial } from '../../composables/useApp';
+import { useMaterial } from '@/composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import BorderStyle from '../config-widgets/BorderStyle.vue';
 import ConfigToggle from '../config-widgets/ConfigToggle.vue';
 import ConfigToggleOption from '../config-widgets/ConfigToggleOption.vue';
 import Color from '../config-widgets/Color.vue';
-import { MaterialBaseConfig } from '../../classes/Material';
+import { MaterialBaseConfig } from '@/classes/Material';
+import { MaterialComponentNames } from '@/components/materials/config';
 
 interface MDividerConfig extends MaterialBaseConfig {
     direction: 'horizontal' | 'vertical';
@@ -75,7 +75,7 @@ const protoInfo: ProtoInfo<MDividerConfig> = {
     dragHandlers: ({ direction }) =>
         direction === 'horizontal' ? ['ml', 'mr'] : ['tm', 'bm'],
     genInitOptions: ({ y, paperInstance }) => ({
-        componentName: M_DIVIDER_NAME,
+        componentName: MaterialComponentNames.MDivider,
         x: 10,
         y: y - paperInstance.cellSize,
         w: 600,
@@ -111,7 +111,7 @@ export default defineComponent({
             () => ({ direction: instance.config.direction }),
             () => {
                 instance.centerRotate();
-            }
+            },
         );
 
         return {

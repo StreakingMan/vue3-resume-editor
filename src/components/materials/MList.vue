@@ -168,11 +168,15 @@ import {
     toRef,
     watch,
 } from 'vue';
-import { MaterialBaseConfig } from '../../classes/Material';
+import { MaterialBaseConfig } from '@/classes/Material';
 import { ProtoInfo } from './prototypes';
-import { fontWeightClass, M_LIST_NAME, typographyClass } from './config';
+import {
+    fontWeightClass,
+    MaterialComponentNames,
+    typographyClass,
+} from './config';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
-import { useMaterial } from '../../composables/useApp';
+import { useMaterial } from '@/composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import Color from '../config-widgets/Color.vue';
 
@@ -220,7 +224,7 @@ const protoInfo: ProtoInfo<MListConfig> = {
         y: y - 33,
         w: 200,
         h: 66,
-        componentName: M_LIST_NAME,
+        componentName: MaterialComponentNames.MList,
         config: {
             items: [
                 '列表项目1',
@@ -245,7 +249,7 @@ const protoInfo: ProtoInfo<MListConfig> = {
 };
 
 export default defineComponent({
-    name: M_LIST_NAME,
+    name: MaterialComponentNames.MList,
     components: {
         Color,
         ConfigItem,
