@@ -23,11 +23,15 @@ export default function useKeyboardStatus(): KeyboardStatus {
         const pressed = e.type === 'keydown';
         switch (e.code) {
             case 'Space':
-                // @ts-ignore
-                if (e.path[0].nodeName === 'BUTTON') {
+                try {
                     // @ts-ignore
-                    e.target?.blur();
-                    e.preventDefault();
+                    if (e.path[0].nodeName === 'BUTTON') {
+                        // @ts-ignore
+                        e.target?.blur();
+                        e.preventDefault();
+                    }
+                } catch (e) {
+                    // ignore
                 }
                 // 防止干扰sketch滚动
                 // 考虑将这里的逻辑交给调用者实现
@@ -74,6 +78,6 @@ export default function useKeyboardStatus(): KeyboardStatus {
         ctrlV,
         alt,
         shift,
-        del
+        del,
     };
 }
