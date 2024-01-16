@@ -125,12 +125,20 @@ watch(
             :elevation="0"
             :scrim="false"
         >
-            <div class="w-100 h-100 d-fex flex-column">
-                <MaterialPrototype class="flex-grow-0" />
-                <div class="flex-grow-1 overflow-y-auto">
-                    <!--                    something-->
-                </div>
-            </div>
+            <MaterialPrototype />
+            <v-divider />
+            <v-btn
+                class="toggle-left-drawer-btn"
+                :class="{ 'position-hide': !runtime.leftDrawer }"
+                :icon="
+                    runtime.leftDrawer
+                        ? 'mdi-chevron-left'
+                        : 'mdi-chevron-right'
+                "
+                size="x-large"
+                @click="runtime.leftDrawer = !runtime.leftDrawer"
+            >
+            </v-btn>
         </v-navigation-drawer>
         <v-main class="bg-grey-darken-3">
             <Sketch ref="sketch" />
@@ -233,6 +241,18 @@ body {
 
     100% {
         background-position: 0 50%;
+    }
+}
+
+.toggle-left-drawer-btn {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateX(50%) translateY(-50%);
+    transition: 0.3s;
+
+    &.position-hide {
+        transform: translateX(100px) translateY(-50%);
     }
 }
 </style>

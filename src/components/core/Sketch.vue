@@ -3,7 +3,7 @@ import Paper from './Paper.vue';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '@/composables/useMouseDrag';
 import { useRuntime } from '@/composables/useApp';
-import { useDebounceFn, useMagicKeys } from '@vueuse/core';
+import { useActiveElement, useDebounceFn, useMagicKeys } from '@vueuse/core';
 import { paperSizeMap } from '@/classes/Paper';
 
 const runtime = useRuntime();
@@ -45,14 +45,16 @@ onUnmounted(() => {
     wrapperRef.value?.removeEventListener('wheel', handleSketchWheel);
 });
 
+const activeElement = useActiveElement();
 const { space, ctrl } = useMagicKeys({
     passive: false,
     onEventFired(e) {
-        // 屏蔽空格键滚动页面
+        // 屏蔽空格键滚动页面，或者目标为button时触发点击
         if (
             e.type === 'keydown' &&
             e.code === 'Space' &&
-            e.target === document.body
+            (e.target === document.body ||
+                activeElement.value?.tagName === 'BUTTON')
         ) {
             e.preventDefault();
         }
