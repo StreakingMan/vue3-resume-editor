@@ -6,9 +6,6 @@
         target="_blank"
     >
         <v-icon>mdi-github</v-icon>
-        <v-tooltip activator="parent" anchor="bottom">
-            Star, Issue or PR!
-        </v-tooltip>
     </v-btn>
 </template>
 

@@ -1,13 +1,12 @@
 <template>
     <v-btn icon @click="onPrintClick">
         <v-icon>mdi-printer</v-icon>
-        <v-tooltip activator="parent" anchor="bottom"> 打印(PDF) </v-tooltip>
     </v-btn>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { useRuntime } from '../../composables/useApp';
+import { useRuntime } from '@/composables/useApp';
 
 export default defineComponent({
     name: 'Print',

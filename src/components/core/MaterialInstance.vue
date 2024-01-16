@@ -58,7 +58,7 @@
                         <v-tooltip activator="parent" anchor="top">
                             层级调整
                         </v-tooltip>
-                        <v-menu activator="parent" anchor="bottom">
+                        <v-menu activator="parent" location="bottom">
                             <v-list density="compact">
                                 <v-list-item
                                     v-for="({ icon, text, onClick }, i) in [

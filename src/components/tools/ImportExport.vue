@@ -1,9 +1,6 @@
 <template>
     <v-btn icon @click="onImportClick">
         <v-icon>mdi-import</v-icon>
-        <v-tooltip activator="parent" anchor="bottom">
-            导入(将覆盖当前，注意备份)
-        </v-tooltip>
     </v-btn>
     <v-file-input
         id="importFileInput"
@@ -13,7 +10,6 @@
     ></v-file-input>
     <v-btn icon>
         <v-icon>mdi-export</v-icon>
-        <v-tooltip activator="parent" anchor="bottom">导出</v-tooltip>
         <v-dialog
             v-model="exportDialog"
             activator="parent"

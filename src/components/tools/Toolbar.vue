@@ -1,3 +1,13 @@
+<script setup lang="ts">
+import Print from './Print.vue';
+import Align from './Align.vue';
+import Github from './Github.vue';
+import Save from './Save.vue';
+import ImportExport from './ImportExport.vue';
+import Group from './Group.vue';
+import Outlook from '@/components/tools/ViewOpt.vue';
+</script>
+
 <template>
     <Align />
     <v-divider vertical class="mx-4"></v-divider>
@@ -10,39 +20,9 @@
     <Save />
     <v-divider vertical class="mx-4"></v-divider>
     <Github />
-    <v-btn
-        icon
-        href="https://next.vuetifyjs.com/"
-        target="_blank"
-        rel="nofollow"
-    >
-        <v-icon>mdi-vuetify</v-icon>
-        <v-tooltip activator="parent" anchor="bottom">
-            powered by vuetify
-        </v-tooltip>
-    </v-btn>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import Print from './Print.vue';
-import Align from './Align.vue';
-import Github from './Github.vue';
-import Save from './Save.vue';
-import ImportExport from './ImportExport.vue';
-import Group from './Group.vue';
-import Outlook from '@/components/tools/Outlook.vue';
-
-export default defineComponent({
-    name: 'Toolbar',
-    components: { Outlook, Group, ImportExport, Save, Github, Align, Print },
-});
-</script>
-
 <style scoped lang="scss">
-.toolbar {
-    //
-}
 :global(.v-toolbar) {
     @media print {
         display: none !important;

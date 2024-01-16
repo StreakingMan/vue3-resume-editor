@@ -1,17 +1,15 @@
 <template>
     <v-btn icon :disabled="groupDisable" @click="group">
         <v-icon>mdi-group</v-icon>
-        <v-tooltip activator="parent" anchor="bottom">合并分组</v-tooltip>
     </v-btn>
     <v-btn icon :disabled="ungroupDisable" @click="ungroup">
         <v-icon>mdi-ungroup</v-icon>
-        <v-tooltip activator="parent" anchor="bottom">解除分组</v-tooltip>
     </v-btn>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
-import { usePaper, useRuntime } from '../../composables/useApp';
+import { usePaper, useRuntime } from '@/composables/useApp';
 
 export default defineComponent({
     name: 'Group',
@@ -28,10 +26,7 @@ export default defineComponent({
             const groupIds = [...runtime.activeMaterialSet]
                 .map((mId) => paper.queryMaterial(mId)?.groupId)
                 .filter((groupId) => !!groupId);
-            if (
-                groupIds.length !== runtime.activeMaterialSet.size
-            )
-                return true;
+            if (groupIds.length !== runtime.activeMaterialSet.size) return true;
             return [...new Set(groupIds)].length !== 1;
         });
 

@@ -2,7 +2,6 @@
 import { computed, onMounted, provide, reactive, toRef, watch } from 'vue';
 import useMouseWheel from './composables/useMouseWheel';
 import { Paper, paperInjectionKey } from './classes/Paper';
-import BeiAn from './components/BeiAn.vue';
 import Sketch from './components/core/Sketch.vue';
 import sketch from './components/core/Sketch.vue';
 import MaterialPrototype from './components/core/MaterialPrototype.vue';
@@ -13,10 +12,11 @@ import template1 from './components/templates/resume-template-1.json';
 import TemplateList from './components/templates/TemplateList.vue';
 import { SCALE_RANGE } from '@/components/core/config';
 import { useMagicKeys, whenever } from '@vueuse/core';
+import WebsiteInfo from '@/components/other/WebsiteInfo.vue';
 
 // 运行时
 const runtime = reactive(new Runtime());
-const leftDrawer = toRef(runtime, 'leftDrawer');
+// const leftDrawer = toRef(runtime, 'leftDrawer');
 const bottomDrawer = toRef(runtime, 'bottomDrawer');
 const snackbar = computed(() => runtime.snackbar);
 provide(runtimeInjectionKey, runtime);
@@ -103,15 +103,15 @@ watch(
 <template>
     <v-app>
         <v-app-bar flat border class="bg-grey-darken-3">
-            <v-app-bar-nav-icon
-                icon="mdi-widgets"
-                @click.stop="leftDrawer = !leftDrawer"
-            />
-            <v-app-bar-title>
-                <span class="font-weight-black">Vue3简历编辑器</span>
-                <span class="text-subtitle-1 ml-2">轻松制作一份精美简历</span>
+            <img src="/favicon.svg" alt="logo" class="h-100 py-2 pl-6" />
+
+            <v-app-bar-title class="flex-grow-1">
+                <span class="text-h4 font-weight-black brand-text font-italic">
+                    Resume Editor
+                </span>
+                <span class="text-subtitle-1 ml-2">轻松制作精美简历</span>
             </v-app-bar-title>
-            <v-spacer />
+
             <Toolbar />
         </v-app-bar>
         <v-navigation-drawer v-model="bottomDrawer" temporary location="bottom">
@@ -134,7 +134,7 @@ watch(
         </v-navigation-drawer>
         <v-main class="bg-grey-darken-3">
             <Sketch ref="sketch" />
-            <BeiAn />
+            <WebsiteInfo />
             <v-btn
                 class="position-fixed print-none"
                 style="right: 24px; bottom: 128px"
@@ -211,5 +211,28 @@ body {
 }
 :focus-visible {
     outline: none;
+}
+
+.brand-text {
+    background-image: -webkit-linear-gradient(120deg, #5a42ec 30%, #09bbfe);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 2px rgba(255, 255, 255, 0.2);
+    animation: gradient 6s ease infinite;
+    background-size: 400% 400%;
+    background-position: 0 0;
+}
+@keyframes gradient {
+    0% {
+        background-position: 0 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0 50%;
+    }
 }
 </style>

@@ -1,7 +1,6 @@
 <template>
     <v-btn icon @click="save">
         <v-icon>mdi-content-save</v-icon>
-        <v-tooltip activator="parent" anchor="bottom">缓存到浏览器</v-tooltip>
     </v-btn>
 </template>
 

@@ -1,11 +1,11 @@
 <template>
+    <v-divider vertical class="mx-4"></v-divider>
+
     <template v-for="opt of alignButtons.slice(0, 4)" :key="opt.icon">
         <v-btn icon :disabled="alignOperateDisable" @click="opt.onClick">
             <v-icon>{{ opt.icon }}</v-icon>
         </v-btn>
     </template>
-
-    <v-divider vertical class="mx-4"></v-divider>
 
     <template v-for="opt of alignButtons.slice(4)" :key="opt.icon">
         <v-btn icon :disabled="alignOperateDisable" @click="opt.onClick">
@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
-import { usePaper, useRuntime } from '../../composables/useApp';
+import { usePaper, useRuntime } from '@/composables/useApp';
 
 type AlignCommandType =
     | 'alignHorizontalLeft'
@@ -73,7 +73,7 @@ export default defineComponent({
         const paper = usePaper();
 
         const alignOperateDisable = computed(
-            () => runtime.activeMaterialSet.size < 2
+            () => runtime.activeMaterialSet.size < 2,
         );
 
         const alignButtons: Array<{
