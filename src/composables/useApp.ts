@@ -1,11 +1,12 @@
 import { inject, reactive, UnwrapNestedRefs } from 'vue';
-import { Runtime, runtimeInjectionKey } from '../classes/Runtime';
-import { Paper, paperInjectionKey } from '../classes/Paper';
+import { Runtime, runtimeInjectionKey } from '@/classes/Runtime';
+import { Paper, paperInjectionKey } from '@/classes/Paper';
 import {
     Material,
     MaterialBaseConfig,
     materialInjectionKey,
-} from '../classes/Material';
+} from '@/classes/Material';
+import { MaterialNames } from '@/components/materials/config';
 
 export function useRuntime(): UnwrapNestedRefs<Runtime> {
     return inject(runtimeInjectionKey, reactive(new Runtime()));
@@ -30,7 +31,7 @@ export function useMaterial<T extends MaterialBaseConfig>(): UnwrapNestedRefs<{
                 w: 0,
                 h: 0,
                 config: {} as T,
-                componentName: 'MText',
+                componentName: MaterialNames.MText,
             }),
             active: false,
             hover: false,

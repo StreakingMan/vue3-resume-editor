@@ -1,7 +1,7 @@
 import { Material, MaterialOptions } from './Material';
-import { uniqueString } from '../utils/uniqueString';
-import { InjectionKey } from 'vue';
-import { UnwrapNestedRefs } from '@vue/reactivity';
+import { uniqueString } from '@/utils/uniqueString';
+import { InjectionKey, UnwrapNestedRefs } from 'vue';
+import { easeInOut } from '@/utils/timeFunction';
 
 const LOCAL_STORAGE_KEY = 'paper_cache';
 
@@ -377,8 +377,15 @@ export class Paper {
             const m = this._materialMap.get(ids[index]);
             if (!m) return setMinX(index + 1, minX);
             if (minX === undefined) minX = m.x;
-            m.x = setMinX(index + 1, minX > m.x ? m.x : minX);
-            return m.x;
+            const _minX = setMinX(index + 1, minX > m.x ? m.x : minX);
+            easeInOut({
+                start: m.x,
+                end: _minX,
+                callback: (value) => {
+                    m.x = value;
+                },
+            });
+            return _minX;
         };
         setMinX(0);
     }
@@ -402,6 +409,8 @@ export class Paper {
             minX = m.x > minX ? minX : m.x;
         }
 
+        const centerX = (maxX + minX) / 2;
+
         for (let i = 0; i < ids.length; i++) {
             const m = this._materialMap.get(ids[i]);
 
@@ -409,7 +418,13 @@ export class Paper {
                 continue;
             }
 
-            m.x = (maxX + minX) / 2 - m.w / 2;
+            easeInOut({
+                start: m.x,
+                end: centerX - m.w / 2,
+                callback: (value) => {
+                    m.x = value;
+                },
+            });
         }
     }
     // 右对齐
@@ -422,8 +437,16 @@ export class Paper {
             const m = this._materialMap.get(ids[index]);
             if (!m) return setMaxX(index + 1, maxX);
             if (maxX === undefined) maxX = m.x + m.w;
-            m.x = setMaxX(index + 1, m.x + m.w > maxX ? m.x + m.w : maxX) - m.w;
-            return m.x + m.w;
+            const _maxX =
+                setMaxX(index + 1, m.x + m.w > maxX ? m.x + m.w : maxX) - m.w;
+            easeInOut({
+                start: m.x,
+                end: _maxX,
+                callback: (value) => {
+                    m.x = value;
+                },
+            });
+            return _maxX + m.w;
         };
         setMaxX(0);
     }
@@ -456,7 +479,14 @@ export class Paper {
                 continue;
             }
 
-            m.x = minX + ((maxX - minX) / (_ids.length - 1)) * i;
+            const _x = minX + ((maxX - minX) / (_ids.length - 1)) * i;
+            easeInOut({
+                start: m.x,
+                end: _x,
+                callback: (value) => {
+                    m.x = value;
+                },
+            });
         }
     }
     // 顶对齐
@@ -469,8 +499,15 @@ export class Paper {
             const m = this._materialMap.get(ids[index]);
             if (!m) return setMinY(index + 1, minY);
             if (minY === undefined) minY = m.y;
-            m.y = setMinY(index + 1, minY > m.y ? m.y : minY);
-            return m.y;
+            const _minY = setMinY(index + 1, minY > m.y ? m.y : minY);
+            easeInOut({
+                start: m.y,
+                end: _minY,
+                callback: (value) => {
+                    m.y = value;
+                },
+            });
+            return _minY;
         };
         setMinY(0);
     }
@@ -501,7 +538,14 @@ export class Paper {
                 continue;
             }
 
-            m.y = (maxY + minY) / 2 - m.h / 2;
+            const _y = (maxY + minY) / 2 - m.h / 2;
+            easeInOut({
+                start: m.y,
+                end: _y,
+                callback: (value) => {
+                    m.y = value;
+                },
+            });
         }
     }
     // 底对齐
@@ -537,7 +581,14 @@ export class Paper {
                 continue;
             }
 
-            m.y = maxY + maxHeight - m.h;
+            const _y = maxY + maxHeight - m.h;
+            easeInOut({
+                start: m.y,
+                end: _y,
+                callback: (value) => {
+                    m.y = value;
+                },
+            });
         }
     }
     // 垂直均匀分布
@@ -568,7 +619,14 @@ export class Paper {
                 continue;
             }
 
-            m.y = minY + ((maxY - minY) / (_ids.length - 1)) * i;
+            const _y = minY + ((maxY - minY) / (_ids.length - 1)) * i;
+            easeInOut({
+                start: m.y,
+                end: _y,
+                callback: (value) => {
+                    m.y = value;
+                },
+            });
         }
     }
 
