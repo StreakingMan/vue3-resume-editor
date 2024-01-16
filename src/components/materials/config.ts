@@ -1,4 +1,4 @@
-export enum MaterialComponentNames {
+export enum MaterialNames {
     MText = 'MText',
     MImage = 'MImage',
     MList = 'MList',
@@ -7,6 +7,7 @@ export enum MaterialComponentNames {
     MRating = 'MRating',
     MIcon = 'MIcon',
     MPie = 'MPie',
+    MTimeline = 'MTimeline',
 }
 
 export type CtrlDotType = 'tl' | 'tm' | 'tr' | 'mr' | 'br' | 'bm' | 'bl' | 'ml';

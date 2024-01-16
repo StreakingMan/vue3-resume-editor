@@ -57,7 +57,7 @@ import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
 import { useMaterial } from '@/composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import Color from '../config-widgets/Color.vue';
-import { MaterialComponentNames } from '@/components/materials/config';
+import { MaterialNames } from '@/components/materials/config';
 
 interface MRatingConfig extends MaterialBaseConfig {
     style: StyleType;
@@ -86,7 +86,7 @@ const protoInfo: ProtoInfo<MRatingConfig> = {
         y: y - 14,
         w: 140,
         h: 28,
-        componentName: MaterialComponentNames.MRating,
+        componentName: MaterialNames.MRating,
         config: {
             style: 'star',
             size: 28,
@@ -97,7 +97,7 @@ const protoInfo: ProtoInfo<MRatingConfig> = {
 };
 
 export default defineComponent({
-    name: MaterialComponentNames.MRating,
+    name: MaterialNames.MRating,
     components: { Color, ConfigItem, MaterialConfigPopover },
     protoInfo,
     setup() {

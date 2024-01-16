@@ -49,8 +49,8 @@ import {
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import MaterialInstance from './MaterialInstance.vue';
-import { usePaper, useRuntime } from '../../composables/useApp';
-import { Material } from '../../classes/Material';
+import { usePaper, useRuntime } from '@/composables/useApp';
+import { Material } from '@/classes/Material';
 import { useElementBounding } from '@vueuse/core';
 
 export default defineComponent({

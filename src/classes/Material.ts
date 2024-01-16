@@ -1,8 +1,7 @@
-import { uniqueString } from '../utils/uniqueString';
-import { MaterialComponentNameType } from '../components/materials/config';
-import { InjectionKey } from 'vue';
-import { UnwrapNestedRefs } from '@vue/reactivity';
-import { calcCellingValue } from '../utils/calcCellingValue';
+import { uniqueString } from '@/utils/uniqueString';
+import { InjectionKey, UnwrapNestedRefs } from 'vue';
+import { calcCellingValue } from '@/utils/calcCellingValue';
+import { MaterialNames } from '@/components/materials/config';
 
 export interface MaterialInjection {
     instance: Material<any>;
@@ -25,7 +24,7 @@ export interface MaterialBaseConfig {
 }
 
 export interface MaterialOptions<T extends MaterialBaseConfig> {
-    componentName: MaterialComponentNameType;
+    componentName: MaterialNames;
     _id?: string;
     _freePosition?: boolean;
     _freeSize?: boolean;
@@ -44,7 +43,7 @@ export class Material<T extends MaterialBaseConfig> {
     get id(): string {
         return this._id;
     }
-    public readonly componentName: MaterialComponentNameType;
+    public readonly componentName: MaterialNames;
     public groupId?: string;
     public config: T;
     public cellSize = 10; // 网格尺寸

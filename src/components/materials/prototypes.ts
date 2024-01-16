@@ -1,5 +1,5 @@
 import { MaterialBaseConfig, MaterialOptions } from '@/classes/Material';
-import { CtrlDotFunction, CtrlDotType, MaterialComponentNames } from './config';
+import { CtrlDotFunction, CtrlDotType, MaterialNames } from './config';
 import { Paper } from '@/classes/Paper';
 import { UnwrapNestedRefs } from 'vue';
 import MText from './MText.vue';
@@ -10,6 +10,7 @@ import MRect from './MRect.vue';
 import MRating from './MRating.vue';
 import MIcon from './MIcon.vue';
 import MPie from './MPie.vue';
+import MTimeline from './MTimeline.vue';
 
 export interface ProtoInfo<T extends MaterialBaseConfig> {
     label: string;
@@ -23,17 +24,18 @@ export interface ProtoInfo<T extends MaterialBaseConfig> {
 }
 
 export type PrototypeMap = Record<
-    MaterialComponentNames,
+    MaterialNames,
     ProtoInfo<any> & { tempStyle: string }
 >;
 
 export const prototypeMap: PrototypeMap = {
-    [MaterialComponentNames.MText]: { ...MText.protoInfo, tempStyle: '' },
-    [MaterialComponentNames.MImage]: { ...MImage.protoInfo, tempStyle: '' },
-    [MaterialComponentNames.MList]: { ...MList.protoInfo, tempStyle: '' },
-    [MaterialComponentNames.MRating]: { ...MRating.protoInfo, tempStyle: '' },
-    [MaterialComponentNames.MIcon]: { ...MIcon.protoInfo, tempStyle: '' },
-    [MaterialComponentNames.MDivider]: { ...MDivider.protoInfo, tempStyle: '' },
-    [MaterialComponentNames.MRect]: { ...MRect.protoInfo, tempStyle: '' },
-    [MaterialComponentNames.MPie]: { ...MPie.protoInfo, tempStyle: '' },
+    [MaterialNames.MText]: { ...MText.protoInfo, tempStyle: '' },
+    [MaterialNames.MImage]: { ...MImage.protoInfo, tempStyle: '' },
+    [MaterialNames.MList]: { ...MList.protoInfo, tempStyle: '' },
+    [MaterialNames.MRating]: { ...MRating.protoInfo, tempStyle: '' },
+    [MaterialNames.MIcon]: { ...MIcon.protoInfo, tempStyle: '' },
+    [MaterialNames.MDivider]: { ...MDivider.protoInfo, tempStyle: '' },
+    [MaterialNames.MRect]: { ...MRect.protoInfo, tempStyle: '' },
+    [MaterialNames.MPie]: { ...MPie.protoInfo, tempStyle: '' },
+    [MaterialNames.MTimeline]: { ...MTimeline.protoInfo, tempStyle: '' },
 };

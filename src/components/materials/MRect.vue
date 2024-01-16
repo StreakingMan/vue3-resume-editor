@@ -13,7 +13,7 @@ import { MaterialBaseConfig } from '@/classes/Material';
 import { ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
 import { useMaterial } from '@/composables/useApp';
-import { MaterialComponentNames } from '@/components/materials/config';
+import { MaterialNames } from '@/components/materials/config';
 
 const protoInfo: ProtoInfo<MaterialBaseConfig> = {
     label: '矩形',
@@ -24,7 +24,7 @@ const protoInfo: ProtoInfo<MaterialBaseConfig> = {
         y: y - 100,
         w: 200,
         h: 200,
-        componentName: MaterialComponentNames.MRect,
+        componentName: MaterialNames.MRect,
         config: {
             backgroundColor: 'rgba(128,128,128)',
         },
@@ -32,7 +32,7 @@ const protoInfo: ProtoInfo<MaterialBaseConfig> = {
 };
 
 export default defineComponent({
-    name: MaterialComponentNames.MRect,
+    name: MaterialNames.MRect,
     components: { MaterialConfigPopover },
     protoInfo,
     setup() {

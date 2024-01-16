@@ -82,7 +82,7 @@ import { ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
 import {
     fontWeightClass,
-    MaterialComponentNames,
+    MaterialNames,
     textAlignOptions,
     typographyClass,
 } from './config';
@@ -110,7 +110,7 @@ const protoInfo: ProtoInfo<MTextConfig> = {
         y: y - 16,
         w: 200,
         h: 32,
-        componentName: MaterialComponentNames.MText,
+        componentName: MaterialNames.MText,
         config: {
             content: '这是一段文本',
             typo: 5,
@@ -122,7 +122,7 @@ const protoInfo: ProtoInfo<MTextConfig> = {
 };
 
 export default defineComponent({
-    name: MaterialComponentNames.MText,
+    name: MaterialNames.MText,
     components: {
         Color,
         ConfigToggleOption,

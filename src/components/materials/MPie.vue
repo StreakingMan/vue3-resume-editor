@@ -4,7 +4,7 @@ import { MaterialBaseConfig } from '@/classes/Material';
 import { ProtoInfo } from '@/components/materials/prototypes';
 import {
     fontWeightClass,
-    MaterialComponentNames,
+    MaterialNames,
     typographyClass,
 } from '@/components/materials/config';
 import { useMaterial } from '@/composables/useApp';
@@ -35,7 +35,7 @@ const protoInfo: ProtoInfo<MPieConfig> = {
         y: y - 150,
         w: 250,
         h: 150,
-        componentName: MaterialComponentNames.MPie,
+        componentName: MaterialNames.MPie,
         config: {
             pieBorderStyle: 'none',
             pieBorderWidth: 0,
@@ -52,7 +52,7 @@ const protoInfo: ProtoInfo<MPieConfig> = {
 };
 
 export default defineComponent({
-    name: MaterialComponentNames.MPie,
+    name: MaterialNames.MPie,
     components: { Color, BorderStyle, ConfigItem, MaterialConfigPopover },
     setup() {
         const material = useMaterial<MPieConfig>();

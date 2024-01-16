@@ -88,7 +88,7 @@ import ConfigItem from '../config-widgets/ConfigItem.vue';
 import ConfigToggle from '../config-widgets/ConfigToggle.vue';
 import ConfigToggleOption from '../config-widgets/ConfigToggleOption.vue';
 import { MaterialBaseConfig } from '@/classes/Material';
-import { MaterialComponentNames } from '@/components/materials/config';
+import { MaterialNames } from '@/components/materials/config';
 
 interface MImageConfig extends MaterialBaseConfig {
     url: string;
@@ -105,7 +105,7 @@ const protoInfo: ProtoInfo<MImageConfig> = {
             ? ['tl', 'tr', 'tm', 'ml', 'mr', 'bl', 'bm', 'br']
             : ['br', 'mr', 'bl', 'ml'],
     genInitOptions: ({ x, y }) => ({
-        componentName: MaterialComponentNames.MImage,
+        componentName: MaterialNames.MImage,
         x: x - 50,
         y: y - 50,
         w: 100,
@@ -120,7 +120,7 @@ const protoInfo: ProtoInfo<MImageConfig> = {
 };
 
 export default defineComponent({
-    name: MaterialComponentNames.MImage,
+    name: MaterialNames.MImage,
     components: {
         ConfigToggleOption,
         ConfigToggle,

@@ -60,7 +60,7 @@ import ConfigToggle from '../config-widgets/ConfigToggle.vue';
 import ConfigToggleOption from '../config-widgets/ConfigToggleOption.vue';
 import Color from '../config-widgets/Color.vue';
 import { MaterialBaseConfig } from '@/classes/Material';
-import { MaterialComponentNames } from '@/components/materials/config';
+import { MaterialNames } from '@/components/materials/config';
 
 interface MDividerConfig extends MaterialBaseConfig {
     direction: 'horizontal' | 'vertical';
@@ -75,7 +75,7 @@ const protoInfo: ProtoInfo<MDividerConfig> = {
     dragHandlers: ({ direction }) =>
         direction === 'horizontal' ? ['ml', 'mr'] : ['tm', 'bm'],
     genInitOptions: ({ y, paperInstance }) => ({
-        componentName: MaterialComponentNames.MDivider,
+        componentName: MaterialNames.MDivider,
         x: 10,
         y: y - paperInstance.cellSize,
         w: 600,

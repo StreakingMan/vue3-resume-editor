@@ -167,20 +167,21 @@ import {
     watch,
 } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
-import MImage from '../materials/MImage.vue';
-import MList from '../materials/MList.vue';
-import MText from '../materials/MText.vue';
 import { CTRL_DOT_SIZE, UNIT_SIZE } from './config';
+import { Material, materialInjectionKey } from '@/classes/Material';
+import { usePaper, useRuntime } from '@/composables/useApp';
 import MaterialConfig from './MaterialConfigPopover.vue';
 import { prototypeMap } from '../materials/prototypes';
 import { CtrlDotType } from '../materials/config';
-import { Material, materialInjectionKey } from '../../classes/Material';
 import MDivider from '../materials/MDivider.vue';
-import { usePaper, useRuntime } from '../../composables/useApp';
-import MRect from '../materials/MRect.vue';
-import MRating from '../materials/MRating.vue';
 import MIcon from '../materials/MIcon.vue';
-import MPie from '@/components/materials/MPie.vue';
+import MImage from '../materials/MImage.vue';
+import MList from '../materials/MList.vue';
+import MPie from '../materials/MPie.vue';
+import MRating from '../materials/MRating.vue';
+import MRect from '../materials/MRect.vue';
+import MText from '../materials/MText.vue';
+import MTimeline from '../materials/MTimeline.vue';
 
 const ctrlDots: CtrlDotType[] = [
     'tl',
@@ -223,6 +224,7 @@ export default defineComponent({
         MImage,
         MList,
         MPie,
+        MTimeline,
     },
     props: {
         item: {

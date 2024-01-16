@@ -83,7 +83,7 @@ import { useMaterial } from '@/composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import Color from '../config-widgets/Color.vue';
 import { iconInfo } from './iconInfo';
-import { MaterialComponentNames } from '@/components/materials/config';
+import { MaterialNames } from '@/components/materials/config';
 
 interface MIconConfig extends MaterialBaseConfig {
     icon: string;
@@ -101,7 +101,7 @@ const protoInfo: ProtoInfo<MIconConfig> = {
         w: 24,
         h: 24,
         _freeSize: true,
-        componentName: MaterialComponentNames.MIcon,
+        componentName: MaterialNames.MIcon,
         config: {
             icon: 'emoticon-cool-outline',
             size: 24,
@@ -111,7 +111,7 @@ const protoInfo: ProtoInfo<MIconConfig> = {
 };
 
 export default defineComponent({
-    name: MaterialComponentNames.MIcon,
+    name: MaterialNames.MIcon,
     components: { Color, ConfigItem, MaterialConfigPopover },
     protoInfo,
     setup() {

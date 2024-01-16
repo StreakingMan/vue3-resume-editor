@@ -2,7 +2,8 @@
     <v-sheet
         width="24"
         height="24"
-        class="position-relative border rounded ma-2 ml-0"
+        class="position-relative border rounded"
+        :class="noMargin ? '' : 'ma-2 ml-0'"
         :color="value"
         style="cursor: pointer"
     >
@@ -23,6 +24,10 @@ export default defineComponent({
             type: String,
             default: '',
             required: true,
+        },
+        noMargin: {
+            type: Boolean,
+            default: false,
         },
     },
     emits: ['update:modelValue'],
