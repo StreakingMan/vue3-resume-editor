@@ -59,6 +59,14 @@ whenever(Delete, () => {
     paper.removeMaterial([...runtime.activeMaterialSet]);
 });
 
+// ctrl+a全选
+const { ctrl_a } = useMagicKeys();
+whenever(ctrl_a, () => {
+    for (const m of paper.materialList) {
+        runtime.activeMaterialSet.add(m.id);
+    }
+});
+
 // 激活元素集合控制
 watch(
     () => [...runtime.activeMaterialSet],
