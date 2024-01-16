@@ -550,46 +550,26 @@ export class Paper {
     }
     // 底对齐
     alignVerticalBottom(ids: Material<any>['id'][]): void {
-        if (!ids.length) {
-            return;
-        }
-
-        let maxY = this._materialMap.get(ids[0])?.y || 0;
-        let maxHeight = 0;
-
-        for (let i = 0; i < ids.length; i++) {
-            const m = this._materialMap.get(ids[i]);
-
-            if (!m) {
-                continue;
-            }
-
-            maxY = m.y > maxY ? m.y : maxY;
-            if (m.y > maxY) {
-                maxY = m.y;
-            }
-
-            if (m.h > maxHeight) {
-                maxHeight = m.h;
-            }
-        }
-
-        for (let i = 0; i < ids.length; i++) {
-            const m = this._materialMap.get(ids[i]);
-
-            if (!m) {
-                continue;
-            }
-
-            const _y = maxY + maxHeight - m.h;
+        const setMaxY: (index: number, maxX?: number) => number = (
+            index,
+            maxY,
+        ) => {
+            if (index === ids.length) return maxY ?? 0;
+            const m = this._materialMap.get(ids[index]);
+            if (!m) return setMaxY(index + 1, maxY);
+            if (maxY === undefined) maxY = m.y + m.h;
+            const _maxY =
+                setMaxY(index + 1, m.y + m.h > maxY ? m.y + m.h : maxY) - m.h;
             easeInOut({
                 start: m.y,
-                end: _y,
+                end: _maxY,
                 callback: (value) => {
                     m.y = value;
                 },
             });
-        }
+            return _maxY + m.h;
+        };
+        setMaxY(0);
     }
     // 垂直均匀分布
     alignVerticalDistribute(ids: Material<any>['id'][]): void {
