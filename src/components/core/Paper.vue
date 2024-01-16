@@ -29,7 +29,7 @@
                 v-model:item="materialList[i]"
             ></MaterialInstance>
             <div
-                v-if="selecting && !space"
+                v-if="selecting && !current.size"
                 class="select-box"
                 :style="selectorStyle"
             ></div>
@@ -51,7 +51,7 @@ import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
 import MaterialInstance from './MaterialInstance.vue';
 import { usePaper, useRuntime } from '@/composables/useApp';
 import { Material } from '@/classes/Material';
-import { useElementBounding } from '@vueuse/core';
+import { useElementBounding, useMagicKeys } from '@vueuse/core';
 
 export default defineComponent({
     name: 'Paper',
@@ -100,12 +100,12 @@ export default defineComponent({
         const selectorY = ref(0);
         const selectorW = ref(0);
         const selectorH = ref(0);
+        const { current } = useMagicKeys();
         const onSelectStart = (info: MouseEvtInfo) => {
             selectorW.value = 0;
             selectorH.value = 0;
             if (!paperRef.value) return false;
-            if (runtime.keyboardStatus.space || runtime.keyboardStatus.ctrl)
-                return false;
+            if (current.size) return false;
             const { startX, startY } = info;
             const { x, y } = paperRef.value.getBoundingClientRect();
             selectorX.value = (startX - x) / runtime.scale.value;
@@ -185,7 +185,7 @@ export default defineComponent({
         });
 
         return {
-            space: toRef(runtime.keyboardStatus, 'space'),
+            current,
             showGrid: toRef(runtime, 'showGrid'),
             groupRects,
             paperRef,

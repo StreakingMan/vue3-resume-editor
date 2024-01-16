@@ -1,4 +1,3 @@
-import { KeyboardStatus } from '../composables/useKeyboardStatus';
 import { InjectionKey, reactive, ref, UnwrapNestedRefs } from 'vue';
 import { Material } from './Material';
 
@@ -10,16 +9,6 @@ export class Runtime {
     // 抽屉
     public leftDrawer = ref(true);
     public bottomDrawer = ref(false);
-    // 键盘状态
-    public keyboardStatus: KeyboardStatus = {
-        space: ref(false),
-        ctrl: ref(false),
-        ctrlC: ref(false),
-        ctrlV: ref(false),
-        alt: ref(false),
-        shift: ref(false),
-        del: ref(false),
-    };
     // 辅助网格显示
     public showGrid = ref(true);
     // 缩放值和缩放中心

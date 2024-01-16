@@ -3,7 +3,7 @@ import Paper from './Paper.vue';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '@/composables/useMouseDrag';
 import { useRuntime } from '@/composables/useApp';
-import { useDebounceFn } from '@vueuse/core';
+import { useDebounceFn, useMagicKeys } from '@vueuse/core';
 import { paperSizeMap } from '@/classes/Paper';
 
 const runtime = useRuntime();
@@ -45,10 +45,24 @@ onUnmounted(() => {
     wrapperRef.value?.removeEventListener('wheel', handleSketchWheel);
 });
 
+const { space, ctrl } = useMagicKeys({
+    passive: false,
+    onEventFired(e) {
+        // 屏蔽空格键滚动页面
+        if (
+            e.type === 'keydown' &&
+            e.code === 'Space' &&
+            e.target === document.body
+        ) {
+            e.preventDefault();
+        }
+    },
+});
+
 let scrollTopCache: number, scrollLeftCache: number;
 useMouseDrag({
     onStart: () => {
-        if (!runtime.keyboardStatus.space || !wrapperRef.value) return false;
+        if (!space.value || !wrapperRef.value) return false;
         scrollLeftCache = wrapperRef.value.scrollLeft;
         scrollTopCache = wrapperRef.value.scrollTop;
     },
@@ -86,10 +100,10 @@ watch(
 
 // 光标样式
 const cursor = computed(() => {
-    if (runtime.keyboardStatus.space) {
+    if (space.value) {
         return grabbing.value ? 'grabbing' : 'grab';
     }
-    if (runtime.keyboardStatus.ctrl) {
+    if (ctrl.value) {
         return 'zoom-in';
     }
     return 'default';

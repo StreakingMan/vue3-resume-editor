@@ -182,6 +182,7 @@ import MRating from '../materials/MRating.vue';
 import MRect from '../materials/MRect.vue';
 import MText from '../materials/MText.vue';
 import MTimeline from '../materials/MTimeline.vue';
+import { useMagicKeys } from '@vueuse/core';
 
 const ctrlDots: CtrlDotType[] = [
     'tl',
@@ -237,6 +238,7 @@ export default defineComponent({
     setup(props) {
         const runtime = useRuntime();
         const paper = usePaper();
+        const { space, shift } = useMagicKeys();
 
         const material = reactive({
             instance: props.item,
@@ -258,9 +260,9 @@ export default defineComponent({
         const focus = (e: MouseEvent) => {
             material.clicked = true;
             // 没按空格时阻止冒泡
-            if (!runtime.keyboardStatus.space) e.stopPropagation();
+            if (!space.value) e.stopPropagation();
 
-            if (runtime.keyboardStatus.shift) {
+            if (shift.value) {
                 // 按住shift点击元素则切换选中状态
                 if (!runtime.activeMaterialSet.delete(material.instance.id)) {
                     runtime.activeMaterialSet.add(material.instance.id);

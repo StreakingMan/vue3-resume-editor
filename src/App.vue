@@ -10,9 +10,9 @@ import Toolbar from './components/tools/Toolbar.vue';
 import { stringArrayDiff } from './utils/stringArrayDiff';
 import { Runtime, runtimeInjectionKey } from './classes/Runtime';
 import template1 from './components/templates/resume-template-1.json';
-import useKeyboardStatus from './composables/useKeyboardStatus';
 import TemplateList from './components/templates/TemplateList.vue';
 import { SCALE_RANGE } from '@/components/core/config';
+import { useMagicKeys, whenever } from '@vueuse/core';
 
 // 运行时
 const runtime = reactive(new Runtime());
@@ -32,26 +32,6 @@ useMouseWheel({
         }
     },
 });
-const { space, ctrl, ctrlC, ctrlV, alt, shift, del } = useKeyboardStatus();
-watch(
-    () => ({
-        space: space.value,
-        ctrl: ctrl.value,
-        ctrlC: ctrlC.value,
-        ctrlV: ctrlV.value,
-        alt: alt.value,
-        shift: shift.value,
-    }),
-    () => {
-        runtime.keyboardStatus.space = space.value;
-        runtime.keyboardStatus.ctrl = ctrl.value;
-        runtime.keyboardStatus.ctrlC = ctrlC.value;
-        runtime.keyboardStatus.ctrlV = ctrlV.value;
-        runtime.keyboardStatus.alt = alt.value;
-        runtime.keyboardStatus.shift = shift.value;
-        runtime.keyboardStatus.del = del.value;
-    },
-);
 
 // Paper实例
 const paper = reactive(new Paper({}));
@@ -64,31 +44,20 @@ onMounted(() => {
 });
 
 // 复制粘贴
-watch(
-    () => ({
-        ctrlC: runtime.keyboardStatus.ctrlC,
-        ctrlV: runtime.keyboardStatus.ctrlV,
-    }),
-    ({ ctrlC, ctrlV }) => {
-        if (ctrlC) {
-            runtime.copyMaterialSet = new Set(runtime.activeMaterialSet);
-        }
-        if (ctrlV) {
-            paper.copyMaterial([...runtime.copyMaterialSet]);
-            runtime.copyMaterialSet.clear();
-        }
-    },
-);
+const { ctrl_c, ctrl_v } = useMagicKeys();
+whenever(ctrl_c, () => {
+    runtime.copyMaterialSet = new Set(runtime.activeMaterialSet);
+});
+whenever(ctrl_v, () => {
+    paper.copyMaterial([...runtime.copyMaterialSet]);
+    runtime.copyMaterialSet.clear();
+});
 
 // 按del键删除
-watch(
-    () => del.value,
-    (v) => {
-        if (v) {
-            paper.removeMaterial([...runtime.activeMaterialSet]);
-        }
-    },
-);
+const { Delete } = useMagicKeys();
+whenever(Delete, () => {
+    paper.removeMaterial([...runtime.activeMaterialSet]);
+});
 
 // 激活元素集合控制
 watch(

@@ -114,11 +114,12 @@
 
 <script lang="ts">
 import { defineComponent, nextTick, ref, toRef } from 'vue';
-import { useMaterial, usePaper, useRuntime } from '../../composables/useApp';
+import { useMaterial, usePaper, useRuntime } from '@/composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import BorderStyle from '../config-widgets/BorderStyle.vue';
 import Color from '../config-widgets/Color.vue';
 import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
+import { useMagicKeys } from '@vueuse/core';
 
 export default defineComponent({
     name: 'MaterialConfigPopover',
@@ -127,6 +128,7 @@ export default defineComponent({
         const runtime = useRuntime();
         const paper = usePaper();
         const material = useMaterial();
+        const { space } = useMagicKeys();
 
         // 所有激活元素的位置缓存
         const posInfoCacheMap = new Map();
@@ -134,7 +136,7 @@ export default defineComponent({
         const moveHandlerRef = ref(null);
         useMouseDrag({
             onStart() {
-                if (runtime.keyboardStatus.space) return false;
+                if (space.value) return false;
                 // 拖动非激活元素时，重置激活集合
                 if (!runtime.activeMaterialSet.has(material.instance.id)) {
                     runtime.activeMaterialSet.clear();
