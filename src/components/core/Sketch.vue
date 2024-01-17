@@ -32,7 +32,7 @@ onMounted(() => {
     if (!wrapperRef.value) return;
 
     // paper居中
-    runtime.scale.value = (window.innerHeight - 120) / paperSizeMap.a4.h;
+    runtime.scale.value = (window.innerHeight - 160) / paperSizeMap.a4.h;
     wrapperRef.value.scrollLeft =
         (wrapperRef.value.children[0].clientWidth - window.innerWidth) / 2;
     wrapperRef.value.scrollTop =
@@ -125,7 +125,6 @@ const cursor = computed(() => {
             },
         ]"
     >
-        {{ scrolling }}
         <div class="sketch__inner">
             <Paper ref="paperRef" />
         </div>

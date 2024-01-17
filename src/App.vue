@@ -128,7 +128,7 @@ watch(
             <MaterialPrototype />
             <v-divider />
             <v-btn
-                class="toggle-left-drawer-btn"
+                class="toggle-left-drawer-btn print-none"
                 :class="{ 'position-hide': !runtime.leftDrawer }"
                 :icon="
                     runtime.leftDrawer
