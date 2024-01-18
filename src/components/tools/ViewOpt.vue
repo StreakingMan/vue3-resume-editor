@@ -75,7 +75,7 @@ const showGrid = toRef(runtime, 'showGrid');
             location="bottom"
             :close-on-content-click="false"
         >
-            <v-sheet class="pa-2 rounded print-none" width="200">
+            <v-sheet class="pa-4 rounded print-none" width="200">
                 <div class="d-flex align-center ga-2">
                     <div class="text-subtitle-2">缩放视图</div>
                     <v-slider
@@ -83,8 +83,6 @@ const showGrid = toRef(runtime, 'showGrid');
                         hide-details
                         :min="SCALE_RANGE[0]"
                         :max="SCALE_RANGE[1]"
-                        tick-size="4"
-                        step="0.01"
                         :thumb-size="18"
                     ></v-slider>
                 </div>

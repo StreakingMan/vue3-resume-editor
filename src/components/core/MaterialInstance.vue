@@ -29,35 +29,14 @@
                 <template #activator>
                     <!-- 复制 -->
                     <v-btn
-                        variant="outlined"
-                        color="primary"
-                        size="x-small"
-                        icon
-                        class="border-r-0"
-                        :rounded="0"
                         @mousedown.stop="() => paper.copyMaterial(instance.id)"
                     >
                         <v-icon>mdi-content-copy</v-icon>
-                        <v-tooltip activator="parent" anchor="top">
-                            复制
-                        </v-tooltip>
                     </v-btn>
 
                     <!-- 层级 -->
-                    <v-btn
-                        variant="outlined"
-                        color="primary"
-                        size="x-small"
-                        icon
-                        class="border-r-0"
-                        :rounded="0"
-                        title="层级调整"
-                        @mousedown.stop
-                    >
+                    <v-btn title="层级调整" @mousedown.stop>
                         <v-icon>mdi-layers-triple</v-icon>
-                        <v-tooltip activator="parent" anchor="top">
-                            层级调整
-                        </v-tooltip>
                         <v-menu activator="parent" location="bottom">
                             <v-list density="compact">
                                 <v-list-item
@@ -113,20 +92,11 @@
 
                     <!-- 删除 -->
                     <v-btn
-                        variant="outlined"
-                        color="error"
-                        size="x-small"
-                        icon
-                        class="border-r-0"
-                        :rounded="0"
-                        title="双击删除"
+                        class="text-error"
                         @mousedown.stop
-                        @dblclick="removeMaterialInstance"
+                        @click="removeMaterialInstance"
                     >
                         <v-icon>mdi-trash-can</v-icon>
-                        <v-tooltip activator="parent" anchor="top">
-                            双击删除
-                        </v-tooltip>
                     </v-btn>
                 </template>
             </component>

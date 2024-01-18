@@ -1,44 +1,35 @@
 <template>
     <v-menu v-model="visible" anchor="end" :close-on-content-click="false">
         <template #activator="{ props }">
-            <div
-                class="activator"
+            <v-sheet
+                class="activator text-blue-darken-3"
+                rounded="pill"
+                border
                 :style="{
                     transform: `translateY(-100%) scale(${1 / scale})`,
                 }"
             >
-                <!-- 移动 -->
-                <v-btn
-                    ref="moveHandlerRef"
-                    variant="outlined"
-                    color="primary"
-                    size="x-small"
-                    icon
-                    class="border-r-0"
-                    :rounded="0"
+                <v-defaults-provider
+                    :defaults="{
+                        VBtn: {
+                            density: 'comfortable',
+                            icon: true,
+                            flat: true,
+                            size: 'small',
+                        },
+                    }"
                 >
-                    <v-icon>mdi-arrow-all</v-icon>
-                    <v-tooltip activator="parent" anchor="top">
-                        拖拽移动
-                    </v-tooltip>
-                </v-btn>
-                <slot name="activator"></slot>
-                <!-- 配置面板 -->
-                <v-btn
-                    v-bind="props"
-                    variant="outlined"
-                    color="primary"
-                    size="x-small"
-                    icon
-                    :rounded="0"
-                    @mousedown.stop
-                >
-                    <v-icon>mdi-cog</v-icon>
-                    <v-tooltip activator="parent" anchor="top">
-                        配置面板
-                    </v-tooltip>
-                </v-btn>
-            </div>
+                    <!-- 移动 -->
+                    <v-btn ref="moveHandlerRef">
+                        <v-icon>mdi-arrow-all</v-icon>
+                    </v-btn>
+                    <slot name="activator"></slot>
+                    <!-- 配置面板 -->
+                    <v-btn v-bind="props" @mousedown.stop>
+                        <v-icon>mdi-cog</v-icon>
+                    </v-btn>
+                </v-defaults-provider>
+            </v-sheet>
         </template>
         <v-sheet rounded width="400" class="px-6 py-8">
             <slot name="config"></slot>
@@ -191,7 +182,7 @@ export default defineComponent({
 .activator {
     position: absolute;
     right: 0;
-    top: 0;
+    top: -4px;
     transform: translateY(-100%);
     transform-origin: right bottom;
     min-width: max-content;
