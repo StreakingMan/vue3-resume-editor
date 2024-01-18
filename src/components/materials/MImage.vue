@@ -111,7 +111,7 @@ const protoInfo: ProtoInfo<MImageConfig> = {
         w: 100,
         h: 100,
         config: {
-            url: `https://avatars.dicebear.com/v2/avataaars/12e951b855470f70b2f3051992f61f26.svg`,
+            url: `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=Bubba`,
             type: 'web',
             aspectRatio: 1,
             cut: false,

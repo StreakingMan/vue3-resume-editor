@@ -2,7 +2,7 @@
     <v-menu v-model="visible" anchor="end" :close-on-content-click="false">
         <template #activator="{ props }">
             <v-sheet
-                class="activator text-blue-darken-3"
+                class="activator text-blue-darken-3 bg-white"
                 rounded="pill"
                 border
                 :style="{
