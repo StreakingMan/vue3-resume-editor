@@ -197,15 +197,15 @@ const materialList = computed(() => paper.materialList);
 
     .select-box {
         position: absolute;
-        background: lightblue;
-        opacity: 0.3;
+        background: #09bbfe22;
+        border: 1px solid #09bbfe;
         z-index: 9;
     }
 
     .group-rect {
         position: absolute;
-        background: lightcoral;
-        opacity: 0.3;
+        background: #5a42ec22;
+        border: 1px dashed #5a42ec;
         z-index: 1;
     }
 
