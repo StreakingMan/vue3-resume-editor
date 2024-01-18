@@ -1,3 +1,45 @@
+<script setup lang="ts">
+import { reactive, ref } from 'vue';
+import useMouseDragDynamic, {
+    MouseEvtInfo,
+} from '../../composables/useMouseDragDynamic';
+import { prototypeMap } from '../materials/prototypes';
+import { MaterialNames } from '../materials/config';
+import { usePaper, useRuntime } from '@/composables/useApp';
+
+const runtime = useRuntime();
+const paper = usePaper();
+
+// 原型信息
+const prototypes = reactive(prototypeMap);
+
+// 原型拖入paper
+const draggingProtoType = ref<MaterialNames>(MaterialNames.MText);
+const { onMousedown: onProtoMousedown } = useMouseDragDynamic({
+    onStart() {
+        //console.log(draggingProtoType.value);
+    },
+    onDrag({ transX, transY }: MouseEvtInfo) {
+        const proto = prototypes[draggingProtoType.value];
+        if (!proto) return;
+        proto.tempStyle = `transition: 0s;transform: translateX(${transX}px) translateY(${transY}px) !important`;
+    },
+    onFinish({ currentX, currentY }: MouseEvtInfo) {
+        const proto = prototypes[draggingProtoType.value];
+        if (!proto) return;
+        proto.tempStyle = '';
+
+        // 计算释放时相对于paper的位置
+        const { x: paperX, y: paperY } = runtime.paper.bounds;
+
+        const x = (currentX - paperX) / runtime.scale.value;
+        const y = (currentY - paperY) / runtime.scale.value;
+        if (x < 0 || y < 0) return;
+        paper.addMaterial(proto.genInitOptions({ x, y, paperInstance: paper }));
+    },
+});
+</script>
+
 <template>
     <v-row no-gutters class="pa-6">
         <v-col cols="12" class="mb-2">
@@ -5,7 +47,7 @@
         </v-col>
         <v-col v-for="(proto, name) in prototypes" :key="name" cols="4">
             <v-sheet
-                class="border sheet bg-grey-darken-2 ma-1"
+                class="sheet bg-grey-darken-2 ma-1"
                 :style="proto.tempStyle"
                 @mousedown.prevent.stop="
                     draggingProtoType = name;
@@ -24,62 +66,6 @@
         </v-col>
     </v-row>
 </template>
-
-<script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
-import useMouseDragDynamic, {
-    MouseEvtInfo,
-} from '../../composables/useMouseDragDynamic';
-import { prototypeMap } from '../materials/prototypes';
-import { MaterialComponentNameType } from '../materials/config';
-import { usePaper, useRuntime } from '../../composables/useApp';
-
-export default defineComponent({
-    name: 'MaterialPrototype',
-    components: {},
-    setup() {
-        const runtime = useRuntime();
-        const paper = usePaper();
-
-        // 原型信息
-        const prototypes = reactive(prototypeMap);
-
-        // 原型拖入paper
-        const draggingProtoType = ref<MaterialComponentNameType>('MText');
-        const { onMousedown: onProtoMousedown } = useMouseDragDynamic({
-            onStart() {
-                //console.log(draggingProtoType.value);
-            },
-            onDrag({ transX, transY }: MouseEvtInfo) {
-                const proto = prototypes[draggingProtoType.value];
-                if (!proto) return;
-                proto.tempStyle = `transition: 0s;transform: translateX(${transX}px) translateY(${transY}px) !important`;
-            },
-            onFinish({ currentX, currentY }: MouseEvtInfo) {
-                const proto = prototypes[draggingProtoType.value];
-                if (!proto) return;
-                proto.tempStyle = '';
-
-                // 计算释放时相对于paper的位置
-                const { x: paperX, y: paperY } = runtime.paper.bounds;
-
-                const x = (currentX - paperX) / runtime.scale.value;
-                const y = (currentY - paperY) / runtime.scale.value;
-                if (x < 0 || y < 0) return;
-                paper.addMaterial(
-                    proto.genInitOptions({ x, y, paperInstance: paper }),
-                );
-            },
-        });
-
-        return {
-            prototypes,
-            onProtoMousedown,
-            draggingProtoType,
-        };
-    },
-});
-</script>
 
 <style scoped lang="scss">
 .sheet {
