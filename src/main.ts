@@ -2,8 +2,14 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import { loadFonts } from './plugins/webfontloader';
-import { i18n } from './i18n';
+import { useUrlSearchParams } from '@vueuse/core';
+import PrintPage from '@/PrintPage.vue';
+// import { i18n } from './i18n';
 
 loadFonts().then();
 
-createApp(App).use(vuetify).use(i18n).mount('#app');
+if (useUrlSearchParams().printPage === 'auto') {
+    createApp(PrintPage).use(vuetify).mount('#app');
+} else {
+    createApp(App).use(vuetify).mount('#app');
+}
