@@ -6668,10 +6668,10 @@ vue@^3.4.10:
     "@vue/server-renderer" "3.4.10"
     "@vue/shared" "3.4.10"
 
-vuetify@^3.4.10:
-  version "3.4.10"
-  resolved "https://registry.npmmirror.com/vuetify/-/vuetify-3.4.10.tgz#436ff039857cacc5239a8a86d7c391f871d16110"
-  integrity sha512-tObGoumCJxuK26OpS/CLZZIJAgDtN2cnd31vJscVhpuf6jeMD7wh8IsgfZownAOXU1FcKWVQwn1RSDsoXk5cJA==
+vuetify@^3.4.11:
+  version "3.4.11"
+  resolved "https://registry.npmmirror.com/vuetify/-/vuetify-3.4.11.tgz#85fb1212bb0672ba1208899bcde2b6d0ab2b2ae9"
+  integrity sha512-8kF1G6/VHZvZEuwL91DybWRimM0d1ueupTfFcxrtLDNMmytCI0PF/hf/Z7tCPe1gfMXrENk9FOP6ojydSmNFpQ==
 
 w3c-hr-time@^1.0.2:
   version "1.0.2"
