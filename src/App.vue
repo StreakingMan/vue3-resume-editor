@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, provide, reactive, toRef, watch } from 'vue';
 import useMouseWheel from './composables/useMouseWheel';
-import { Paper, paperInjectionKey } from './classes/Paper';
+import { Paper as PaperClass, paperInjectionKey } from './classes/Paper';
 import Sketch from './components/core/Sketch.vue';
 import sketch from './components/core/Sketch.vue';
 import MaterialPrototype from './components/core/MaterialPrototype.vue';
@@ -13,6 +13,7 @@ import TemplateList from './components/templates/TemplateList.vue';
 import { SCALE_RANGE } from '@/components/core/config';
 import { useMagicKeys, whenever } from '@vueuse/core';
 import WebsiteInfo from '@/components/other/WebsiteInfo.vue';
+import Paper from '@/components/core/Paper.vue';
 
 // 运行时
 const runtime = reactive(new Runtime());
@@ -34,13 +35,13 @@ useMouseWheel({
 });
 
 // Paper实例
-const paper = reactive(new Paper({}));
-provide(paperInjectionKey, paper);
+const paperInstance = reactive(new PaperClass({}));
+provide(paperInjectionKey, paperInstance);
 onMounted(() => {
-    if (!paper.loadFromStorage()) {
-        paper.loadData(template1);
+    if (!paperInstance.loadFromStorage()) {
+        paperInstance.loadData(template1);
     }
-    console.log(paper);
+    console.log(paperInstance);
 });
 
 // 复制粘贴
@@ -49,20 +50,20 @@ whenever(ctrl_c, () => {
     runtime.copyMaterialSet = new Set(runtime.activeMaterialSet);
 });
 whenever(ctrl_v, () => {
-    paper.copyMaterial([...runtime.copyMaterialSet]);
+    paperInstance.copyMaterial([...runtime.copyMaterialSet]);
     runtime.copyMaterialSet.clear();
 });
 
 // 按del键删除
 const { Delete } = useMagicKeys();
 whenever(Delete, () => {
-    paper.removeMaterial([...runtime.activeMaterialSet]);
+    paperInstance.removeMaterial([...runtime.activeMaterialSet]);
 });
 
 // ctrl+a全选
 const { ctrl_a } = useMagicKeys();
 whenever(ctrl_a, () => {
-    for (const m of paper.materialList) {
+    for (const m of paperInstance.materialList) {
         runtime.activeMaterialSet.add(m.id);
     }
 });
@@ -79,20 +80,24 @@ watch(
         // 激活列表增减时，同属分组元素一并操作
         const { added, removed } = stringArrayDiff(ov, nv);
         const needAddGroupIdSet = [
-            ...new Set(added.map((mId) => paper.queryMaterial(mId)?.groupId)),
+            ...new Set(
+                added.map((mId) => paperInstance.queryMaterial(mId)?.groupId),
+            ),
         ];
         const needRemoveGroupIdSet = [
-            ...new Set(removed.map((mId) => paper.queryMaterial(mId)?.groupId)),
+            ...new Set(
+                removed.map((mId) => paperInstance.queryMaterial(mId)?.groupId),
+            ),
         ];
         needAddGroupIdSet.forEach((groupId) => {
             if (!groupId) return;
-            paper.queryGroupMaterials(groupId).forEach(({ id }) => {
+            paperInstance.queryGroupMaterials(groupId).forEach(({ id }) => {
                 runtime.activeMaterialSet.add(id);
             });
         });
         needRemoveGroupIdSet.forEach((groupId) => {
             if (!groupId) return;
-            paper.queryGroupMaterials(groupId).forEach(({ id }) => {
+            paperInstance.queryGroupMaterials(groupId).forEach(({ id }) => {
                 runtime.activeMaterialSet.delete(id);
             });
         });
@@ -141,7 +146,9 @@ watch(
             </v-btn>
         </v-navigation-drawer>
         <v-main class="bg-grey-darken-3">
-            <Sketch ref="sketch" />
+            <Sketch ref="sketch">
+                <Paper />
+            </Sketch>
             <WebsiteInfo />
             <v-btn
                 class="position-fixed print-none"

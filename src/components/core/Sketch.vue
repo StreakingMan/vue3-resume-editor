@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import Paper from './Paper.vue';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import useMouseDrag, { MouseEvtInfo } from '@/composables/useMouseDrag';
 import { useRuntime } from '@/composables/useApp';
@@ -8,7 +7,6 @@ import { paperSizeMap } from '@/classes/Paper';
 
 const runtime = useRuntime();
 const wrapperRef = ref<HTMLDivElement | null>(null);
-const paperRef = ref<InstanceType<typeof Paper> | null>(null);
 
 const grabbing = ref(false);
 
@@ -18,7 +16,7 @@ const setUnScrollingDebounce = useDebounceFn(() => {
 }, 300);
 // 优化Mac触控板滚动（屏蔽默认行为，重新赋值两个轴的偏移量）
 const handleSketchWheel = (e: WheelEvent) => {
-    if (!wrapperRef.value || !paperRef.value || e.ctrlKey) return;
+    if (!wrapperRef.value || e.ctrlKey) return;
     e.preventDefault();
     wrapperRef.value.scrollLeft += e.deltaX;
     wrapperRef.value.scrollTop += e.deltaY;
@@ -126,7 +124,7 @@ const cursor = computed(() => {
         ]"
     >
         <div class="sketch__inner">
-            <Paper ref="paperRef" />
+            <slot />
         </div>
     </div>
 </template>
