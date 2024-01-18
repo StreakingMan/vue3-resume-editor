@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
-import useMouseDrag, { MouseEvtInfo } from '@/composables/useMouseDrag';
+import useMouseDragDynamic, {
+    MouseEvtInfo,
+} from '@/composables/useMouseDragDynamic';
 import { useRuntime } from '@/composables/useApp';
 import { useActiveElement, useDebounceFn, useMagicKeys } from '@vueuse/core';
 import { paperSizeMap } from '@/classes/Paper';
@@ -60,7 +62,7 @@ const { space, ctrl } = useMagicKeys({
 });
 
 let scrollTopCache: number, scrollLeftCache: number;
-useMouseDrag({
+useMouseDragDynamic({
     onStart: () => {
         if (!space.value || !wrapperRef.value) return false;
         scrollLeftCache = wrapperRef.value.scrollLeft;

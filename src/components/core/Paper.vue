@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
-import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
+import useMouseDragDynamic, {
+    MouseEvtInfo,
+} from '../../composables/useMouseDragDynamic';
 import MaterialInstance from './MaterialInstance.vue';
 import { usePaper, useRuntime } from '@/composables/useApp';
 import { useElementBounding, useMagicKeys } from '@vueuse/core';
@@ -79,7 +81,7 @@ const onSelectFinish = (/*info: MouseEvtInfo*/) => {
     selectorW.value = 0;
     selectorH.value = 0;
 };
-const { clicking: selecting } = useMouseDrag({
+const { clicking: selecting } = useMouseDragDynamic({
     onStart: onSelectStart,
     onDrag: onSelectDrag,
     onFinish: onSelectFinish,

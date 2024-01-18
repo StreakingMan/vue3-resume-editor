@@ -166,7 +166,9 @@ import {
     toRef,
     watch,
 } from 'vue';
-import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
+import useMouseDragDynamic, {
+    MouseEvtInfo,
+} from '../../composables/useMouseDragDynamic';
 import { CTRL_DOT_SIZE, UNIT_SIZE } from './config';
 import { Material, materialInjectionKey } from '@/classes/Material';
 import { usePaper, useRuntime } from '@/composables/useApp';
@@ -287,7 +289,7 @@ export default defineComponent({
 
         // 缩放控制点
         const clickingDot = ref<CtrlDotType | null>(null);
-        const { onMousedown: onDotMousedown } = useMouseDrag({
+        const { onMousedown: onDotMousedown } = useMouseDragDynamic({
             onStart() {
                 if (!(material.active || material.hover)) return;
                 const { x, y, w, h } = material.instance;

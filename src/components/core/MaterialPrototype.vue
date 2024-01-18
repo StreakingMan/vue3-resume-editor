@@ -27,7 +27,9 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue';
-import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
+import useMouseDragDynamic, {
+    MouseEvtInfo,
+} from '../../composables/useMouseDragDynamic';
 import { prototypeMap } from '../materials/prototypes';
 import { MaterialComponentNameType } from '../materials/config';
 import { usePaper, useRuntime } from '../../composables/useApp';
@@ -44,7 +46,7 @@ export default defineComponent({
 
         // 原型拖入paper
         const draggingProtoType = ref<MaterialComponentNameType>('MText');
-        const { onMousedown: onProtoMousedown } = useMouseDrag({
+        const { onMousedown: onProtoMousedown } = useMouseDragDynamic({
             onStart() {
                 //console.log(draggingProtoType.value);
             },

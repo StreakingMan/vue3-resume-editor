@@ -118,7 +118,9 @@ import { useMaterial, usePaper, useRuntime } from '@/composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import BorderStyle from '../config-widgets/BorderStyle.vue';
 import Color from '../config-widgets/Color.vue';
-import useMouseDrag, { MouseEvtInfo } from '../../composables/useMouseDrag';
+import useMouseDragDynamic, {
+    MouseEvtInfo,
+} from '../../composables/useMouseDragDynamic';
 import { useMagicKeys } from '@vueuse/core';
 
 export default defineComponent({
@@ -134,7 +136,7 @@ export default defineComponent({
         const posInfoCacheMap = new Map();
         // 元素移动
         const moveHandlerRef = ref(null);
-        useMouseDrag({
+        useMouseDragDynamic({
             onStart() {
                 if (space.value) return false;
                 // 拖动非激活元素时，重置激活集合

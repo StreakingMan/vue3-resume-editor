@@ -1,4 +1,4 @@
-import { ref, Ref, onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted, ref, Ref } from 'vue';
 
 interface MouseDragCbs {
     onMousedown: (ev: MouseEvent) => void;
@@ -27,7 +27,12 @@ export interface MouseEvtCb {
     (info: MouseEvtInfo): void | boolean;
 }
 
-export default function useMouseDrag(options: MouseDragOptions): MouseDragCbs {
+// 动态的拖拽监听
+// 在鼠标按下时才会监听鼠标移动和抬起事件，以减少不必要的监听
+// 鼠标抬起时会自动移除监听
+export default function useMouseDragDynamic(
+    options: MouseDragOptions,
+): MouseDragCbs {
     const clicking = ref(false);
     const {
         onStart,
