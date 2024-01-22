@@ -148,36 +148,49 @@ watch(
         <v-main class="bg-grey-darken-3">
             <Sketch ref="sketch">
                 <Paper />
-                <v-btn @click="paperInstance.pageCount++">新增一页</v-btn>
             </Sketch>
             <WebsiteInfo />
-            <v-btn
-                class="position-fixed print-none"
-                style="right: 24px; bottom: 128px"
-                color="success"
-                icon
-                size="x-large"
-                href="https://github.com/StreakingMan/vue3-resume-editor#%E5%8A%9F%E8%83%BD%E6%BC%94%E7%A4%BA"
-                target="_blank"
+            <v-defaults-provider
+                :defaults="{
+                    VBtn: {
+                        class: 'position-fixed print-none',
+                        icon: true,
+                        size: 'x-large',
+                    },
+                }"
             >
-                <v-icon>mdi-help</v-icon>
-                <v-tooltip activator="parent" anchor="start">
-                    使用文档
-                </v-tooltip>
-            </v-btn>
-            <v-btn
-                class="position-fixed print-none"
-                style="right: 24px; bottom: 48px"
-                color="primary"
-                icon
-                size="x-large"
-                @click="bottomDrawer = !bottomDrawer"
-            >
-                <v-icon>mdi-file</v-icon>
-                <v-tooltip activator="parent" anchor="start">
-                    模板预设
-                </v-tooltip>
-            </v-btn>
+                <v-btn
+                    style="right: 24px; bottom: 208px"
+                    color="#673ab7"
+                    @click="paperInstance.pageCount++"
+                >
+                    <v-icon>mdi-note-plus-outline</v-icon>
+                    <v-tooltip activator="parent" anchor="start">
+                        新增页面
+                    </v-tooltip>
+                </v-btn>
+                <v-btn
+                    style="right: 24px; bottom: 128px"
+                    color="#3f51b5"
+                    href="https://github.com/StreakingMan/vue3-resume-editor#%E5%8A%9F%E8%83%BD%E6%BC%94%E7%A4%BA"
+                    target="_blank"
+                >
+                    <v-icon>mdi-help</v-icon>
+                    <v-tooltip activator="parent" anchor="start">
+                        使用文档
+                    </v-tooltip>
+                </v-btn>
+                <v-btn
+                    style="right: 24px; bottom: 48px"
+                    color="#2196f3"
+                    @click="bottomDrawer = !bottomDrawer"
+                >
+                    <v-icon>mdi-note-text-outline</v-icon>
+                    <v-tooltip activator="parent" anchor="start">
+                        模板预设
+                    </v-tooltip>
+                </v-btn>
+            </v-defaults-provider>
         </v-main>
         <v-snackbar
             v-model="snackbar.show"

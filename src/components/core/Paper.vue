@@ -135,6 +135,14 @@ const paperStyle = computed(() => [
 ]);
 
 const isPrintPage = !!useUrlSearchParams().printPage;
+
+const deletePage = (index: number) => {
+    paper.pageCount--;
+    console.log('删除页', index);
+    // TODO 判断是否有元素
+    //  询问是否删除范围内的元素
+    // 调整后面元素的位置
+};
 </script>
 
 <template>
@@ -146,7 +154,7 @@ const isPrintPage = !!useUrlSearchParams().printPage;
             ...paperStyle,
             {
                 height: isPrintPage
-                    ? (Math.ceil(paper.h) + 1) * paper.pageCount + 'px '
+                    ? (paper.h + 1) * paper.pageCount + 'px '
                     : paper.h + 'px',
             },
         ]"
@@ -182,7 +190,36 @@ const isPrintPage = !!useUrlSearchParams().printPage;
             :key="p"
             class="paper"
             :style="paperStyle"
-        ></div>
+        >
+            <div
+                class="paper-options"
+                :style="{
+                    transform: `scale(${1 / runtime.scale.value})`,
+                }"
+            >
+                <v-defaults-provider
+                    :defaults="{
+                        VBtn: {
+                            icon: true,
+                            size: 64,
+                            color: 'transparent',
+                            flat: true,
+                        },
+                        VIcon: {
+                            color: 'white',
+                            size: 42,
+                        },
+                    }"
+                >
+                    <v-btn :ripple="false">
+                        <v-icon> mdi-keyboard-return </v-icon>
+                    </v-btn>
+                    <v-btn @click="deletePage(p)">
+                        <v-icon color="red"> mdi-note-remove-outline </v-icon>
+                    </v-btn>
+                </v-defaults-provider>
+            </div>
+        </div>
     </template>
 </template>
 
@@ -222,6 +259,19 @@ const isPrintPage = !!useUrlSearchParams().printPage;
         border-radius: 0;
         background-image: none;
         overflow: hidden !important;
+    }
+}
+
+.paper-options {
+    position: absolute;
+    right: -80px;
+    top: -32px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    @media print {
+        display: none;
     }
 }
 </style>

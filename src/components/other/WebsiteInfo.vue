@@ -15,6 +15,14 @@
         | Powered by
         <a
             class="text-grey-darken-1 text-caption text-decoration-none"
+            href="https://vuejs.org/"
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+        >
+            <v-icon size="small">mdi-vuejs</v-icon>
+        </a>
+        <a
+            class="text-grey-darken-1 text-caption text-decoration-none"
             href="https://vuetifyjs.com/"
             target="_blank"
             rel="noopener noreferrer nofollow"
