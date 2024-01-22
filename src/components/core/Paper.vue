@@ -135,7 +135,6 @@ const paperStyle = computed(() => [
 ]);
 
 const isPrintPage = !!useUrlSearchParams().printPage;
-console.log(paper.h);
 </script>
 
 <template>
@@ -147,7 +146,7 @@ console.log(paper.h);
             ...paperStyle,
             {
                 height: isPrintPage
-                    ? paper.h * paper.pageCount + 'px '
+                    ? (Math.ceil(paper.h) + 1) * paper.pageCount + 'px '
                     : paper.h + 'px',
             },
         ]"
