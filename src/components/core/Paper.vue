@@ -5,7 +5,11 @@ import useMouseDragDynamic, {
 } from '@/composables/useMouseDragDynamic';
 import MaterialInstance from './MaterialInstance.vue';
 import { usePaper, useRuntime } from '@/composables/useApp';
-import { useElementBounding, useMagicKeys } from '@vueuse/core';
+import {
+    useElementBounding,
+    useMagicKeys,
+    useUrlSearchParams,
+} from '@vueuse/core';
 
 const runtime = useRuntime();
 const paper = usePaper();
@@ -119,6 +123,19 @@ const groupRects = computed<
 
 const showGrid = computed(() => runtime.showGrid);
 const materialList = computed(() => paper.materialList);
+
+const paperStyle = computed(() => [
+    paper.cellSize < 10 || !showGrid.value ? 'background-image: none' : '',
+    {
+        width: paper.w + 'px',
+        height: paper.h + 'px',
+        backgroundColor: paper.background,
+        backgroundSize: `${paper.cellSize}px ${paper.cellSize}px,${paper.cellSize}px ${paper.cellSize}px`,
+    },
+]);
+
+const isPrintPage = !!useUrlSearchParams().printPage;
+console.log(paper.h);
 </script>
 
 <template>
@@ -127,12 +144,11 @@ const materialList = computed(() => paper.materialList);
         ref="paperRef"
         class="paper"
         :style="[
-            paper.cellSize < 10 || !showGrid ? 'background-image: none' : '',
+            ...paperStyle,
             {
-                width: paper.w + 'px',
-                height: paper.h + 'px',
-                backgroundColor: paper.background,
-                backgroundSize: `${paper.cellSize}px ${paper.cellSize}px,${paper.cellSize}px ${paper.cellSize}px`,
+                height: isPrintPage
+                    ? paper.h * paper.pageCount + 'px '
+                    : paper.h + 'px',
             },
         ]"
     >
@@ -160,6 +176,15 @@ const materialList = computed(() => paper.materialList);
             ></div>
         </v-theme-provider>
     </div>
+    <!--分页 -->
+    <template v-if="!isPrintPage">
+        <div
+            v-for="p in paper.pageCount - 1"
+            :key="p"
+            class="paper"
+            :style="paperStyle"
+        ></div>
+    </template>
 </template>
 
 <style lang="scss" scoped>

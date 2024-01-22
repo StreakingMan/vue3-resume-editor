@@ -11,6 +11,7 @@ onMounted(() => {
         window.alert('没有找到存储的数据');
     } else {
         console.log(paperInstance);
+        // document.body.style.background = paperInstance.background;
         window.print();
     }
 });
@@ -18,5 +19,4 @@ onMounted(() => {
 
 <template>
     <Paper />
-    <div style="page-break-after: always"></div>
 </template>

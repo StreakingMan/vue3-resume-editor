@@ -1388,5 +1388,6 @@
     ],
     "_materialMap": {},
     "_groupMap": {},
-    "_cellSize": 10
+    "_cellSize": 10,
+    "_pageCount": 1
 }

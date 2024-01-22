@@ -43,6 +43,14 @@ export class Paper {
             m.cellSize = value;
         });
     }
+    // 页数
+    private _pageCount = 1;
+    get pageCount(): number {
+        return this._pageCount;
+    }
+    set pageCount(value: number) {
+        this._pageCount = value;
+    }
     // 当前z值map
     // 该访问器在同一批次的操作中应提前访问然后缓存
     get currentZMap(): Map<number, Material<any>> {
@@ -72,13 +80,22 @@ export class Paper {
         w: number;
         h: number;
         _cellSize: number;
+        _pageCount: number;
         materialList: any[];
     }): void {
-        const { w, h, _cellSize, materialList = [], background } = data;
+        const {
+            w,
+            h,
+            _cellSize,
+            _pageCount,
+            materialList = [],
+            background,
+        } = data;
         this.background = background;
         this.w = w;
         this.h = h;
         this.cellSize = _cellSize;
+        this.pageCount = _pageCount || 1;
         this.materialList = [];
         this._materialMap.clear();
         this._groupMap.clear();

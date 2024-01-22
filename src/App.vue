@@ -148,6 +148,7 @@ watch(
         <v-main class="bg-grey-darken-3">
             <Sketch ref="sketch">
                 <Paper />
+                <v-btn @click="paperInstance.pageCount++">新增一页</v-btn>
             </Sketch>
             <WebsiteInfo />
             <v-btn
