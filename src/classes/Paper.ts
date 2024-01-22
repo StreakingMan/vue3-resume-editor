@@ -49,6 +49,7 @@ export class Paper {
         return this._pageCount;
     }
     set pageCount(value: number) {
+        if (value < 1) return;
         this._pageCount = value;
     }
     // 当前z值map
