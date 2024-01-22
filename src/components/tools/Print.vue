@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import { usePaper } from '@/composables/useApp';
+
+const paper = usePaper();
 const onPrintClick = async () => {
+    paper.saveToStorage();
     window.open('/?printPage=auto', '_blank');
 };
 </script>
