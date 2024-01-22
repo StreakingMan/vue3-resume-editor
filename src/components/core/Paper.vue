@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import useMouseDragDynamic, {
     MouseEvtInfo,
-} from '../../composables/useMouseDragDynamic';
+} from '@/composables/useMouseDragDynamic';
 import MaterialInstance from './MaterialInstance.vue';
 import { usePaper, useRuntime } from '@/composables/useApp';
 import { useElementBounding, useMagicKeys } from '@vueuse/core';
@@ -29,22 +29,6 @@ watch(
     },
 );
 
-onMounted(() => {
-    // 初始化尺寸
-    if (!paperRef.value) return;
-    paperRef.value.style.width = paper.w + 'px';
-    paperRef.value.style.height = paper.h + 'px';
-});
-
-// 缩放值监听设置
-watch(
-    () => runtime.scale.value,
-    async (v) => {
-        if (!paperRef.value) return;
-        paperRef.value.style.transform = `scale(${v})`;
-    },
-);
-
 // 选择框拖拽
 const selectorX = ref(0);
 const selectorY = ref(0);
@@ -57,9 +41,8 @@ const onSelectStart = (info: MouseEvtInfo) => {
     if (!paperRef.value) return false;
     if (current.size) return false;
     const { startX, startY } = info;
-    const { x, y } = paperRef.value.getBoundingClientRect();
-    selectorX.value = (startX - x) / runtime.scale.value;
-    selectorY.value = (startY - y) / runtime.scale.value;
+    selectorX.value = (startX - x.value) / runtime.scale.value;
+    selectorY.value = (startY - y.value) / runtime.scale.value;
 };
 const onSelectDrag = (info: MouseEvtInfo) => {
     const { transX, transY } = info;
@@ -89,7 +72,7 @@ const { clicking: selecting } = useMouseDragDynamic({
     preventDefault: false,
 });
 
-// 选择框实时样式
+// 选择框实时bounding样式
 const selectorStyle = computed(() => {
     let left = selectorX.value,
         top = selectorY.value,
@@ -146,6 +129,8 @@ const materialList = computed(() => paper.materialList);
         :style="[
             paper.cellSize < 10 || !showGrid ? 'background-image: none' : '',
             {
+                width: paper.w + 'px',
+                height: paper.h + 'px',
                 backgroundColor: paper.background,
                 backgroundSize: `${paper.cellSize}px ${paper.cellSize}px,${paper.cellSize}px ${paper.cellSize}px`,
             },
@@ -211,7 +196,6 @@ const materialList = computed(() => paper.materialList);
 
     @media print {
         border-radius: 0;
-        transform: scale(1) !important;
         background-image: none;
         overflow: hidden !important;
     }

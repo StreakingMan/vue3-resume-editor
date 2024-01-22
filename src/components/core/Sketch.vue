@@ -120,12 +120,15 @@ const cursor = computed(() => {
             `--scroll-thumb-color: ${
                 scrolling ? 'rgba(255,255,255,0.3)' : 'transparent'
             }`,
-            {
-                cursor,
-            },
+            { cursor },
         ]"
     >
-        <div class="sketch__inner">
+        <div
+            class="sketch__inner"
+            :style="{
+                transform: `scale(${runtime.scale.value})`,
+            }"
+        >
             <slot />
         </div>
     </div>
