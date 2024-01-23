@@ -140,6 +140,17 @@ watch(
         <v-main class="bg-grey-darken-3">
             <Sketch ref="sketch">
                 <Paper />
+                <v-btn
+                    block
+                    size="x-large"
+                    class="mt-4 text-white print-none"
+                    variant="tonal"
+                    color="#4f545c"
+                    prepend-icon="mdi-plus"
+                    @click="paperInstance.pageCount++"
+                >
+                    新增页面
+                </v-btn>
             </Sketch>
             <WebsiteInfo />
             <v-defaults-provider

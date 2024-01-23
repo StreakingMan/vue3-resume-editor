@@ -273,17 +273,6 @@ const insertPage = (index: number) => {
             </div>
         </div>
     </template>
-    <v-btn
-        block
-        size="x-large"
-        class="mt-4 text-white print-none"
-        variant="tonal"
-        color="#4f545c"
-        prepend-icon="mdi-plus"
-        @click="paper.pageCount++"
-    >
-        新增页面
-    </v-btn>
 </template>
 
 <style lang="scss" scoped>
@@ -366,6 +355,10 @@ const insertPage = (index: number) => {
     &.show {
         opacity: 1;
         clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+
+    @media print {
+        display: none;
     }
 }
 </style>
