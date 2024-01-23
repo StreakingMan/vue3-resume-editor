@@ -5,9 +5,13 @@ export const easeInOut = (option: {
     callback?: (value: number) => void;
 }) => {
     const { start, end, duration = 300, callback } = option;
+    if (import.meta.env.MODE === 'test') {
+        callback?.(end);
+        return;
+    }
     let startTime = 0;
     let endTime = 0;
-    const easeInOut = (t: number): number => {
+    const _easeInOut = (t: number): number => {
         return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
     };
     const step = (timestamp: number): void => {
@@ -18,7 +22,7 @@ export const easeInOut = (option: {
             endTime = startTime + duration;
         }
         const progress = Math.min(1, (timestamp - startTime) / duration);
-        const _value = start + (end - start) * easeInOut(progress);
+        const _value = start + (end - start) * _easeInOut(progress);
         callback?.(_value);
         if (progress < 1) {
             requestAnimationFrame(step);

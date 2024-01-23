@@ -340,7 +340,7 @@ test('对齐操作:底端对齐', () => {
     paper.addMaterial(mOptions3);
     const [m1, m2, m3] = paper.materialList;
     paper.alignVerticalBottom([m1.id, m2.id, m3.id]);
-    expect([m1.y, m2.y, m3.y]).toEqual([500, 400, 500]);
+    expect([m1.y, m2.y, m3.y]).toEqual([400, 300, 400]);
 });
 
 test('对齐操作:垂直居中对齐', () => {
