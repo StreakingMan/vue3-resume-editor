@@ -93,7 +93,7 @@ import { useMaterial, usePaper, useRuntime } from '@/composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import BorderStyle from '../config-widgets/BorderStyle.vue';
 import Color from '../config-widgets/Color.vue';
-import useMouseDragDynamic, { MouseEvtInfo } from '../../composables/useMouseDragDynamic';
+import useMouseDragDynamic, { type MouseEvtInfo } from '../../composables/useMouseDragDynamic';
 import { useMagicKeys } from '@vueuse/core';
 
 export default defineComponent({

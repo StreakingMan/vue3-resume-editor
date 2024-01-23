@@ -6,4 +6,5 @@ dist-ssr
 .idea
 .eslintcache
 
-yarn-error.log
+# TypeScript
+*.tsbuildinfo

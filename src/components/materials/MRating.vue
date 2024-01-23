@@ -51,8 +51,8 @@
 
 <script lang="ts">
 import { defineComponent, nextTick, ref, toRef, watch } from 'vue';
-import { MaterialBaseConfig } from '@/classes/Material';
-import { ProtoInfo } from './prototypes';
+import { type MaterialBaseConfig } from '@/classes/Material';
+import { type ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
 import { useMaterial } from '@/composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';

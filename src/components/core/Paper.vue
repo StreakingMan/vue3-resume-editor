@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import useMouseDragDynamic, { MouseEvtInfo } from '@/composables/useMouseDragDynamic';
+import useMouseDragDynamic, { type MouseEvtInfo } from '@/composables/useMouseDragDynamic';
 import MaterialInstance from './MaterialInstance.vue';
 import { usePaper, useRuntime } from '@/composables/useApp';
 import { useElementBounding, useMagicKeys, useUrlSearchParams } from '@vueuse/core';
+import type { Material } from '@/classes/Material';
 
 const runtime = useRuntime();
 const paper = usePaper();
@@ -166,7 +167,7 @@ const deletePage = (index: number) => {
             <MaterialInstance
                 v-for="(m, i) in materialList"
                 :key="m.id"
-                v-model:item="materialList[i]"
+                v-model:item="(materialList as Material<any>[])[i]"
             ></MaterialInstance>
             <div v-if="selecting && !current.size" class="select-box" :style="selectorStyle"></div>
         </v-theme-provider>
@@ -194,7 +195,7 @@ const deletePage = (index: number) => {
                         },
                     }"
                 >
-                    <v-btn :ripple="false">
+                    <v-btn>
                         <v-icon> mdi-keyboard-return </v-icon>
                     </v-btn>
                     <v-btn @click="deletePage(p)">
@@ -252,6 +253,7 @@ const deletePage = (index: number) => {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    transform-origin: center 32px;
 
     @media print {
         display: none;

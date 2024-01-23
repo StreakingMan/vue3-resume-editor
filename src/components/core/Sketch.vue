@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
-import useMouseDragDynamic, { MouseEvtInfo } from '@/composables/useMouseDragDynamic';
+import useMouseDragDynamic, { type MouseEvtInfo } from '@/composables/useMouseDragDynamic';
 import { useRuntime } from '@/composables/useApp';
 import { useActiveElement, useDebounceFn, useMagicKeys } from '@vueuse/core';
 import { paperSizeMap } from '@/classes/Paper';

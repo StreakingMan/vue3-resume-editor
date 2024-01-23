@@ -1,6 +1,6 @@
 <script lang="ts">
-import { MaterialBaseConfig } from '@/classes/Material';
-import { ProtoInfo } from '@/components/materials/prototypes';
+import { type MaterialBaseConfig } from '@/classes/Material';
+import { type ProtoInfo } from '@/components/materials/prototypes';
 import { MaterialNames } from '@/components/materials/config';
 
 interface MTimelineConfig extends MaterialBaseConfig {

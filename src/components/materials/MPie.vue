@@ -1,7 +1,7 @@
 <script lang="ts">
 import { computed, defineComponent, nextTick, toRef, watch } from 'vue';
-import { MaterialBaseConfig } from '@/classes/Material';
-import { ProtoInfo } from '@/components/materials/prototypes';
+import { type MaterialBaseConfig } from '@/classes/Material';
+import { type ProtoInfo } from '@/components/materials/prototypes';
 import { fontWeightClass, MaterialNames, typographyClass } from '@/components/materials/config';
 import { useMaterial } from '@/composables/useApp';
 import MaterialConfigPopover from '@/components/core/MaterialConfigPopover.vue';

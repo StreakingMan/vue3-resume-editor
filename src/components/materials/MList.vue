@@ -5,8 +5,8 @@
         :style="{
             color: instance.config.color,
             gap: instance.config.gap + 'px',
-            top: instance.config.padding + instance.config.borderWidth + 'px',
-            left: instance.config.padding + instance.config.borderWidth + 'px',
+            top: (instance.config.padding || 0) + (instance.config.borderWidth || 0) + 'px',
+            left: (instance.config.padding || 0) + (instance.config.borderWidth || 0) + 'px',
         }"
     >
         <div
@@ -21,7 +21,9 @@
                 :style="{ height: itemHeights[idx] + 'px !important' }"
                 wrap="hard"
                 placeholder="请输入文本"
-                @input="(e) => (instance.config.items[idx] = e.target.value)"
+                @input="
+                    (e) => (instance.config.items[idx] = (e.target as HTMLTextAreaElement)?.value)
+                "
                 @keydown.stop
             ></textarea>
         </div>
@@ -37,7 +39,7 @@
         <div
             v-for="(item, idx) in instance.config.items.slice(0, instance.config.itemLength)"
             :key="idx"
-            :ref="(el) => setItemRef(el, idx)"
+            :ref="(el) => setItemRef(el as any, idx)"
             class="d-flex align-start"
         >
             <span v-if="instance.config.dotType === 'numeric'"> {{ idx + 1 }}. </span>
@@ -142,36 +144,38 @@
 
 <script lang="ts">
 import { computed, defineComponent, nextTick, onMounted, ref, toRef, watch } from 'vue';
-import { MaterialBaseConfig } from '@/classes/Material';
-import { ProtoInfo } from './prototypes';
+import { type MaterialBaseConfig } from '@/classes/Material';
+import { type ProtoInfo } from './prototypes';
 import { fontWeightClass, MaterialNames, typographyClass } from './config';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
 import { useMaterial } from '@/composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import Color from '../config-widgets/Color.vue';
 
+type DotType =
+    | 'chevron-right'
+    | 'square'
+    | 'square-small'
+    | 'square-outline'
+    | 'square-medium'
+    | 'square-medium-outline'
+    | 'circle'
+    | 'circle-small'
+    | 'circle-outline'
+    | 'circle-medium'
+    | 'numeric';
+
 interface MListConfig extends MaterialBaseConfig {
     items: string[];
     itemLength: number;
-    dotType:
-        | 'chevron-right'
-        | 'square'
-        | 'square-small'
-        | 'square-outline'
-        | 'square-medium'
-        | 'square-medium-outline'
-        | 'circle'
-        | 'circle-small'
-        | 'circle-outline'
-        | 'circle-medium'
-        | 'numeric';
+    dotType: DotType;
     typo: number;
     fontWeight: number;
     color: string;
     gap: number;
 }
 
-const dots = [
+const dots: DotType[] = [
     'chevron-right',
     'square',
     'square-small',

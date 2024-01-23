@@ -62,13 +62,13 @@
 
 <script lang="ts">
 import { defineComponent, nextTick, toRef, watch } from 'vue';
-import { ProtoInfo } from './prototypes';
+import { type ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
 import { useMaterial } from '@/composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import ConfigToggle from '../config-widgets/ConfigToggle.vue';
 import ConfigToggleOption from '../config-widgets/ConfigToggleOption.vue';
-import { MaterialBaseConfig } from '@/classes/Material';
+import { type MaterialBaseConfig } from '@/classes/Material';
 import { MaterialNames } from '@/components/materials/config';
 
 interface MImageConfig extends MaterialBaseConfig {

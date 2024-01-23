@@ -1,3 +1,18 @@
+<script setup lang="ts">
+withDefaults(
+    defineProps<{
+        label?: string;
+        value: string;
+        icon?: string;
+    }>(),
+    {
+        label: '',
+        value: '',
+        icon: '',
+    },
+);
+</script>
+
 <template>
     <v-btn :value="value" variant="text" size="small">
         <slot>
@@ -6,26 +21,3 @@
         </slot>
     </v-btn>
 </template>
-
-<script>
-export default {
-    name: 'ConfigToggleOption',
-    props: {
-        label: {
-            type: String,
-            default: '',
-            required: false,
-        },
-        value: {
-            type: String,
-            default: '',
-            required: true,
-        },
-        icon: {
-            type: String,
-            default: '',
-            required: false,
-        },
-    },
-};
-</script>

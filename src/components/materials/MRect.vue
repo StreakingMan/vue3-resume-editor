@@ -9,8 +9,8 @@
 
 <script lang="ts">
 import { defineComponent, toRef } from 'vue';
-import { MaterialBaseConfig } from '@/classes/Material';
-import { ProtoInfo } from './prototypes';
+import { type MaterialBaseConfig } from '@/classes/Material';
+import { type ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
 import { useMaterial } from '@/composables/useApp';
 import { MaterialNames } from '@/components/materials/config';

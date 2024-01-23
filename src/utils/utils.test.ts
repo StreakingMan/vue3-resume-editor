@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import { uniqueString } from './uniqueString';
 import { stringArrayDiff } from './stringArrayDiff';
 import { calcCellingValue } from './calcCellingValue';

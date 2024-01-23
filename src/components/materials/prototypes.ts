@@ -36,3 +36,15 @@ export const prototypeMap: PrototypeMap = {
     [MaterialNames.MPie]: { ...MPie.protoInfo, tempStyle: '' },
     [MaterialNames.MTimeline]: { ...MTimeline.protoInfo, tempStyle: '' },
 };
+
+export const componentMap: Record<MaterialNames, any> = {
+    [MaterialNames.MText]: MText,
+    [MaterialNames.MImage]: MImage,
+    [MaterialNames.MList]: MList,
+    [MaterialNames.MRating]: MRating,
+    [MaterialNames.MIcon]: MIcon,
+    [MaterialNames.MDivider]: MDivider,
+    [MaterialNames.MRect]: MRect,
+    [MaterialNames.MPie]: MPie,
+    [MaterialNames.MTimeline]: MTimeline,
+};

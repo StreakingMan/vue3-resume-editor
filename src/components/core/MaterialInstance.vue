@@ -1,3 +1,161 @@
+<script lang="ts" setup>
+import { computed, provide, reactive, ref, toRef, watch } from 'vue';
+import useMouseDragDynamic, { type MouseEvtInfo } from '../../composables/useMouseDragDynamic';
+import { CTRL_DOT_SIZE, UNIT_SIZE } from './config';
+import { Material, materialInjectionKey } from '@/classes/Material';
+import { usePaper, useRuntime } from '@/composables/useApp';
+import { componentMap, prototypeMap } from '../materials/prototypes';
+import { type CtrlDotType } from '../materials/config';
+import { useMagicKeys } from '@vueuse/core';
+
+const styleMap: Record<CtrlDotType, string> = {
+    tl: `top: 0px;left: 0px;cursor: nw-resize;transform-origin: top left;`,
+    tm: `top: 0px;left: 50%;margin-left: -${
+        CTRL_DOT_SIZE / 2
+    }px;cursor: n-resize;transform-origin: top center;`,
+    tr: `top: 0px;right: 0px;cursor: ne-resize;transform-origin: top right;`,
+    mr: `top: 50%;margin-top: -${
+        CTRL_DOT_SIZE / 2
+    }px;right: 0px;cursor: e-resize;transform-origin: center right;`,
+    br: `bottom: 0px;right: 0px;cursor: se-resize;transform-origin: bottom right;`,
+    bm: `bottom: 0px;left: 50%;margin-left: -${
+        CTRL_DOT_SIZE / 2
+    }px;cursor: s-resize;transform-origin: bottom center;`,
+    bl: `bottom: 0px;left: 0px;cursor: sw-resize;transform-origin: bottom left;`,
+    ml: `top: 50%;margin-top: -${
+        CTRL_DOT_SIZE / 2
+    }px;left: 0px;cursor: w-resize;transform-origin: center left;`,
+};
+
+const props = defineProps<{
+    item: Material<any>;
+}>();
+
+const runtime = useRuntime();
+const paper = usePaper();
+const { space, shift } = useMagicKeys();
+
+const material = reactive({
+    instance: props.item,
+    hover: false,
+    active: computed(() => runtime.activeMaterialSet.has(props.item.id)),
+    clicked: false,
+});
+provide(materialInjectionKey, material);
+
+watch(
+    () => material.active,
+    () => {
+        if (!material.active) material.clicked = false;
+    },
+);
+
+const focus = (e: MouseEvent) => {
+    material.clicked = true;
+    // 没按空格时阻止冒泡
+    if (!space.value) e.stopPropagation();
+
+    if (shift.value) {
+        // 按住shift点击元素则切换选中状态
+        if (!runtime.activeMaterialSet.delete(material.instance.id)) {
+            runtime.activeMaterialSet.add(material.instance.id);
+        }
+    } else {
+        // 否则重置为该元素
+        runtime.activeMaterialSet.clear();
+        runtime.activeMaterialSet.add(material.instance.id);
+    }
+};
+const blur = () => {
+    runtime.activeMaterialSet.clear();
+};
+
+// 位置信息缓存
+const posInfoCache = {
+    itemStartX: 0,
+    itemStartY: 0,
+    itemStartW: 0,
+    itemStartH: 0,
+};
+
+// 缩放控制点
+const clickingDot = ref<CtrlDotType | null>(null);
+const { onMousedown: onDotMousedown } = useMouseDragDynamic({
+    onStart() {
+        if (!(material.active || material.hover)) return;
+        const { x, y, w, h } = material.instance;
+        posInfoCache.itemStartX = x;
+        posInfoCache.itemStartY = y;
+        posInfoCache.itemStartW = w;
+        posInfoCache.itemStartH = h;
+    },
+    onDrag({ transX, transY }: MouseEvtInfo) {
+        if (!clickingDot.value) return;
+
+        const { itemStartX, itemStartY, itemStartH, itemStartW } = posInfoCache;
+
+        let newX = itemStartX,
+            newY = itemStartY,
+            newW = itemStartW,
+            newH = itemStartH;
+
+        if (clickingDot.value.includes('b')) {
+            newH = itemStartH + transY / runtime.scale.value;
+        } else if (clickingDot.value.includes('t')) {
+            newY = itemStartY + transY / runtime.scale.value;
+            newH = itemStartH - transY / runtime.scale.value;
+        }
+
+        if (clickingDot.value.includes('r')) {
+            newW = itemStartW + transX / runtime.scale.value;
+        } else if (clickingDot.value.includes('l')) {
+            newX = itemStartX + transX / runtime.scale.value;
+            newW = itemStartW - transX / runtime.scale.value;
+        }
+
+        if (newH < UNIT_SIZE) newH = UNIT_SIZE;
+        if (newW < UNIT_SIZE) newW = UNIT_SIZE;
+        if (newX + UNIT_SIZE > itemStartX + itemStartW) {
+            newX = itemStartX + itemStartW - UNIT_SIZE;
+        }
+        if (newY + UNIT_SIZE > itemStartY + itemStartH) {
+            newY = itemStartY + itemStartH - UNIT_SIZE;
+        }
+
+        material.instance.x = newX;
+        material.instance.y = newY;
+        material.instance.w = newW;
+        material.instance.h = newH;
+    },
+    onFinish() {
+        clickingDot.value = null;
+        posInfoCache.itemStartX = 0;
+        posInfoCache.itemStartY = 0;
+        posInfoCache.itemStartW = 0;
+        posInfoCache.itemStartH = 0;
+    },
+});
+
+// 可用控制点
+const ableCtrlDots = computed(() => {
+    const dragHandlers = prototypeMap[material.instance.componentName].dragHandlers;
+    if (dragHandlers instanceof Function) {
+        return dragHandlers(material.instance.config);
+    } else {
+        return dragHandlers;
+    }
+});
+
+const removeMaterialInstance = () => {
+    paper.removeMaterial(material.instance.id);
+};
+
+const hover = toRef(material, 'hover');
+const active = toRef(material, 'active');
+const instance = toRef(material, 'instance');
+const scale = toRef(runtime.scale, 'value');
+</script>
+
 <template>
     <div
         :key="instance.id"
@@ -25,7 +183,7 @@
                 backgroundColor: instance.config.backgroundColor,
             }"
         >
-            <component :is="instance.componentName">
+            <component :is="componentMap[instance.componentName]">
                 <template #activator>
                     <!-- 复制 -->
                     <v-btn @mousedown.stop="() => paper.copyMaterial(instance.id)">
@@ -103,209 +261,6 @@
         ></div>
     </div>
 </template>
-
-<script lang="ts">
-import { computed, defineComponent, PropType, provide, reactive, ref, toRef, watch } from 'vue';
-import useMouseDragDynamic, { MouseEvtInfo } from '../../composables/useMouseDragDynamic';
-import { CTRL_DOT_SIZE, UNIT_SIZE } from './config';
-import { Material, materialInjectionKey } from '@/classes/Material';
-import { usePaper, useRuntime } from '@/composables/useApp';
-import MaterialConfig from './MaterialConfigPopover.vue';
-import { prototypeMap } from '../materials/prototypes';
-import { CtrlDotType } from '../materials/config';
-import MDivider from '../materials/MDivider.vue';
-import MIcon from '../materials/MIcon.vue';
-import MImage from '../materials/MImage.vue';
-import MList from '../materials/MList.vue';
-import MPie from '../materials/MPie.vue';
-import MRating from '../materials/MRating.vue';
-import MRect from '../materials/MRect.vue';
-import MText from '../materials/MText.vue';
-import MTimeline from '../materials/MTimeline.vue';
-import { useMagicKeys } from '@vueuse/core';
-
-const ctrlDots: CtrlDotType[] = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
-const styleMap: Record<CtrlDotType, string> = {
-    tl: `top: 0px;left: 0px;cursor: nw-resize;transform-origin: top left;`,
-    tm: `top: 0px;left: 50%;margin-left: -${
-        CTRL_DOT_SIZE / 2
-    }px;cursor: n-resize;transform-origin: top center;`,
-    tr: `top: 0px;right: 0px;cursor: ne-resize;transform-origin: top right;`,
-    mr: `top: 50%;margin-top: -${
-        CTRL_DOT_SIZE / 2
-    }px;right: 0px;cursor: e-resize;transform-origin: center right;`,
-    br: `bottom: 0px;right: 0px;cursor: se-resize;transform-origin: bottom right;`,
-    bm: `bottom: 0px;left: 50%;margin-left: -${
-        CTRL_DOT_SIZE / 2
-    }px;cursor: s-resize;transform-origin: bottom center;`,
-    bl: `bottom: 0px;left: 0px;cursor: sw-resize;transform-origin: bottom left;`,
-    ml: `top: 50%;margin-top: -${
-        CTRL_DOT_SIZE / 2
-    }px;left: 0px;cursor: w-resize;transform-origin: center left;`,
-};
-
-export default defineComponent({
-    name: 'MaterialInstance',
-    components: {
-        MIcon,
-        MRating,
-        MRect,
-        MDivider,
-        MaterialConfig,
-        MText,
-        MImage,
-        MList,
-        MPie,
-        MTimeline,
-    },
-    props: {
-        item: {
-            type: Object as PropType<Material<any>>,
-            default: null,
-            required: true,
-        },
-    },
-    emits: ['update:item'],
-    setup(props) {
-        const runtime = useRuntime();
-        const paper = usePaper();
-        const { space, shift } = useMagicKeys();
-
-        const material = reactive({
-            instance: props.item,
-            hover: false,
-            active: computed(() => runtime.activeMaterialSet.has(props.item.id)),
-            clicked: false,
-        });
-        provide(materialInjectionKey, material);
-
-        watch(
-            () => material.active,
-            () => {
-                if (!material.active) material.clicked = false;
-            },
-        );
-
-        const focus = (e: MouseEvent) => {
-            material.clicked = true;
-            // 没按空格时阻止冒泡
-            if (!space.value) e.stopPropagation();
-
-            if (shift.value) {
-                // 按住shift点击元素则切换选中状态
-                if (!runtime.activeMaterialSet.delete(material.instance.id)) {
-                    runtime.activeMaterialSet.add(material.instance.id);
-                }
-            } else {
-                // 否则重置为该元素
-                runtime.activeMaterialSet.clear();
-                runtime.activeMaterialSet.add(material.instance.id);
-            }
-        };
-        const blur = () => {
-            runtime.activeMaterialSet.clear();
-        };
-
-        // 位置信息缓存
-        const posInfoCache = {
-            itemStartX: 0,
-            itemStartY: 0,
-            itemStartW: 0,
-            itemStartH: 0,
-        };
-
-        // 缩放控制点
-        const clickingDot = ref<CtrlDotType | null>(null);
-        const { onMousedown: onDotMousedown } = useMouseDragDynamic({
-            onStart() {
-                if (!(material.active || material.hover)) return;
-                const { x, y, w, h } = material.instance;
-                posInfoCache.itemStartX = x;
-                posInfoCache.itemStartY = y;
-                posInfoCache.itemStartW = w;
-                posInfoCache.itemStartH = h;
-            },
-            onDrag({ transX, transY }: MouseEvtInfo) {
-                if (!clickingDot.value) return;
-
-                const { itemStartX, itemStartY, itemStartH, itemStartW } = posInfoCache;
-
-                let newX = itemStartX,
-                    newY = itemStartY,
-                    newW = itemStartW,
-                    newH = itemStartH;
-
-                if (clickingDot.value.includes('b')) {
-                    newH = itemStartH + transY / runtime.scale.value;
-                } else if (clickingDot.value.includes('t')) {
-                    newY = itemStartY + transY / runtime.scale.value;
-                    newH = itemStartH - transY / runtime.scale.value;
-                }
-
-                if (clickingDot.value.includes('r')) {
-                    newW = itemStartW + transX / runtime.scale.value;
-                } else if (clickingDot.value.includes('l')) {
-                    newX = itemStartX + transX / runtime.scale.value;
-                    newW = itemStartW - transX / runtime.scale.value;
-                }
-
-                if (newH < UNIT_SIZE) newH = UNIT_SIZE;
-                if (newW < UNIT_SIZE) newW = UNIT_SIZE;
-                if (newX + UNIT_SIZE > itemStartX + itemStartW) {
-                    newX = itemStartX + itemStartW - UNIT_SIZE;
-                }
-                if (newY + UNIT_SIZE > itemStartY + itemStartH) {
-                    newY = itemStartY + itemStartH - UNIT_SIZE;
-                }
-
-                material.instance.x = newX;
-                material.instance.y = newY;
-                material.instance.w = newW;
-                material.instance.h = newH;
-            },
-            onFinish() {
-                clickingDot.value = null;
-                posInfoCache.itemStartX = 0;
-                posInfoCache.itemStartY = 0;
-                posInfoCache.itemStartW = 0;
-                posInfoCache.itemStartH = 0;
-            },
-        });
-
-        // 可用控制点
-        const ableCtrlDots = computed(() => {
-            const dragHandlers = prototypeMap[material.instance.componentName].dragHandlers;
-            if (dragHandlers instanceof Function) {
-                return dragHandlers(material.instance.config);
-            } else {
-                return dragHandlers;
-            }
-        });
-
-        const removeMaterialInstance = () => {
-            paper.removeMaterial(material.instance.id);
-        };
-
-        return {
-            hover: toRef(material, 'hover'),
-            active: toRef(material, 'active'),
-            instance: toRef(material, 'instance'),
-            clicked: toRef(material, 'clicked'),
-            scale: toRef(runtime.scale, 'value'),
-            paper,
-            dots: ctrlDots,
-            ableCtrlDots,
-            styleMap,
-            clickingDot,
-            onDotMousedown,
-            focus,
-            blur,
-            CTRL_DOT_SIZE,
-            removeMaterialInstance,
-        };
-    },
-});
-</script>
 
 <style scoped lang="scss">
 .material-instance {

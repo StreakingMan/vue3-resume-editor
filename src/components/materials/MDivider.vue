@@ -51,7 +51,7 @@
 
 <script lang="ts">
 import { defineComponent, toRef, watch } from 'vue';
-import { ProtoInfo } from './prototypes';
+import { type ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
 import { useMaterial } from '@/composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
@@ -59,7 +59,7 @@ import BorderStyle from '../config-widgets/BorderStyle.vue';
 import ConfigToggle from '../config-widgets/ConfigToggle.vue';
 import ConfigToggleOption from '../config-widgets/ConfigToggleOption.vue';
 import Color from '../config-widgets/Color.vue';
-import { MaterialBaseConfig } from '@/classes/Material';
+import { type MaterialBaseConfig } from '@/classes/Material';
 import { MaterialNames } from '@/components/materials/config';
 
 interface MDividerConfig extends MaterialBaseConfig {
