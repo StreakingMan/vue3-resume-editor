@@ -1,0 +1,7 @@
+{
+    "*.{[tj]s,[tj]sx,[cm][tj]s}": ["eslint --cache --fix", "prettier --write"],
+    "*.vue": ["stylelint --fix", "eslint --cache --fix", "prettier --write"],
+    "*.css": "stylelint --fix",
+    "*.scss": "stylelint --syntax=scss --fix",
+    "*.{json,html}": "prettier --write"
+}
