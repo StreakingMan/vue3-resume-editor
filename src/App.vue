@@ -152,14 +152,6 @@ watch(
                 }"
             >
                 <v-btn
-                    style="right: 24px; bottom: 208px"
-                    color="#673ab7"
-                    @click="paperInstance.pageCount++"
-                >
-                    <v-icon>mdi-note-plus-outline</v-icon>
-                    <v-tooltip activator="parent" anchor="start"> 新增页面 </v-tooltip>
-                </v-btn>
-                <v-btn
                     style="right: 24px; bottom: 128px"
                     color="#3f51b5"
                     href="https://github.com/StreakingMan/vue3-resume-editor#%E5%8A%9F%E8%83%BD%E6%BC%94%E7%A4%BA"
@@ -209,21 +201,26 @@ body {
     -webkit-print-color-adjust: exact;
     color-adjust: exact;
 }
+
 #app {
     //
 }
+
 .v-navigation-drawer__content {
     overflow: visible !important;
 }
+
 ::-webkit-scrollbar {
     background-color: transparent;
     width: 8px;
     height: 8px;
 }
+
 ::-webkit-scrollbar-thumb {
     background-color: rgba(128, 128, 128, 0.3);
     border-radius: 4px;
 }
+
 :focus-visible {
     outline: none;
 }

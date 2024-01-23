@@ -273,6 +273,17 @@ const insertPage = (index: number) => {
             </div>
         </div>
     </template>
+    <v-btn
+        block
+        size="x-large"
+        class="mt-4 text-white print-none"
+        variant="tonal"
+        color="#4f545c"
+        prepend-icon="mdi-plus"
+        @click="paper.pageCount++"
+    >
+        新增页面
+    </v-btn>
 </template>
 
 <style lang="scss" scoped>
@@ -316,6 +327,7 @@ const insertPage = (index: number) => {
     &.addon {
         transition: box-shadow 0.3s;
     }
+
     &.danger-shadow {
         box-shadow: 0 0 0 4px #f44336;
     }
