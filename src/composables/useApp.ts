@@ -1,7 +1,7 @@
-import { inject, reactive, UnwrapNestedRefs } from 'vue';
+import { inject, reactive, type UnwrapNestedRefs } from 'vue';
 import { Runtime, runtimeInjectionKey } from '@/classes/Runtime';
 import { Paper, paperInjectionKey } from '@/classes/Paper';
-import { Material, MaterialBaseConfig, materialInjectionKey } from '@/classes/Material';
+import { Material, type MaterialBaseConfig, materialInjectionKey } from '@/classes/Material';
 import { MaterialNames } from '@/components/materials/config';
 
 export function useRuntime(): UnwrapNestedRefs<Runtime> {

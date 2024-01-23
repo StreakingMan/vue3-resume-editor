@@ -1,7 +1,7 @@
-import { MaterialBaseConfig, MaterialOptions } from '@/classes/Material';
-import { CtrlDotFunction, CtrlDotType, MaterialNames } from './config';
+import type { MaterialBaseConfig, MaterialOptions } from '@/classes/Material';
+import { type CtrlDotFunction, type CtrlDotType, MaterialNames } from './config';
 import { Paper } from '@/classes/Paper';
-import { UnwrapNestedRefs } from 'vue';
+import { type UnwrapNestedRefs } from 'vue';
 import MText from './MText.vue';
 import MImage from './MImage.vue';
 import MList from './MList.vue';

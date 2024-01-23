@@ -1,4 +1,4 @@
-import { onMounted, onUnmounted, ref, Ref } from 'vue';
+import { onMounted, onUnmounted, ref, type Ref } from 'vue';
 
 interface MouseDragCbs {
     onMousedown: (ev: MouseEvent) => void;
