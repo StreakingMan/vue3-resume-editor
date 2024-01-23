@@ -28,7 +28,7 @@
     },
     "devDependencies": {
         "@commitlint/cli": "^12.0.1",
-        "@commitlint/config-conventional": "^12.0.1",
+        "@commitlint/config-conventional": "^18.5.0",
         "@rushstack/eslint-patch": "^1.7.0",
         "@tsconfig/node18": "^18.2.2",
         "@types/jsdom": "^21.1.6",
