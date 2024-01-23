@@ -371,7 +371,7 @@ export class Paper {
             const m = this._materialMap.get(ids[index]);
             if (!m) return setMinX(index + 1, minX);
             if (minX === undefined) minX = m.x;
-            const _minX = setMinX(index + 1, minX > m.x ? m.x : minX);
+            const _minX = setMinX(index + 1, Math.min(minX, m.x));
             easeInOut({
                 start: m.x,
                 end: _minX,
@@ -428,7 +428,7 @@ export class Paper {
             const m = this._materialMap.get(ids[index]);
             if (!m) return setMaxX(index + 1, maxX);
             if (maxX === undefined) maxX = m.x + m.w;
-            const _maxX = setMaxX(index + 1, m.x + m.w > maxX ? m.x + m.w : maxX) - m.w;
+            const _maxX = setMaxX(index + 1, Math.max(m.x + m.w, maxX)) - m.w;
             easeInOut({
                 start: m.x,
                 end: _maxX,
@@ -486,7 +486,7 @@ export class Paper {
             const m = this._materialMap.get(ids[index]);
             if (!m) return setMinY(index + 1, minY);
             if (minY === undefined) minY = m.y;
-            const _minY = setMinY(index + 1, minY > m.y ? m.y : minY);
+            const _minY = setMinY(index + 1, Math.min(minY, m.y));
             easeInOut({
                 start: m.y,
                 end: _minY,
@@ -542,7 +542,7 @@ export class Paper {
             const m = this._materialMap.get(ids[index]);
             if (!m) return setMaxY(index + 1, maxY);
             if (maxY === undefined) maxY = m.y + m.h;
-            const _maxY = setMaxY(index + 1, m.y + m.h > maxY ? m.y + m.h : maxY) - m.h;
+            const _maxY = setMaxY(index + 1, Math.max(m.y + m.h, maxY)) - m.h;
             easeInOut({
                 start: m.y,
                 end: _maxY,
@@ -605,5 +605,42 @@ export class Paper {
             }
             return -1;
         });
+    }
+
+    // 插入页，根据该页的高度范围，调整元素的位置
+    insertPage(pageNum: number): void {
+        if (pageNum < 1 || pageNum > this.pageCount) return;
+        this.pageCount += 1;
+        // 查找出y值大于插入页上边界高度的元素，将其y值加上一页的高度
+        const pageY = this.h * (pageNum - 1);
+        this.materialList.forEach((m) => {
+            if (m.y >= pageY) {
+                m.y += this.h;
+            }
+        });
+    }
+
+    // 查询某页是否有元素
+    hasMaterialInPage(pageNum: number): boolean {
+        const pageY = this.h * (pageNum - 1);
+        return this.materialList.some((m) => m.y >= pageY && m.y < pageY + this.h);
+    }
+
+    // 删除页，根据该页的高度范围，调整元素的位置
+    deletePage(pageNum: number): void {
+        if (pageNum < 1 || pageNum > this.pageCount) return;
+        this.pageCount -= 1;
+        // 查找出y值处于删除页上边界高度和下边界高度之间的元素，将其删除
+        // 查找出y值大于删除页下边界高度的元素，将其y值减去一页的高度
+        const pageY = this.h * (pageNum - 1);
+        const deleteIds: Material<any>['id'][] = [];
+        this.materialList.forEach((m) => {
+            if (m.y >= pageY && m.y < pageY + this.h) {
+                deleteIds.push(m.id);
+            } else if (m.y >= pageY + this.h) {
+                m.y -= this.h;
+            }
+        });
+        this.removeMaterial(deleteIds);
     }
 }

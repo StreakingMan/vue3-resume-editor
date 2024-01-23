@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, watchEffect } from 'vue';
 import useMouseDragDynamic, { type MouseEvtInfo } from '@/composables/useMouseDragDynamic';
 import MaterialInstance from './MaterialInstance.vue';
 import { usePaper, useRuntime } from '@/composables/useApp';
 import { useElementBounding, useMagicKeys, useUrlSearchParams } from '@vueuse/core';
 import type { Material } from '@/classes/Material';
+import { vElementHover } from '@vueuse/components';
 
 const runtime = useRuntime();
 const paper = usePaper();
@@ -131,12 +132,39 @@ const paperStyle = computed(() => [
 
 const isPrintPage = !!useUrlSearchParams().printPage;
 
+// 插入、删除的hover状态
+const deleteConfirmMenus = ref<boolean[]>([]);
+const pageOptionHover = ref<
+    {
+        insert: boolean;
+        delete: boolean;
+    }[]
+>([]);
+watchEffect(() => {
+    deleteConfirmMenus.value = Array(paper.pageCount).fill(false);
+    pageOptionHover.value = Array(paper.pageCount)
+        .fill(0)
+        .map(() => ({
+            insert: false,
+            delete: false,
+        }));
+});
+const onHover = (state: boolean, type: 'insert' | 'delete', index: number) => {
+    pageOptionHover.value[index][type] = state;
+};
+
+// 增减页面
+const tryDeletePage = (index: number) => {
+    deleteConfirmMenus.value[index] = paper.hasMaterialInPage(index + 1);
+    if (!deleteConfirmMenus.value[index]) {
+        paper.deletePage(index + 1);
+    }
+};
 const deletePage = (index: number) => {
-    paper.pageCount--;
-    console.log('删除页', index);
-    // TODO 判断是否有元素
-    //  询问是否删除范围内的元素
-    // 调整后面元素的位置
+    paper.deletePage(index + 1);
+};
+const insertPage = (index: number) => {
+    paper.insertPage(index + 1);
 };
 </script>
 
@@ -174,9 +202,23 @@ const deletePage = (index: number) => {
     </div>
     <!--分页 -->
     <template v-if="!isPrintPage">
-        <div v-for="p in paper.pageCount - 1" :key="p" class="paper" :style="paperStyle">
+        <div
+            v-for="pageIdx in paper.pageCount - 1"
+            :key="pageIdx"
+            class="paper addon"
+            :style="paperStyle"
+            :class="{
+                'danger-shadow': pageOptionHover[pageIdx].delete,
+            }"
+        >
             <div
-                class="paper-options"
+                class="page-divide-tip"
+                :class="{
+                    show: pageOptionHover[pageIdx].insert,
+                }"
+            ></div>
+            <div
+                class="page-options"
                 :style="{
                     transform: `scale(${1 / runtime.scale.value})`,
                 }"
@@ -195,12 +237,38 @@ const deletePage = (index: number) => {
                         },
                     }"
                 >
-                    <v-btn>
+                    <v-btn
+                        v-element-hover="(state) => onHover(state, 'insert', pageIdx)"
+                        @click="insertPage(pageIdx)"
+                    >
                         <v-icon> mdi-keyboard-return </v-icon>
                     </v-btn>
-                    <v-btn @click="deletePage(p)">
-                        <v-icon color="red"> mdi-note-remove-outline </v-icon>
-                    </v-btn>
+                    <v-menu v-model="deleteConfirmMenus[pageIdx]" location="bottom">
+                        <template #activator="{ props }">
+                            <v-btn
+                                v-element-hover="(state) => onHover(state, 'delete', pageIdx)"
+                                v-bind="props"
+                                @click="tryDeletePage(pageIdx)"
+                            >
+                                <v-icon color="red"> mdi-note-remove-outline </v-icon>
+                            </v-btn>
+                        </template>
+                        <v-sheet class="pa-4 rounded print-none" width="200">
+                            <div class="text-subtitle-2">
+                                <v-icon color="red" size="small">mdi-alert</v-icon>
+                                将删除的页面包含元素，确认删除？
+                            </div>
+                            <div class="d-flex ga-1">
+                                <v-spacer />
+                                <v-btn variant="text" @click="deleteConfirmMenus[pageIdx] = false">
+                                    取消
+                                </v-btn>
+                                <v-btn variant="tonal" color="red" @click="deletePage(pageIdx)">
+                                    确认
+                                </v-btn>
+                            </div>
+                        </v-sheet>
+                    </v-menu>
                 </v-defaults-provider>
             </div>
         </div>
@@ -244,19 +312,48 @@ const deletePage = (index: number) => {
         background-image: none;
         overflow: hidden !important;
     }
+
+    &.addon {
+        transition: box-shadow 0.3s;
+    }
+    &.danger-shadow {
+        box-shadow: 0 0 0 4px #f44336;
+    }
 }
 
-.paper-options {
+.page-options {
     position: absolute;
     right: -80px;
     top: -32px;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    transform-origin: center 32px;
+    transform-origin: left 32px;
 
     @media print {
         display: none;
+    }
+}
+
+.page-divide-tip {
+    background: #424242;
+    width: calc(100% + 32px);
+    height: 36px;
+    transition:
+        opacity 0.3s,
+        clip-path 0.6s ease-out;
+    user-select: none;
+    opacity: 0;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateY(-50%) translateX(-50%);
+    z-index: 0;
+    clip-path: polygon(0% 50%, 100% 0%, 100% 100%, 0% 50%);
+
+    &.show {
+        opacity: 1;
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
     }
 }
 </style>

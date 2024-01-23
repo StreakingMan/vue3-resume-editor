@@ -405,3 +405,55 @@ test('对齐操作:垂直均匀分布', () => {
     paper.alignVerticalDistribute([m1.id, m2.id, m3.id, m4.id]);
     expect([m1.y, m2.y, m3.y, m4.y]).toEqual([0, 110, 220, 330]);
 });
+
+test('页面操作:添加页面', () => {
+    const paper = new Paper({});
+    paper.pageCount = 2;
+    paper.cellSize = 1;
+    const mOptions1 = makeTestMaterialOptions({
+        x: 0,
+        y: 0,
+        w: 100,
+        h: 100,
+    });
+    const mOptions2 = makeTestMaterialOptions({
+        x: 100,
+        y: paper.h,
+        w: 100,
+        h: 100,
+    });
+    paper.addMaterial(mOptions1);
+    paper.addMaterial(mOptions2);
+    paper.insertPage(2);
+    expect(paper.pageCount).toEqual(3);
+    const [m1, m2] = paper.materialList;
+    expect(m1.y).toEqual(0);
+    expect(m2.y).toEqual(paper.h * 2);
+});
+
+test('页面操作:删除页面', () => {
+    const paper = new Paper({});
+    paper.pageCount = 2;
+    paper.cellSize = 1;
+    const mOptions1 = makeTestMaterialOptions({
+        x: 0,
+        y: 0,
+        w: 100,
+        h: 100,
+    });
+    const mOptions2 = makeTestMaterialOptions({
+        x: 100,
+        y: paper.h,
+        w: 100,
+        h: 100,
+    });
+    paper.addMaterial(mOptions1);
+    paper.addMaterial(mOptions2);
+    const [, _m2] = paper.materialList;
+    paper.deletePage(1);
+    expect(paper.pageCount).toEqual(1);
+    expect(paper.materialList.length).toEqual(1);
+    const [m1] = paper.materialList;
+    expect(m1.id).toEqual(_m2.id);
+    expect(m1.y).toEqual(0);
+});
