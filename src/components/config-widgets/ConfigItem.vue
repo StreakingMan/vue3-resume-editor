@@ -1,9 +1,6 @@
 <template>
     <div class="d-flex align-center">
-        <div
-            class="d-flex text-subtitle-2"
-            style="width: 72px; min-width: 72px"
-        >
+        <div class="d-flex text-subtitle-2" style="width: 72px; min-width: 72px">
             {{ title }}<v-spacer />：
         </div>
         <slot></slot>

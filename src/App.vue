@@ -80,14 +80,10 @@ watch(
         // 激活列表增减时，同属分组元素一并操作
         const { added, removed } = stringArrayDiff(ov, nv);
         const needAddGroupIdSet = [
-            ...new Set(
-                added.map((mId) => paperInstance.queryMaterial(mId)?.groupId),
-            ),
+            ...new Set(added.map((mId) => paperInstance.queryMaterial(mId)?.groupId)),
         ];
         const needRemoveGroupIdSet = [
-            ...new Set(
-                removed.map((mId) => paperInstance.queryMaterial(mId)?.groupId),
-            ),
+            ...new Set(removed.map((mId) => paperInstance.queryMaterial(mId)?.groupId)),
         ];
         needAddGroupIdSet.forEach((groupId) => {
             if (!groupId) return;
@@ -135,11 +131,7 @@ watch(
             <v-btn
                 class="toggle-left-drawer-btn print-none"
                 :class="{ 'position-hide': !runtime.leftDrawer }"
-                :icon="
-                    runtime.leftDrawer
-                        ? 'mdi-chevron-left'
-                        : 'mdi-chevron-right'
-                "
+                :icon="runtime.leftDrawer ? 'mdi-chevron-left' : 'mdi-chevron-right'"
                 size="x-large"
                 @click="runtime.leftDrawer = !runtime.leftDrawer"
             >
@@ -165,9 +157,7 @@ watch(
                     @click="paperInstance.pageCount++"
                 >
                     <v-icon>mdi-note-plus-outline</v-icon>
-                    <v-tooltip activator="parent" anchor="start">
-                        新增页面
-                    </v-tooltip>
+                    <v-tooltip activator="parent" anchor="start"> 新增页面 </v-tooltip>
                 </v-btn>
                 <v-btn
                     style="right: 24px; bottom: 128px"
@@ -176,9 +166,7 @@ watch(
                     target="_blank"
                 >
                     <v-icon>mdi-help</v-icon>
-                    <v-tooltip activator="parent" anchor="start">
-                        使用文档
-                    </v-tooltip>
+                    <v-tooltip activator="parent" anchor="start"> 使用文档 </v-tooltip>
                 </v-btn>
                 <v-btn
                     style="right: 24px; bottom: 48px"
@@ -186,9 +174,7 @@ watch(
                     @click="bottomDrawer = !bottomDrawer"
                 >
                     <v-icon>mdi-note-text-outline</v-icon>
-                    <v-tooltip activator="parent" anchor="start">
-                        模板预设
-                    </v-tooltip>
+                    <v-tooltip activator="parent" anchor="start"> 模板预设 </v-tooltip>
                 </v-btn>
             </v-defaults-provider>
         </v-main>

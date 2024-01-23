@@ -10,19 +10,12 @@
         }"
     >
         <div
-            v-for="(item, idx) in instance.config.items.slice(
-                0,
-                instance.config.itemLength,
-            )"
+            v-for="(item, idx) in instance.config.items.slice(0, instance.config.itemLength)"
             :key="idx"
             class="d-flex align-start"
         >
-            <span v-if="instance.config.dotType === 'numeric'">
-                {{ idx + 1 }}.
-            </span>
-            <v-icon v-else class="mr-1">
-                mdi-{{ instance.config.dotType }}
-            </v-icon>
+            <span v-if="instance.config.dotType === 'numeric'"> {{ idx + 1 }}. </span>
+            <v-icon v-else class="mr-1"> mdi-{{ instance.config.dotType }} </v-icon>
             <textarea
                 :value="item"
                 :style="{ height: itemHeights[idx] + 'px !important' }"
@@ -42,20 +35,13 @@
         }"
     >
         <div
-            v-for="(item, idx) in instance.config.items.slice(
-                0,
-                instance.config.itemLength,
-            )"
+            v-for="(item, idx) in instance.config.items.slice(0, instance.config.itemLength)"
             :key="idx"
             :ref="(el) => setItemRef(el, idx)"
             class="d-flex align-start"
         >
-            <span v-if="instance.config.dotType === 'numeric'">
-                {{ idx + 1 }}.
-            </span>
-            <v-icon v-else class="mr-1">
-                mdi-{{ instance.config.dotType }}
-            </v-icon>
+            <span v-if="instance.config.dotType === 'numeric'"> {{ idx + 1 }}. </span>
+            <v-icon v-else class="mr-1"> mdi-{{ instance.config.dotType }} </v-icon>
             <div>{{ item }}</div>
         </div>
     </div>
@@ -85,9 +71,7 @@
                         icon
                         size="x-small"
                         flat
-                        :color="
-                            instance.config.dotType === dot ? 'primary' : ''
-                        "
+                        :color="instance.config.dotType === dot ? 'primary' : ''"
                         @click="instance.config.dotType = dot"
                     >
                         <v-icon>mdi-{{ dot }}</v-icon>
@@ -120,9 +104,7 @@
                 >
                     <template #thumb-label="{ modelValue }">
                         <div class="text-no-wrap">
-                            {{
-                                typographyClass[modelValue].replace('text-', '')
-                            }}
+                            {{ typographyClass[modelValue].replace('text-', '') }}
                         </div>
                     </template>
                 </v-slider>
@@ -159,15 +141,7 @@
 </template>
 
 <script lang="ts">
-import {
-    computed,
-    defineComponent,
-    nextTick,
-    onMounted,
-    ref,
-    toRef,
-    watch,
-} from 'vue';
+import { computed, defineComponent, nextTick, onMounted, ref, toRef, watch } from 'vue';
 import { MaterialBaseConfig } from '@/classes/Material';
 import { ProtoInfo } from './prototypes';
 import { fontWeightClass, MaterialNames, typographyClass } from './config';

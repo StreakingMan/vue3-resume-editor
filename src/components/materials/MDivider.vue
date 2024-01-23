@@ -72,8 +72,7 @@ interface MDividerConfig extends MaterialBaseConfig {
 const protoInfo: ProtoInfo<MDividerConfig> = {
     label: '分割线',
     icon: 'border-horizontal',
-    dragHandlers: ({ direction }) =>
-        direction === 'horizontal' ? ['ml', 'mr'] : ['tm', 'bm'],
+    dragHandlers: ({ direction }) => (direction === 'horizontal' ? ['ml', 'mr'] : ['tm', 'bm']),
     genInitOptions: ({ y, paperInstance }) => ({
         componentName: MaterialNames.MDivider,
         x: 10,

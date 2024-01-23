@@ -27,9 +27,7 @@
                 >
                     <template #thumb-label="{ modelValue }">
                         <div class="text-no-wrap">
-                            {{
-                                typographyClass[modelValue].replace('text-', '')
-                            }}
+                            {{ typographyClass[modelValue].replace('text-', '') }}
                         </div>
                     </template>
                 </v-slider>
@@ -60,10 +58,7 @@
 
             <ConfigItem title="对齐">
                 <ConfigToggle v-model="instance.config.align" class="mx-2">
-                    <template
-                        v-for="{ icon, value } of textAlignOptions"
-                        :key="value"
-                    >
+                    <template v-for="{ icon, value } of textAlignOptions" :key="value">
                         <ConfigToggleOption :value="value" :icon="icon" />
                     </template>
                 </ConfigToggle>
@@ -80,12 +75,7 @@
 import { computed, defineComponent, nextTick, ref, toRef, watch } from 'vue';
 import { ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
-import {
-    fontWeightClass,
-    MaterialNames,
-    textAlignOptions,
-    typographyClass,
-} from './config';
+import { fontWeightClass, MaterialNames, textAlignOptions, typographyClass } from './config';
 import { useMaterial } from '@/composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import ConfigToggle from '../config-widgets/ConfigToggle.vue';
@@ -156,8 +146,7 @@ export default defineComponent({
                 if (eleRef.value) {
                     // 自适应内容高度
                     instance.h = eleRef.value.clientHeight;
-                    const { padding, borderStyle, borderWidth } =
-                        instance.config;
+                    const { padding, borderStyle, borderWidth } = instance.config;
                     if (padding) {
                         instance.h += padding * 2;
                     }

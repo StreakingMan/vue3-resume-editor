@@ -1,15 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import useMouseDragDynamic, {
-    MouseEvtInfo,
-} from '@/composables/useMouseDragDynamic';
+import useMouseDragDynamic, { MouseEvtInfo } from '@/composables/useMouseDragDynamic';
 import MaterialInstance from './MaterialInstance.vue';
 import { usePaper, useRuntime } from '@/composables/useApp';
-import {
-    useElementBounding,
-    useMagicKeys,
-    useUrlSearchParams,
-} from '@vueuse/core';
+import { useElementBounding, useMagicKeys, useUrlSearchParams } from '@vueuse/core';
 
 const runtime = useRuntime();
 const paper = usePaper();
@@ -153,9 +147,7 @@ const deletePage = (index: number) => {
         :style="[
             ...paperStyle,
             {
-                height: isPrintPage
-                    ? (paper.h + 1) * paper.pageCount + 'px '
-                    : paper.h + 'px',
+                height: isPrintPage ? (paper.h + 1) * paper.pageCount + 'px ' : paper.h + 'px',
             },
         ]"
     >
@@ -176,21 +168,12 @@ const deletePage = (index: number) => {
                 :key="m.id"
                 v-model:item="materialList[i]"
             ></MaterialInstance>
-            <div
-                v-if="selecting && !current.size"
-                class="select-box"
-                :style="selectorStyle"
-            ></div>
+            <div v-if="selecting && !current.size" class="select-box" :style="selectorStyle"></div>
         </v-theme-provider>
     </div>
     <!--分页 -->
     <template v-if="!isPrintPage">
-        <div
-            v-for="p in paper.pageCount - 1"
-            :key="p"
-            class="paper"
-            :style="paperStyle"
-        >
+        <div v-for="p in paper.pageCount - 1" :key="p" class="paper" :style="paperStyle">
             <div
                 class="paper-options"
                 :style="{

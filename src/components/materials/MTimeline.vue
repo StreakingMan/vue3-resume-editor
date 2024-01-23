@@ -15,8 +15,7 @@ interface MTimelineConfig extends MaterialBaseConfig {
 const protoInfo: ProtoInfo<MTimelineConfig> = {
     label: '时间轴',
     icon: 'timeline-text',
-    dragHandlers: ({ direction }) =>
-        direction === 'horizontal' ? ['ml', 'mr'] : ['tm', 'bm'],
+    dragHandlers: ({ direction }) => (direction === 'horizontal' ? ['ml', 'mr'] : ['tm', 'bm']),
     genInitOptions: ({ x, y }) => ({
         x: x - 50,
         y: y - 100,
@@ -62,9 +61,7 @@ watch(
     },
 );
 
-const totalWeight = computed(() =>
-    instance.config.dots.reduce((acc, cur) => acc + cur.weight, 0),
-);
+const totalWeight = computed(() => instance.config.dots.reduce((acc, cur) => acc + cur.weight, 0));
 const contentPixel = computed(() => {
     if (instance.config.direction === 'horizontal') {
         return instance.w - 24 * (instance.config.dots.length + 1);
@@ -87,13 +84,11 @@ const contentPixel = computed(() => {
                     :style="{
                         width:
                             instance.config.direction === 'horizontal'
-                                ? (dot.weight / totalWeight) * contentPixel +
-                                  'px'
+                                ? (dot.weight / totalWeight) * contentPixel + 'px'
                                 : '0',
                         height:
                             instance.config.direction === 'vertical'
-                                ? (dot.weight / totalWeight) * contentPixel +
-                                  'px'
+                                ? (dot.weight / totalWeight) * contentPixel + 'px'
                                 : '0',
                     }"
                 ></div>

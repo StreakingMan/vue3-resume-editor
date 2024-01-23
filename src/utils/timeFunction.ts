@@ -8,9 +8,7 @@ export const easeInOut = (option: {
     let startTime = 0;
     let endTime = 0;
     const easeInOut = (t: number): number => {
-        return t < 0.5
-            ? 4 * t * t * t
-            : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+        return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
     };
     const step = (timestamp: number): void => {
         if (!startTime) {

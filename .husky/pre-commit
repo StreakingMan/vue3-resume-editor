@@ -3,4 +3,4 @@
 
 # pnpm test:unit
 pnpm lint
-pnpm format
+# pnpm format

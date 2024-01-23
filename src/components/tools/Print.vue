@@ -20,11 +20,7 @@ const onPrintClick = async () => {
                 <v-img src="/print-target.png" width="100%" />
                 <div class="d-flex mt-2">
                     <v-spacer />
-                    <v-btn
-                        variant="tonal"
-                        append-icon="mdi-chevron-right"
-                        @click="onPrintClick"
-                    >
+                    <v-btn variant="tonal" append-icon="mdi-chevron-right" @click="onPrintClick">
                         前往
                     </v-btn>
                 </div>

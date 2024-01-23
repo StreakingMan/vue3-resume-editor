@@ -23,10 +23,7 @@ export interface ProtoInfo<T extends MaterialBaseConfig> {
     }) => MaterialOptions<T>;
 }
 
-export type PrototypeMap = Record<
-    MaterialNames,
-    ProtoInfo<any> & { tempStyle: string }
->;
+export type PrototypeMap = Record<MaterialNames, ProtoInfo<any> & { tempStyle: string }>;
 
 export const prototypeMap: PrototypeMap = {
     [MaterialNames.MText]: { ...MText.protoInfo, tempStyle: '' },

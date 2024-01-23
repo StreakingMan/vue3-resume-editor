@@ -12,11 +12,7 @@ const showGrid = toRef(runtime, 'showGrid');
 <template>
     <v-btn icon>
         <v-icon>mdi-grid</v-icon>
-        <v-menu
-            activator="parent"
-            location="bottom"
-            :close-on-content-click="false"
-        >
+        <v-menu activator="parent" location="bottom" :close-on-content-click="false">
             <v-sheet class="pa-4 rounded print-none" width="200">
                 <div class="text-subtitle-2">背景辅助网格</div>
                 <div class="d-flex align-center ga-2">
@@ -27,11 +23,7 @@ const showGrid = toRef(runtime, 'showGrid');
                         @click="showGrid = !showGrid"
                     >
                         <v-icon>
-                            {{
-                                paper.cellSize >= 10 && showGrid
-                                    ? 'mdi-eye'
-                                    : 'mdi-eye-off'
-                            }}
+                            {{ paper.cellSize >= 10 && showGrid ? 'mdi-eye' : 'mdi-eye-off' }}
                         </v-icon>
                     </v-btn>
                     <v-slider
@@ -50,11 +42,7 @@ const showGrid = toRef(runtime, 'showGrid');
 
     <v-btn icon>
         <v-icon :style="{ color: paper.background }"> mdi-palette </v-icon>
-        <v-menu
-            activator="parent"
-            location="bottom"
-            :close-on-content-click="false"
-        >
+        <v-menu activator="parent" location="bottom" :close-on-content-click="false">
             <v-sheet class="pa-4 rounded print-none" width="fit-content">
                 <div class="d-flex align-center">
                     <div class="text-subtitle-2">简历背景色</div>
@@ -70,11 +58,7 @@ const showGrid = toRef(runtime, 'showGrid');
 
     <v-btn icon>
         <v-icon>mdi-magnify-plus-outline</v-icon>
-        <v-menu
-            activator="parent"
-            location="bottom"
-            :close-on-content-click="false"
-        >
+        <v-menu activator="parent" location="bottom" :close-on-content-click="false">
             <v-sheet class="pa-4 rounded print-none" width="200">
                 <div class="d-flex align-center ga-2">
                     <div class="text-subtitle-2">缩放视图</div>
@@ -101,12 +85,7 @@ const showGrid = toRef(runtime, 'showGrid');
                 </div>
                 <div class="d-flex">
                     <v-spacer />
-                    <v-btn
-                        variant="tonal"
-                        color="warning"
-                        @click="paper.clear()"
-                        >确认
-                    </v-btn>
+                    <v-btn variant="tonal" color="warning" @click="paper.clear()">确认 </v-btn>
                 </div>
             </v-sheet>
         </v-menu>

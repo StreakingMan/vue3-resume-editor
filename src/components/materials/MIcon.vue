@@ -1,9 +1,5 @@
 <template>
-    <v-icon
-        :size="instance.config.size"
-        :color="instance.config.color"
-        style="vertical-align: top"
-    >
+    <v-icon :size="instance.config.size" :color="instance.config.color" style="vertical-align: top">
         mdi-{{ instance.config.icon }}
     </v-icon>
     <MaterialConfigPopover v-if="clicked">
@@ -24,29 +20,18 @@
                     ></v-text-field>
                     <div class="text-caption my-2">
                         更详细的图标信息->
-                        <a
-                            href="https://materialdesignicons.com/"
-                            target="_blank"
-                        >
+                        <a href="https://materialdesignicons.com/" target="_blank">
                             Material Design Icons
                         </a>
                     </div>
-                    <v-sheet
-                        width="100%"
-                        max-height="200"
-                        class="overflow-y-auto"
-                    >
+                    <v-sheet width="100%" max-height="200" class="overflow-y-auto">
                         <v-btn
                             v-for="icon of iconInfo
                                 .filter((i) => i.name.includes(searchIcon))
                                 .slice(0, 100)"
                             :key="icon.name"
                             :title="icon.name"
-                            :color="
-                                instance.config.icon === icon.name
-                                    ? 'primary'
-                                    : ''
-                            "
+                            :color="instance.config.icon === icon.name ? 'primary' : ''"
                             variant="text"
                             :icon="`mdi-${icon.name}`"
                             size="x-small"

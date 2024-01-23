@@ -2,11 +2,7 @@
 import { computed, defineComponent, nextTick, toRef, watch } from 'vue';
 import { MaterialBaseConfig } from '@/classes/Material';
 import { ProtoInfo } from '@/components/materials/prototypes';
-import {
-    fontWeightClass,
-    MaterialNames,
-    typographyClass,
-} from '@/components/materials/config';
+import { fontWeightClass, MaterialNames, typographyClass } from '@/components/materials/config';
 import { useMaterial } from '@/composables/useApp';
 import MaterialConfigPopover from '@/components/core/MaterialConfigPopover.vue';
 import ConfigItem from '@/components/config-widgets/ConfigItem.vue';
@@ -80,9 +76,7 @@ export default defineComponent({
             const colorAngles: string[] = [];
             data.forEach((item) => {
                 const angle = (item.value / total) * 360;
-                colorAngles.push(
-                    `${item.color} ${lastAngle}deg ${lastAngle + angle}deg`,
-                );
+                colorAngles.push(`${item.color} ${lastAngle}deg ${lastAngle + angle}deg`);
                 lastAngle += angle;
             });
             return `conic-gradient(${colorAngles.join(', ')})`;
@@ -206,9 +200,7 @@ export default defineComponent({
                 >
                     <template #thumb-label="{ modelValue }">
                         <div class="text-no-wrap">
-                            {{
-                                typographyClass[modelValue].replace('text-', '')
-                            }}
+                            {{ typographyClass[modelValue].replace('text-', '') }}
                         </div>
                     </template>
                 </v-slider>
@@ -238,16 +230,10 @@ export default defineComponent({
             </ConfigItem>
 
             <ConfigItem title="边框样式">
-                <BorderStyle
-                    v-model="instance.config.pieBorderStyle"
-                    has-null
-                />
+                <BorderStyle v-model="instance.config.pieBorderStyle" has-null />
             </ConfigItem>
             <template
-                v-if="
-                    instance.config.pieBorderStyle &&
-                    instance.config.pieBorderStyle !== 'none'
-                "
+                v-if="instance.config.pieBorderStyle && instance.config.pieBorderStyle !== 'none'"
             >
                 <ConfigItem title="边框粗细">
                     <v-slider

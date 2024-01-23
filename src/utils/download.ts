@@ -8,10 +8,7 @@ export const downloadHref = (href: string, filename: string): void => {
     document.body.removeChild(eleLink);
 };
 
-export const downloadJSON = (
-    data: Record<any, any>,
-    filename: string
-): void => {
+export const downloadJSON = (data: Record<any, any>, filename: string): void => {
     const blob = new Blob([JSON.stringify(data, null, 4)]);
     const objURL = URL.createObjectURL(blob);
     downloadHref(objURL, filename);

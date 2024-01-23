@@ -28,9 +28,7 @@
             <component :is="instance.componentName">
                 <template #activator>
                     <!-- 复制 -->
-                    <v-btn
-                        @mousedown.stop="() => paper.copyMaterial(instance.id)"
-                    >
+                    <v-btn @mousedown.stop="() => paper.copyMaterial(instance.id)">
                         <v-icon>mdi-content-copy</v-icon>
                     </v-btn>
 
@@ -44,26 +42,22 @@
                                         {
                                             icon: 'mdi-arrange-bring-to-front',
                                             text: '置于顶层',
-                                            onClick: () =>
-                                                paper.bringToFront(instance.id),
+                                            onClick: () => paper.bringToFront(instance.id),
                                         },
                                         {
                                             icon: 'mdi-arrange-bring-forward',
                                             text: '上移一层',
-                                            onClick: () =>
-                                                paper.bringForward(instance.id),
+                                            onClick: () => paper.bringForward(instance.id),
                                         },
                                         {
                                             icon: 'mdi-arrange-send-backward',
                                             text: '下移一层',
-                                            onClick: () =>
-                                                paper.sendBackward(instance.id),
+                                            onClick: () => paper.sendBackward(instance.id),
                                         },
                                         {
                                             icon: 'mdi-arrange-send-to-back',
                                             text: '置于底层',
-                                            onClick: () =>
-                                                paper.sendToBack(instance.id),
+                                            onClick: () => paper.sendToBack(instance.id),
                                         },
                                     ]"
                                     :key="i"
@@ -75,27 +69,18 @@
                                 >
                                     <template #prepend>
                                         <v-avatar>
-                                            <v-icon
-                                                :icon="icon"
-                                                size="small"
-                                            ></v-icon>
+                                            <v-icon :icon="icon" size="small"></v-icon>
                                         </v-avatar>
                                     </template>
 
-                                    <v-list-item-subtitle
-                                        v-text="text"
-                                    ></v-list-item-subtitle>
+                                    <v-list-item-subtitle v-text="text"></v-list-item-subtitle>
                                 </v-list-item>
                             </v-list>
                         </v-menu>
                     </v-btn>
 
                     <!-- 删除 -->
-                    <v-btn
-                        class="text-error"
-                        @mousedown.stop
-                        @click="removeMaterialInstance"
-                    >
+                    <v-btn class="text-error" @mousedown.stop @click="removeMaterialInstance">
                         <v-icon>mdi-trash-can</v-icon>
                     </v-btn>
                 </template>
@@ -108,37 +93,20 @@
             :style="[
                 `transform: scale(${1 / scale});${styleMap[dot]}`,
                 {
-                    opacity:
-                        (clickingDot && clickingDot !== dot) ||
-                        !(active || hover)
-                            ? 0
-                            : 1,
+                    opacity: (clickingDot && clickingDot !== dot) || !(active || hover) ? 0 : 1,
                     width: CTRL_DOT_SIZE + 'px',
                     height: CTRL_DOT_SIZE + 'px',
                 },
             ]"
             class="control-dot bg-primary"
-            @mousedown.stop.prevent="
-                (clickingDot = dot) && onDotMousedown($event)
-            "
+            @mousedown.stop.prevent="(clickingDot = dot) && onDotMousedown($event)"
         ></div>
     </div>
 </template>
 
 <script lang="ts">
-import {
-    computed,
-    defineComponent,
-    PropType,
-    provide,
-    reactive,
-    ref,
-    toRef,
-    watch,
-} from 'vue';
-import useMouseDragDynamic, {
-    MouseEvtInfo,
-} from '../../composables/useMouseDragDynamic';
+import { computed, defineComponent, PropType, provide, reactive, ref, toRef, watch } from 'vue';
+import useMouseDragDynamic, { MouseEvtInfo } from '../../composables/useMouseDragDynamic';
 import { CTRL_DOT_SIZE, UNIT_SIZE } from './config';
 import { Material, materialInjectionKey } from '@/classes/Material';
 import { usePaper, useRuntime } from '@/composables/useApp';
@@ -156,16 +124,7 @@ import MText from '../materials/MText.vue';
 import MTimeline from '../materials/MTimeline.vue';
 import { useMagicKeys } from '@vueuse/core';
 
-const ctrlDots: CtrlDotType[] = [
-    'tl',
-    'tm',
-    'tr',
-    'mr',
-    'br',
-    'bm',
-    'bl',
-    'ml',
-];
+const ctrlDots: CtrlDotType[] = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'];
 const styleMap: Record<CtrlDotType, string> = {
     tl: `top: 0px;left: 0px;cursor: nw-resize;transform-origin: top left;`,
     tm: `top: 0px;left: 50%;margin-left: -${
@@ -215,9 +174,7 @@ export default defineComponent({
         const material = reactive({
             instance: props.item,
             hover: false,
-            active: computed(() =>
-                runtime.activeMaterialSet.has(props.item.id),
-            ),
+            active: computed(() => runtime.activeMaterialSet.has(props.item.id)),
             clicked: false,
         });
         provide(materialInjectionKey, material);
@@ -271,8 +228,7 @@ export default defineComponent({
             onDrag({ transX, transY }: MouseEvtInfo) {
                 if (!clickingDot.value) return;
 
-                const { itemStartX, itemStartY, itemStartH, itemStartW } =
-                    posInfoCache;
+                const { itemStartX, itemStartY, itemStartH, itemStartW } = posInfoCache;
 
                 let newX = itemStartX,
                     newY = itemStartY,
@@ -318,8 +274,7 @@ export default defineComponent({
 
         // 可用控制点
         const ableCtrlDots = computed(() => {
-            const dragHandlers =
-                prototypeMap[material.instance.componentName].dragHandlers;
+            const dragHandlers = prototypeMap[material.instance.componentName].dragHandlers;
             if (dragHandlers instanceof Function) {
                 return dragHandlers(material.instance.config);
             } else {

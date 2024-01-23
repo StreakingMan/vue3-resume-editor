@@ -43,15 +43,12 @@ test('stringArrayDiff', () => {
         added: ['e', 'f', 'g'],
         removed: ['a', 'b', 'c'],
     });
-    expect(
-        stringArrayDiff(
-            ['a', 'b', 'b', 'c', 'c'],
-            ['a', 'a', 'b', 'e', 'e', 'f', 'g']
-        )
-    ).toEqual({
-        added: ['e', 'f', 'g'],
-        removed: ['c'],
-    });
+    expect(stringArrayDiff(['a', 'b', 'b', 'c', 'c'], ['a', 'a', 'b', 'e', 'e', 'f', 'g'])).toEqual(
+        {
+            added: ['e', 'f', 'g'],
+            removed: ['c'],
+        },
+    );
     expect(stringArrayDiff([], [])).toEqual({
         added: [],
         removed: [],

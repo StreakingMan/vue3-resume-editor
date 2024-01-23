@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
-import useMouseDragDynamic, {
-    MouseEvtInfo,
-} from '../../composables/useMouseDragDynamic';
+import useMouseDragDynamic, { MouseEvtInfo } from '../../composables/useMouseDragDynamic';
 import { prototypeMap } from '../materials/prototypes';
 import { MaterialNames } from '../materials/config';
 import { usePaper, useRuntime } from '@/composables/useApp';

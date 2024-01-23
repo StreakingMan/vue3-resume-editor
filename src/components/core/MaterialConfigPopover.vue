@@ -33,20 +33,14 @@
         </template>
         <v-sheet rounded width="400" class="px-6 py-8">
             <slot name="config"></slot>
-            <template
-                v-if="!['MDivider', 'MRating'].includes(instance.componentName)"
-            >
+            <template v-if="!['MDivider', 'MRating'].includes(instance.componentName)">
                 <v-divider class="my-3 mx-n6"></v-divider>
                 <ConfigItem title="内边距">
                     <v-slider
                         v-model="instance.config.padding"
                         step="1"
                         min="0"
-                        :max="
-                            instance.w > instance.h
-                                ? instance.h / 2
-                                : instance.w / 2
-                        "
+                        :max="instance.w > instance.h ? instance.h / 2 : instance.w / 2"
                         color="primary"
                         thumb-label
                         hide-details
@@ -57,27 +51,17 @@
                         v-model="instance.config.borderRadius"
                         step="1"
                         min="0"
-                        :max="
-                            instance.w > instance.h
-                                ? instance.h / 2
-                                : instance.w / 2
-                        "
+                        :max="instance.w > instance.h ? instance.h / 2 : instance.w / 2"
                         color="primary"
                         thumb-label
                         hide-details
                     ></v-slider>
                 </ConfigItem>
                 <ConfigItem title="边框样式">
-                    <BorderStyle
-                        v-model="instance.config.borderStyle"
-                        has-null
-                    />
+                    <BorderStyle v-model="instance.config.borderStyle" has-null />
                 </ConfigItem>
                 <template
-                    v-if="
-                        instance.config.borderStyle &&
-                        instance.config.borderStyle !== 'none'
-                    "
+                    v-if="instance.config.borderStyle && instance.config.borderStyle !== 'none'"
                 >
                     <ConfigItem title="边框粗细">
                         <v-slider
@@ -109,9 +93,7 @@ import { useMaterial, usePaper, useRuntime } from '@/composables/useApp';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import BorderStyle from '../config-widgets/BorderStyle.vue';
 import Color from '../config-widgets/Color.vue';
-import useMouseDragDynamic, {
-    MouseEvtInfo,
-} from '../../composables/useMouseDragDynamic';
+import useMouseDragDynamic, { MouseEvtInfo } from '../../composables/useMouseDragDynamic';
 import { useMagicKeys } from '@vueuse/core';
 
 export default defineComponent({
@@ -154,10 +136,8 @@ export default defineComponent({
                     const mInstance = paper.queryMaterial(mId);
                     if (!mInstance) continue;
                     const posInfoCache = posInfoCacheMap.get(mId);
-                    mInstance.x =
-                        posInfoCache.itemStartX + transX / runtime.scale.value;
-                    mInstance.y =
-                        posInfoCache.itemStartY + transY / runtime.scale.value;
+                    mInstance.x = posInfoCache.itemStartX + transX / runtime.scale.value;
+                    mInstance.y = posInfoCache.itemStartY + transY / runtime.scale.value;
                 }
             },
             onFinish() {

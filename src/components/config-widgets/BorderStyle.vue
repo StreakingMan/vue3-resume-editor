@@ -1,19 +1,13 @@
 <template>
     <ConfigToggle v-model="value">
         <ConfigToggleOption value="solid">
-            <div
-                style="width: 40px; height: 0; border-top: 2px solid black"
-            ></div>
+            <div style="width: 40px; height: 0; border-top: 2px solid black"></div>
         </ConfigToggleOption>
         <ConfigToggleOption value="dotted">
-            <div
-                style="width: 40px; height: 0; border-top: 2px dotted black"
-            ></div>
+            <div style="width: 40px; height: 0; border-top: 2px dotted black"></div>
         </ConfigToggleOption>
         <ConfigToggleOption value="dashed">
-            <div
-                style="width: 40px; height: 0; border-top: 2px dashed black"
-            ></div>
+            <div style="width: 40px; height: 0; border-top: 2px dashed black"></div>
         </ConfigToggleOption>
         <ConfigToggleOption v-if="hasNull" value="none" label="无" />
     </ConfigToggle>

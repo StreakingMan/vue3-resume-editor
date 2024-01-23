@@ -1,6 +1,6 @@
 export const stringArrayDiff: (
     beforeArray: string[],
-    afterArray: string[]
+    afterArray: string[],
 ) => { added: string[]; removed: string[] } = (beforeArray, afterArray) => {
     // 暴力，复杂度 n^2
     const _beforeArray = [...new Set(beforeArray.slice())];

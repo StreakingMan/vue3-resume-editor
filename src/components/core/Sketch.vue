@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
-import useMouseDragDynamic, {
-    MouseEvtInfo,
-} from '@/composables/useMouseDragDynamic';
+import useMouseDragDynamic, { MouseEvtInfo } from '@/composables/useMouseDragDynamic';
 import { useRuntime } from '@/composables/useApp';
 import { useActiveElement, useDebounceFn, useMagicKeys } from '@vueuse/core';
 import { paperSizeMap } from '@/classes/Paper';
@@ -53,8 +51,7 @@ const { space, ctrl } = useMagicKeys({
         if (
             e.type === 'keydown' &&
             e.code === 'Space' &&
-            (e.target === document.body ||
-                activeElement.value?.tagName === 'BUTTON')
+            (e.target === document.body || activeElement.value?.tagName === 'BUTTON')
         ) {
             e.preventDefault();
         }
@@ -117,9 +114,7 @@ const cursor = computed(() => {
         ref="wrapperRef"
         class="sketch__wrapper"
         :style="[
-            `--scroll-thumb-color: ${
-                scrolling ? 'rgba(255,255,255,0.3)' : 'transparent'
-            }`,
+            `--scroll-thumb-color: ${scrolling ? 'rgba(255,255,255,0.3)' : 'transparent'}`,
             { cursor },
         ]"
     >

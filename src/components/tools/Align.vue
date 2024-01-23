@@ -72,9 +72,7 @@ export default defineComponent({
         const runtime = useRuntime();
         const paper = usePaper();
 
-        const alignOperateDisable = computed(
-            () => runtime.activeMaterialSet.size < 2,
-        );
+        const alignOperateDisable = computed(() => runtime.activeMaterialSet.size < 2);
 
         const alignButtons: Array<{
             icon: string;

@@ -7,18 +7,12 @@
         @mousemove="handleMouseMove"
         @mouseleave="handleMouseLeave"
     >
-        <div
-            class="template-preview--card"
-            :style="{ backgroundColor: paper.background }"
-        >
+        <div class="template-preview--card" :style="{ backgroundColor: paper.background }">
             <div
-                v-for="m in paper.materialList.filter(
-                    (m) => m.componentName !== 'MDivider'
-                )"
+                v-for="m in paper.materialList.filter((m) => m.componentName !== 'MDivider')"
                 :key="m.id"
                 :style="{
-                    background:
-                        m?.config?.backgroundColor || 'rgba(128,128,128,0.3)',
+                    background: m?.config?.backgroundColor || 'rgba(128,128,128,0.3)',
                     borderRadius: (m?.config?.borderRadius || 0) + 'px',
                     position: 'absolute',
                     left: m.x + 'px',
@@ -28,9 +22,7 @@
                 }"
             ></div>
         </div>
-        <v-btn class="btn" color="primary" elevation="8" @click="onClick">
-            使用模板
-        </v-btn>
+        <v-btn class="btn" color="primary" elevation="8" @click="onClick"> 使用模板 </v-btn>
     </div>
 </template>
 

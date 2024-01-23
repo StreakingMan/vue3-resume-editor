@@ -30,17 +30,9 @@ export interface MouseEvtCb {
 // 动态的拖拽监听
 // 在鼠标按下时才会监听鼠标移动和抬起事件，以减少不必要的监听
 // 鼠标抬起时会自动移除监听
-export default function useMouseDragDynamic(
-    options: MouseDragOptions,
-): MouseDragCbs {
+export default function useMouseDragDynamic(options: MouseDragOptions): MouseDragCbs {
     const clicking = ref(false);
-    const {
-        onStart,
-        onDrag,
-        onFinish,
-        stopPropagation = true,
-        preventDefault = true,
-    } = options;
+    const { onStart, onDrag, onFinish, stopPropagation = true, preventDefault = true } = options;
     let startX: number;
     let startY: number;
 
@@ -104,15 +96,13 @@ export default function useMouseDragDynamic(
     };
 
     onMounted(() => {
-        const target =
-            options.bindElementRef?.value?.$el || options.bindElementRef?.value;
+        const target = options.bindElementRef?.value?.$el || options.bindElementRef?.value;
         if (!target) return;
         target.addEventListener('mousedown', onMousedown);
     });
 
     onUnmounted(() => {
-        const target =
-            options.bindElementRef?.value?.$el || options.bindElementRef?.value;
+        const target = options.bindElementRef?.value?.$el || options.bindElementRef?.value;
         if (!target) return;
         target.removeEventListener('mousedown', onMousedown);
     });
