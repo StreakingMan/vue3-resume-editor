@@ -1,4 +1,6 @@
+import { expect, test } from 'vitest';
 import { Material } from './Material';
+import { MaterialNames } from '@/components/materials/config';
 
 export const makeTestMaterial: (rect: {
     x: number;
@@ -9,16 +11,7 @@ export const makeTestMaterial: (rect: {
     cellSize?: number;
     _freePosition?: boolean;
     _freeSize?: boolean;
-}) => Material<any> = ({
-    x,
-    y,
-    w,
-    h,
-    z,
-    _freeSize,
-    _freePosition,
-    cellSize = 1,
-}) => {
+}) => Material<any> = ({ x, y, w, h, z, _freeSize, _freePosition, cellSize = 1 }) => {
     return new Material<any>({
         x,
         y,
@@ -28,7 +21,7 @@ export const makeTestMaterial: (rect: {
         cellSize,
         _freePosition,
         _freeSize,
-        componentName: 'MText',
+        componentName: MaterialNames.MText,
         config: {},
     });
 };

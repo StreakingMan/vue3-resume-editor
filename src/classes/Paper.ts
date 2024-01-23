@@ -1,6 +1,6 @@
-import { Material, MaterialOptions } from './Material';
+import { Material, type MaterialOptions } from './Material';
 import { uniqueString } from '@/utils/uniqueString';
-import { InjectionKey, UnwrapNestedRefs } from 'vue';
+import type { InjectionKey, UnwrapNestedRefs } from 'vue';
 import { easeInOut } from '@/utils/timeFunction';
 
 const LOCAL_STORAGE_KEY = 'paper_cache';
@@ -14,8 +14,7 @@ export const paperSizeMap = {
     },
 };
 
-export const paperInjectionKey: InjectionKey<UnwrapNestedRefs<Paper>> =
-    Symbol('Paper');
+export const paperInjectionKey: InjectionKey<UnwrapNestedRefs<Paper>> = Symbol('Paper');
 
 export interface PaperOptions {
     size?: 'a4';
@@ -28,10 +27,7 @@ export class Paper {
     public background = 'white';
     public materialList: Material<any>[] = [];
     private _materialMap: Map<Material<any>['id'], Material<any>>;
-    private _groupMap: Map<
-        Material<any>['groupId'],
-        Map<Material<any>['id'], Material<any>>
-    >;
+    private _groupMap: Map<Material<any>['groupId'], Map<Material<any>['id'], Material<any>>>;
     // 网格尺寸同步到每个元素实例
     private _cellSize = 10;
     get cellSize(): number {
@@ -84,14 +80,7 @@ export class Paper {
         _pageCount: number;
         materialList: any[];
     }): void {
-        const {
-            w,
-            h,
-            _cellSize,
-            _pageCount,
-            materialList = [],
-            background,
-        } = data;
+        const { w, h, _cellSize, _pageCount, materialList = [], background } = data;
         this.background = background;
         this.w = w;
         this.h = h;
@@ -105,10 +94,7 @@ export class Paper {
         });
     }
     isNeedSave(): boolean {
-        return (
-            JSON.stringify(this) !==
-            window.localStorage.getItem(LOCAL_STORAGE_KEY)
-        );
+        return JSON.stringify(this) !== window.localStorage.getItem(LOCAL_STORAGE_KEY);
     }
     saveToStorage(): void {
         window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this));
@@ -129,12 +115,7 @@ export class Paper {
             groupId: m.groupId,
         });
     }
-    addMaterial({
-        z,
-        cellSize,
-        groupId,
-        ...options
-    }: MaterialOptions<any>): Material<any>[] {
+    addMaterial({ z, cellSize, groupId, ...options }: MaterialOptions<any>): Material<any>[] {
         const materialInstance = new Material({
             ...options,
             groupId,
@@ -273,9 +254,7 @@ export class Paper {
         return res;
     }
     // 获取分组边缘矩形
-    getGroupRect(
-        groupId: string,
-    ): { x: number; y: number; w: number; h: number } | undefined {
+    getGroupRect(groupId: string): { x: number; y: number; w: number; h: number } | undefined {
         const group = this._groupMap.get(groupId);
         if (!group) return;
         let minX: number, maxX: number, minY: number, maxY: number;
@@ -387,10 +366,7 @@ export class Paper {
     // 对齐操作
     // 左对齐
     alignHorizontalLeft(ids: Material<any>['id'][]): void {
-        const setMinX: (index: number, minX?: number) => number = (
-            index,
-            minX,
-        ) => {
+        const setMinX: (index: number, minX?: number) => number = (index, minX) => {
             if (index === ids.length) return minX ?? 0;
             const m = this._materialMap.get(ids[index]);
             if (!m) return setMinX(index + 1, minX);
@@ -447,16 +423,12 @@ export class Paper {
     }
     // 右对齐
     alignHorizontalRight(ids: Material<any>['id'][]): void {
-        const setMaxX: (index: number, maxX?: number) => number = (
-            index,
-            maxX,
-        ) => {
+        const setMaxX: (index: number, maxX?: number) => number = (index, maxX) => {
             if (index === ids.length) return maxX ?? 0;
             const m = this._materialMap.get(ids[index]);
             if (!m) return setMaxX(index + 1, maxX);
             if (maxX === undefined) maxX = m.x + m.w;
-            const _maxX =
-                setMaxX(index + 1, m.x + m.w > maxX ? m.x + m.w : maxX) - m.w;
+            const _maxX = setMaxX(index + 1, m.x + m.w > maxX ? m.x + m.w : maxX) - m.w;
             easeInOut({
                 start: m.x,
                 end: _maxX,
@@ -509,10 +481,7 @@ export class Paper {
     }
     // 顶对齐
     alignVerticalTop(ids: Material<any>['id'][]): void {
-        const setMinY: (index: number, minY?: number) => number = (
-            index,
-            minY,
-        ) => {
+        const setMinY: (index: number, minY?: number) => number = (index, minY) => {
             if (index === ids.length) return minY || 0;
             const m = this._materialMap.get(ids[index]);
             if (!m) return setMinY(index + 1, minY);
@@ -568,16 +537,12 @@ export class Paper {
     }
     // 底对齐
     alignVerticalBottom(ids: Material<any>['id'][]): void {
-        const setMaxY: (index: number, maxX?: number) => number = (
-            index,
-            maxY,
-        ) => {
+        const setMaxY: (index: number, maxX?: number) => number = (index, maxY) => {
             if (index === ids.length) return maxY ?? 0;
             const m = this._materialMap.get(ids[index]);
             if (!m) return setMaxY(index + 1, maxY);
             if (maxY === undefined) maxY = m.y + m.h;
-            const _maxY =
-                setMaxY(index + 1, m.y + m.h > maxY ? m.y + m.h : maxY) - m.h;
+            const _maxY = setMaxY(index + 1, m.y + m.h > maxY ? m.y + m.h : maxY) - m.h;
             easeInOut({
                 start: m.y,
                 end: _maxY,
@@ -629,10 +594,7 @@ export class Paper {
     }
 
     // 仅对ids涉及的material按横/纵坐标排序
-    sortIdsByPosition(
-        ids: Material<any>['id'][],
-        type: 'x' | 'y',
-    ): Material<any>['id'][] {
+    sortIdsByPosition(ids: Material<any>['id'][], type: 'x' | 'y'): Material<any>['id'][] {
         if (ids.length < 2) return ids.slice();
         return ids.slice().sort((id1, id2) => {
             const mA = this.queryMaterial(id1);

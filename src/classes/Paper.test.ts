@@ -1,5 +1,7 @@
+import { expect, test } from 'vitest';
 import { Paper } from './Paper';
-import { MaterialOptions } from './Material';
+import type { MaterialOptions } from './Material';
+import { MaterialNames } from '@/components/materials/config';
 
 const makeTestMaterialOptions: (rect: {
     x: number;
@@ -17,7 +19,7 @@ const makeTestMaterialOptions: (rect: {
     h,
     groupId,
     cellSize,
-    componentName: 'MText',
+    componentName: MaterialNames.MText,
     config: {},
 });
 
@@ -48,9 +50,7 @@ test('获取选区内元素', () => {
     paper.addMaterial(mCOptions);
     paper.addMaterial(mDOptions);
     const selection = paper.getSelectRangeMaterial(selectRangeA);
-    expect(selection).toEqual(
-        paper.materialList.filter((m) => [2, 3].includes(m.z))
-    );
+    expect(selection).toEqual(paper.materialList.filter((m) => [2, 3].includes(m.z)));
 });
 
 test('元素增减', () => {
@@ -98,9 +98,7 @@ test('分组操作', () => {
     expect(!m2.groupId && !m4.groupId).toEqual(true);
     paper.groupMaterials([m1.id, m2.id, m3.id]);
     expect(
-        m1.groupId === m2.groupId &&
-            m2.groupId === m3.groupId &&
-            m3.groupId !== firstGroupId
+        m1.groupId === m2.groupId && m2.groupId === m3.groupId && m3.groupId !== firstGroupId,
     ).toEqual(true);
     paper.unGroupMaterials(m1.groupId!);
     expect([m1.groupId, m2.groupId, m3.groupId, m4.groupId]).toEqual([
@@ -120,7 +118,7 @@ test('获取分组边缘矩形', () => {
             y: 480,
             w: 100,
             h: 100,
-        })
+        }),
     );
     paper.addMaterial(
         makeTestMaterialOptions({
@@ -129,7 +127,7 @@ test('获取分组边缘矩形', () => {
             y: 640,
             w: 100,
             h: 100,
-        })
+        }),
     );
     paper.addMaterial(
         makeTestMaterialOptions({
@@ -138,7 +136,7 @@ test('获取分组边缘矩形', () => {
             y: 480,
             w: 200,
             h: 296,
-        })
+        }),
     );
     expect(paper.getGroupRect('test')).toEqual({
         x: 40,
@@ -217,12 +215,7 @@ test('对齐操作:右对齐', () => {
     paper.addMaterial(mOptions4);
     const [m1, m2, m3, m4] = paper.materialList;
     paper.alignHorizontalRight([m1.id, m2.id, m3.id, m4.id]);
-    expect([m1.x + m1.w, m2.x + m2.w, m3.x + m3.w, m4.x + m4.w]).toEqual([
-        800,
-        800,
-        800,
-        800,
-    ]);
+    expect([m1.x + m1.w, m2.x + m2.w, m3.x + m3.w, m4.x + m4.w]).toEqual([800, 800, 800, 800]);
 });
 
 test('对齐操作:水平居中对齐', () => {
@@ -285,7 +278,12 @@ test('对齐操作:水平均匀分布', () => {
     paper.addMaterial(mOptions4);
     const [m1, m2, m3, m4] = paper.materialList;
     paper.alignHorizontalDistribute([m1.id, m2.id, m3.id, m4.id]);
-    expect(paper.sortIdsByPosition([m1.id, m2.id, m3.id, m4.id],"y")).toEqual([m1.id, m2.id, m3.id, m4.id]);
+    expect(paper.sortIdsByPosition([m1.id, m2.id, m3.id, m4.id], 'y')).toEqual([
+        m1.id,
+        m2.id,
+        m3.id,
+        m4.id,
+    ]);
     expect([m1.x, m2.x, m3.x, m4.x]).toEqual([0, 100, 200, 300]);
 });
 

@@ -1,8 +1,0 @@
-# base
-node_modules
-.idea
-
-# vue
-/src/assets
-/public
-/dist

@@ -16,16 +16,8 @@
         <template #config>
             <ConfigItem title="类型" class="mb-2">
                 <ConfigToggle v-model="instance.config.type">
-                    <ConfigToggleOption
-                        label="本地"
-                        value="local"
-                        icon="mdi-laptop"
-                    />
-                    <ConfigToggleOption
-                        label="网络"
-                        value="web"
-                        icon="mdi-web"
-                    />
+                    <ConfigToggleOption label="本地" value="local" icon="mdi-laptop" />
+                    <ConfigToggleOption label="网络" value="web" icon="mdi-web" />
                 </ConfigToggle>
             </ConfigItem>
             <ConfigItem title="链接">
@@ -40,12 +32,7 @@
                     @input="onUrlChange"
                 ></v-text-field>
                 <template v-else>
-                    <v-btn
-                        variant="outlined"
-                        color="primary"
-                        height="40"
-                        @click="clickFileInput"
-                    >
+                    <v-btn variant="outlined" color="primary" height="40" @click="clickFileInput">
                         选择图片
                     </v-btn>
                     <v-file-input
@@ -53,23 +40,17 @@
                         style="position: fixed; right: -1000px; bottom: 1000px"
                         :rules="fileRules"
                         accept="image/*"
-                        @update:modelValue="(files) => onFileChange(files[0])"
+                        @update:model-value="(files) => onFileChange(files[0])"
                     ></v-file-input>
                 </template>
             </ConfigItem>
 
             <ConfigItem title="裁切">
-                <v-switch
-                    v-model="instance.config.cut"
-                    color="primary"
-                    hide-details
-                >
+                <v-switch v-model="instance.config.cut" color="primary" hide-details>
                     <template #label>
                         <div class="text-caption">
                             {{
-                                instance.config.cut
-                                    ? '宽度适配，裁切多余高度'
-                                    : '保持图片原有比例'
+                                instance.config.cut ? '宽度适配，裁切多余高度' : '保持图片原有比例'
                             }}
                         </div>
                     </template>
@@ -101,9 +82,7 @@ const protoInfo: ProtoInfo<MImageConfig> = {
     label: '图像',
     icon: 'image',
     dragHandlers: (config) =>
-        config.cut
-            ? ['tl', 'tr', 'tm', 'ml', 'mr', 'bl', 'bm', 'br']
-            : ['br', 'mr', 'bl', 'ml'],
+        config.cut ? ['tl', 'tr', 'tm', 'ml', 'mr', 'bl', 'bm', 'br'] : ['br', 'mr', 'bl', 'ml'],
     genInitOptions: ({ x, y }) => ({
         componentName: MaterialNames.MImage,
         x: x - 50,
@@ -150,9 +129,7 @@ export default defineComponent({
 
         const onUrlChange = async () => {
             try {
-                const { width, height, ratio } = await getImageSizeInfo(
-                    instance.config.url,
-                );
+                const { width, height, ratio } = await getImageSizeInfo(instance.config.url);
                 instance.config.aspectRatio = ratio;
                 if (width > 200) {
                     instance.w = 200;
@@ -230,12 +207,7 @@ export default defineComponent({
     data: () => ({
         fileRules: [
             (value: string | any[]) => {
-                return (
-                    !value ||
-                    !value.length ||
-                    value[0].size < 1000000 ||
-                    '图片大小最大 1 MB!'
-                );
+                return !value || !value.length || value[0].size < 1000000 || '图片大小最大 1 MB!';
             },
         ],
     }),

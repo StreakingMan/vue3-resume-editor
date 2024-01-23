@@ -1,8 +1,7 @@
-import { InjectionKey, reactive, ref, UnwrapNestedRefs } from 'vue';
+import { type InjectionKey, reactive, ref, type UnwrapNestedRefs } from 'vue';
 import { Material } from './Material';
 
-export const runtimeInjectionKey: InjectionKey<UnwrapNestedRefs<Runtime>> =
-    Symbol('Runtime');
+export const runtimeInjectionKey: InjectionKey<UnwrapNestedRefs<Runtime>> = Symbol('Runtime');
 
 // App类主要维护运行时的东西
 export class Runtime {

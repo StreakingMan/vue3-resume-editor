@@ -6,7 +6,7 @@
         id="importFileInput"
         style="position: fixed; right: -1000px; bottom: 1000px"
         accept="application/json"
-        @update:modelValue="(files) => onImportFileChange(files[0])"
+        @update:model-value="(files) => onImportFileChange(files[0])"
     ></v-file-input>
     <v-btn icon>
         <v-icon>mdi-export</v-icon>
@@ -14,7 +14,7 @@
             v-model="exportDialog"
             activator="parent"
             width="600"
-            @update:modelValue="exportFilename = new Date().toLocaleString()"
+            @update:model-value="exportFilename = new Date().toLocaleString()"
         >
             <v-card width="600">
                 <v-card-text>
@@ -27,9 +27,7 @@
                     ></v-text-field>
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn color="primary" block @click="exportPaperJSON">
-                        导出JSON文件
-                    </v-btn>
+                    <v-btn color="primary" block @click="exportPaperJSON"> 导出JSON文件 </v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>

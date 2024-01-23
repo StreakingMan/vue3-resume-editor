@@ -1,5 +1,5 @@
 import { uniqueString } from '@/utils/uniqueString';
-import { InjectionKey, UnwrapNestedRefs } from 'vue';
+import type { InjectionKey, UnwrapNestedRefs } from 'vue';
 import { calcCellingValue } from '@/utils/calcCellingValue';
 import { MaterialNames } from '@/components/materials/config';
 
@@ -10,9 +10,8 @@ export interface MaterialInjection {
     clicked: boolean;
 }
 
-export const materialInjectionKey: InjectionKey<
-    UnwrapNestedRefs<MaterialInjection>
-> = Symbol('Material');
+export const materialInjectionKey: InjectionKey<UnwrapNestedRefs<MaterialInjection>> =
+    Symbol('Material');
 
 export interface MaterialBaseConfig {
     padding?: number;
@@ -56,9 +55,7 @@ export class Material<T extends MaterialBaseConfig> {
         return this._x;
     }
     set x(value: number) {
-        this._x = this._freePosition
-            ? value
-            : calcCellingValue(value, this.cellSize);
+        this._x = this._freePosition ? value : calcCellingValue(value, this.cellSize);
     }
 
     private _y = 0;
@@ -66,9 +63,7 @@ export class Material<T extends MaterialBaseConfig> {
         return this._y;
     }
     set y(value: number) {
-        this._y = this._freePosition
-            ? value
-            : calcCellingValue(value, this.cellSize);
+        this._y = this._freePosition ? value : calcCellingValue(value, this.cellSize);
     }
 
     private _w = 100;
@@ -76,9 +71,7 @@ export class Material<T extends MaterialBaseConfig> {
         return this._w;
     }
     set w(value: number) {
-        this._w = this._freeSize
-            ? value
-            : calcCellingValue(value, this.cellSize, true);
+        this._w = this._freeSize ? value : calcCellingValue(value, this.cellSize, true);
     }
 
     private _h = 100;
