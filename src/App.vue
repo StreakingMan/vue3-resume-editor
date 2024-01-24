@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, provide, reactive, toRef, watch } from 'vue';
 import useMouseWheel from './composables/useMouseWheel';
-import { Paper as PaperClass, paperInjectionKey } from './classes/Paper';
+import { Paper as PaperClass, paperInjectionKey, PaperMode } from './classes/Paper';
 import Sketch from './components/core/Sketch.vue';
 import sketch from './components/core/Sketch.vue';
 import MaterialPrototype from './components/core/MaterialPrototype.vue';
@@ -141,6 +141,7 @@ watch(
             <Sketch ref="sketch">
                 <Paper />
                 <v-btn
+                    v-if="paperInstance.mode === PaperMode.Edit"
                     block
                     size="x-large"
                     class="mt-4 text-white print-none"

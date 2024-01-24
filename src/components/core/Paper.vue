@@ -6,10 +6,13 @@ import { usePaper, useRuntime } from '@/composables/useApp';
 import { useElementBounding, useMagicKeys, useUrlSearchParams } from '@vueuse/core';
 import type { Material } from '@/classes/Material';
 import { vElementHover } from '@vueuse/components';
+import { PaperMode } from '@/classes/Paper';
 
 const runtime = useRuntime();
 const paper = usePaper();
 const paperRef = ref<HTMLDivElement | null>(null);
+
+const isEdit = computed(() => paper.mode === PaperMode.Edit);
 
 const { x, y, width, height } = useElementBounding(paperRef);
 watch(
@@ -121,7 +124,7 @@ const showGrid = computed(() => runtime.showGrid);
 const materialList = computed(() => paper.materialList);
 
 const paperStyle = computed(() => [
-    paper.cellSize < 10 || !showGrid.value ? 'background-image: none' : '',
+    paper.cellSize < 10 || !showGrid.value || !isEdit.value ? 'background-image: none' : '',
     {
         width: paper.w + 'px',
         height: paper.h + 'px',
@@ -176,6 +179,7 @@ const insertPage = (index: number) => {
         :style="[
             ...paperStyle,
             {
+                pointerEvents: isEdit ? 'auto' : 'none',
                 height: isPrintPage ? (paper.h + 1) * paper.pageCount + 'px ' : paper.h + 'px',
             },
         ]"
@@ -212,12 +216,14 @@ const insertPage = (index: number) => {
             }"
         >
             <div
+                v-if="isEdit"
                 class="page-divide-tip"
                 :class="{
                     show: pageOptionHover[pageIdx].insert,
                 }"
             ></div>
             <div
+                v-if="isEdit"
                 class="page-options"
                 :style="{
                     transform: `scale(${1 / runtime.scale.value})`,
