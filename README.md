@@ -15,6 +15,8 @@
     <img src="https://img.shields.io/github/deployments/StreakingMan/vue3-resume-editor/Production?label=proccution%20state" alt="production-state" />
     <img src="https://img.shields.io/github/deployments/StreakingMan/vue3-resume-editor/Preview?label=preview%20state" alt="preview-state" />
     <a href="https://wallabyjs.com/oss/" target="_blank"><img src="https://img.shields.io/badge/wallaby.js-powered-blue.svg?style=flat&logo=github" alt="" /></a>
+    <a href="https://app.codacy.com/gh/StreakingMan/vue3-resume-editor/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade"><img src="https://app.codacy.com/project/badge/Grade/bf6cfe2ad40049d196cb403faf5c7526"/></a>
+    <a href="https://app.codacy.com/gh/StreakingMan/vue3-resume-editor/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage"><img src="https://app.codacy.com/project/badge/Coverage/bf6cfe2ad40049d196cb403faf5c7526"/></a>
 </p>
 
 # Vue3 Resume Editor
