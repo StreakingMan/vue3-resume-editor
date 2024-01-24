@@ -9,6 +9,11 @@ export default mergeConfig(
             environment: 'jsdom',
             exclude: [...configDefaults.exclude, 'e2e/*'],
             root: fileURLToPath(new URL('./', import.meta.url)),
+            coverage: {
+                all: true,
+                include: ['src/classes/*.ts', 'src/utils/*.ts'],
+                reporter: ['lcov', 'text'],
+            },
         },
     }),
 );

@@ -8,3 +8,5 @@ dist-ssr
 
 # TypeScript
 *.tsbuildinfo
+
+coverage
