@@ -9,7 +9,7 @@ provide(paperModeInjectionKey, PaperMode.Preview);
 </script>
 
 <template>
-    <div class="container">
+    <div class="container print-none">
         <v-sheet
             v-for="(num, idx) in paperInstance.pageCount"
             :key="idx"

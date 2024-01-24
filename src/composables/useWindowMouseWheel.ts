@@ -2,18 +2,13 @@ import { onMounted, onUnmounted } from 'vue';
 
 interface MouseWheelOptions {
     onWheel: {
-        (delta: number, mousePosition: { x: number; y: number }): void;
+        (delta: number, mousePosition: { x: number; y: number }, e: WheelEvent): void;
     };
 }
 
-export default function useMouseWheel(options: MouseWheelOptions): void {
+export default function useWindowMouseWheel(options: MouseWheelOptions): void {
     const onMousewheel = (e: WheelEvent) => {
-        if (e.ctrlKey) {
-            // 阻止冒泡默认考虑交给调用者去做
-            e.stopPropagation();
-            e.preventDefault();
-            options.onWheel(-e.deltaY / 200, { x: e.clientX, y: e.clientY });
-        }
+        options.onWheel(-e.deltaY / 200, { x: e.clientX, y: e.clientY }, e);
     };
 
     onMounted(() => {

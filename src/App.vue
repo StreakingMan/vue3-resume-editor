@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { computed, onMounted, provide, reactive, toRef, watch } from 'vue';
-import useMouseWheel from './composables/useMouseWheel';
 import {
     Paper as PaperClass,
     paperInjectionKey,
@@ -15,7 +14,6 @@ import { stringArrayDiff } from './utils/stringArrayDiff';
 import { Runtime, runtimeInjectionKey } from './classes/Runtime';
 import template1 from './components/templates/resume-template-1.json';
 import TemplateList from './components/templates/TemplateList.vue';
-import { SCALE_RANGE } from '@/components/core/config';
 import { useMagicKeys, whenever } from '@vueuse/core';
 import WebsiteInfo from '@/components/other/WebsiteInfo.vue';
 import Paper from '@/components/core/Paper.vue';
@@ -27,18 +25,6 @@ const runtime = reactive(new Runtime());
 const bottomDrawer = toRef(runtime, 'bottomDrawer');
 const snackbar = computed(() => runtime.snackbar);
 provide(runtimeInjectionKey, runtime);
-useMouseWheel({
-    onWheel: (wheelDelta, { x, y }) => {
-        // 更新缩放值
-        const scaleValue = runtime.scale.value + wheelDelta;
-        // 缩放范围0.1~5
-        if (SCALE_RANGE[0] < scaleValue && scaleValue < SCALE_RANGE[1]) {
-            runtime.scale.position.x = x;
-            runtime.scale.position.y = y;
-            runtime.scale.value += wheelDelta;
-        }
-    },
-});
 
 // Paper实例
 const paperInstance = reactive(new PaperClass({}));

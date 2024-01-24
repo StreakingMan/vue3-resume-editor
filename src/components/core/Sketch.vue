@@ -1,9 +1,13 @@
 <script lang="ts" setup>
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
 import useMouseDragDynamic, { type MouseEvtInfo } from '@/composables/useMouseDragDynamic';
 import { usePaper, useRuntime } from '@/composables/useApp';
 import { useActiveElement, useDebounceFn, useMagicKeys, useWindowSize } from '@vueuse/core';
 import { paperSizeMap } from '@/classes/Paper';
+import useWindowMouseWheel from '@/composables/useWindowMouseWheel';
+import { SCALE_RANGE } from '@/components/core/config';
+
+const { height: windowHeight, width: windowWidth } = useWindowSize();
 
 const runtime = useRuntime();
 const wrapperRef = ref<HTMLDivElement | null>(null);
@@ -29,12 +33,15 @@ const handleSketchWheel = (e: WheelEvent) => {
 onMounted(() => {
     if (!wrapperRef.value) return;
 
-    // paper居中
+    // paper位置初始化
     runtime.scale.value = (window.innerHeight - 160) / paperSizeMap.a4.h;
-    wrapperRef.value.scrollLeft =
-        (wrapperRef.value.children[0].clientWidth - window.innerWidth) / 2;
-    wrapperRef.value.scrollTop =
-        (wrapperRef.value.children[0].clientHeight - window.innerHeight) / 2;
+    nextTick(() => {
+        if (!wrapperRef.value) return;
+        wrapperRef.value.scrollTo({
+            top: windowHeight.value / 2,
+            left: (wrapperRef.value.scrollWidth - windowWidth.value) / 2,
+        });
+    });
 
     wrapperRef.value.addEventListener('wheel', handleSketchWheel);
 });
@@ -78,24 +85,50 @@ useMouseDragDynamic({
 });
 
 // 以鼠标为中心进行缩放
-const firstFlag = ref(true);
-watch(
-    () => runtime.scale.value,
-    async (newScale, oldScale) => {
-        if (firstFlag.value) {
-            firstFlag.value = false;
+// 计算依据：缩放前后，鼠标位置与页面的相对百分比位置不变
+// const mousePaperPercentX = computed(() => {
+//     return (runtime.scale.position.x - runtime.paper.bounds.x) / runtime.paper.bounds.width;
+// });
+// const mousePaperPercentY = computed(() => {
+//     return (runtime.scale.position.y - runtime.paper.bounds.y) / runtime.paper.bounds.height;
+// });
+// watch(
+//     () => ({
+//         mppx: mousePaperPercentX.value,
+//         mppy: mousePaperPercentY.value,
+//         scale: runtime.scale.value,
+//     }),
+//     (newInfo, oldInfo) => {
+//         // 单位偏移
+//         const unitOffsetX = paperInstance.w * (newInfo.mppx - oldInfo.mppx);
+//         const unitOffsetY = paperInstance.h * (newInfo.mppy - oldInfo.mppy);
+//         // 真实偏移
+//         const offsetX = unitOffsetX / newInfo.scale;
+//         const offsetY = unitOffsetY / newInfo.scale;
+//         // 补偿容器滚动
+//         wrapperRef.value.scrollLeft -= offsetX;
+//         wrapperRef.value.scrollTop -= offsetY;
+//     },
+// );
+useWindowMouseWheel({
+    onWheel: (wheelDelta, { x, y }, e) => {
+        if (!e.ctrlKey) {
             return;
         }
-        if (!wrapperRef.value) return;
-        const { x, y } = runtime.scale.position;
-        const { x: px, y: py, width: pw, height: ph } = runtime.paper.bounds;
-        const offsetX = (px + pw / 2 - x) * (1 - oldScale / newScale);
-        const offsetY = (py + ph / 2 - y) * (1 - oldScale / newScale);
 
-        wrapperRef.value.scrollLeft -= offsetX;
-        wrapperRef.value.scrollTop -= offsetY;
+        e.stopPropagation();
+        e.preventDefault();
+
+        // 更新缩放值
+        const scaleValue = runtime.scale.value + wheelDelta;
+        // 缩放范围0.1~5
+        if (SCALE_RANGE[0] < scaleValue && scaleValue < SCALE_RANGE[1]) {
+            runtime.scale.position.x = x;
+            runtime.scale.position.y = y;
+            runtime.scale.value += wheelDelta;
+        }
     },
-);
+});
 
 // 光标样式
 const cursor = computed(() => {
@@ -109,14 +142,13 @@ const cursor = computed(() => {
 });
 
 // 出血框在页面缩放时保持不变
-const { height, width } = useWindowSize();
 const paperInstance = usePaper();
 const gapX = computed(() => {
-    return width.value * 0.6 - Math.ceil((paperInstance.w * (1 - runtime.scale.value)) / 2);
+    return windowWidth.value * 0.6 - Math.ceil((paperInstance.w * (1 - runtime.scale.value)) / 2);
 });
 const gapY = computed(() => {
     return (
-        height.value * 0.6 -
+        windowHeight.value * 0.6 -
         Math.ceil((paperInstance.h * paperInstance.pageCount * (1 - runtime.scale.value)) / 2)
     );
 });

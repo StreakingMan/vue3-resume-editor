@@ -15,6 +15,7 @@ const paperRef = ref<HTMLDivElement | null>(null);
 
 const isEdit = inject(paperModeInjectionKey, PaperMode.Edit) === PaperMode.Edit;
 
+// paper边界信息记录
 const { x, y, width, height } = useElementBounding(paperRef);
 watch(
     () => ({
@@ -30,6 +31,14 @@ watch(
             width: width.value,
             height: height.value,
         };
+    },
+);
+// 缩放的是否不知道为啥宽高没有响应，主动根据缩放值计算下
+watch(
+    () => runtime.scale.value,
+    (v) => {
+        runtime.paper.bounds.width = Math.ceil(paper.w * v);
+        runtime.paper.bounds.height = Math.ceil(paper.h * v);
     },
 );
 
@@ -174,7 +183,7 @@ const insertPage = (index: number) => {
 
 <template>
     <div
-        id="paper"
+        :id="isEdit ? 'paper' : ''"
         ref="paperRef"
         class="paper"
         :style="[
