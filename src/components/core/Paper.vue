@@ -7,6 +7,7 @@ import { useElementBounding, useMagicKeys, useUrlSearchParams } from '@vueuse/co
 import type { Material } from '@/classes/Material';
 import { vElementHover } from '@vueuse/components';
 import { PaperMode, paperModeInjectionKey } from '@/classes/Paper';
+import AddPageBtn from '@/components/other/AddPageBtn.vue';
 
 const runtime = useRuntime();
 const paper = usePaper();
@@ -205,6 +206,8 @@ const insertPage = (index: number) => {
             ></MaterialInstance>
             <div v-if="selecting && !current.size" class="select-box" :style="selectorStyle"></div>
         </v-theme-provider>
+
+        <AddPageBtn v-if="paper.pageCount === 1" />
     </div>
     <!--分页 -->
     <template v-if="!isPrintPage">
@@ -279,6 +282,8 @@ const insertPage = (index: number) => {
                     </v-menu>
                 </v-defaults-provider>
             </div>
+
+            <AddPageBtn v-if="isEdit && pageIdx === paper.pageCount - 1" />
         </div>
     </template>
 </template>

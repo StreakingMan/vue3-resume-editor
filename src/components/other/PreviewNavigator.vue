@@ -9,7 +9,7 @@ provide(paperModeInjectionKey, PaperMode.Preview);
 </script>
 
 <template>
-    <v-sheet class="container">
+    <div class="container">
         <v-sheet
             v-for="(num, idx) in paperInstance.pageCount"
             :key="idx"
@@ -19,7 +19,7 @@ provide(paperModeInjectionKey, PaperMode.Preview);
         >
             <PreviewNavigatorPage :page-num="num" />
         </v-sheet>
-    </v-sheet>
+    </div>
 </template>
 
 <style scoped lang="scss">

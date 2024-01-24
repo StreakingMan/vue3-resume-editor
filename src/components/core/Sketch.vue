@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import useMouseDragDynamic, { type MouseEvtInfo } from '@/composables/useMouseDragDynamic';
-import { useRuntime } from '@/composables/useApp';
-import { useActiveElement, useDebounceFn, useMagicKeys } from '@vueuse/core';
+import { usePaper, useRuntime } from '@/composables/useApp';
+import { useActiveElement, useDebounceFn, useMagicKeys, useWindowSize } from '@vueuse/core';
 import { paperSizeMap } from '@/classes/Paper';
 
 const runtime = useRuntime();
@@ -107,6 +107,19 @@ const cursor = computed(() => {
     }
     return 'default';
 });
+
+// 出血框在页面缩放时保持不变
+const { height, width } = useWindowSize();
+const paperInstance = usePaper();
+const gapX = computed(() => {
+    return width.value * 0.6 - Math.ceil((paperInstance.w * (1 - runtime.scale.value)) / 2);
+});
+const gapY = computed(() => {
+    return (
+        height.value * 0.6 -
+        Math.ceil((paperInstance.h * paperInstance.pageCount * (1 - runtime.scale.value)) / 2)
+    );
+});
 </script>
 
 <template>
@@ -121,6 +134,8 @@ const cursor = computed(() => {
         <div
             class="sketch__inner"
             :style="{
+                margin: `${gapY}px ${gapX}px`,
+                width: `${paperInstance.w}px`,
                 transform: `scale(${runtime.scale.value})`,
             }"
         >
@@ -150,15 +165,15 @@ const cursor = computed(() => {
             width: 12px;
             height: 12px;
         }
+
         &::-webkit-scrollbar-thumb {
             transition: background-color 0.3s;
             border-radius: 6px;
             background-color: var(--scroll-thumb-color);
         }
     }
+
     &__inner {
-        position: absolute;
-        padding: 80vh 80vw;
         @media print {
             padding: 0 !important;
         }
