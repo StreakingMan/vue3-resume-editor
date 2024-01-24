@@ -19,6 +19,8 @@
 
 # Vue3 Resume Editor
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/39cd2e88d5214126aa87cdf5efc4b4ef)](https://app.codacy.com/gh/StreakingMan/vue3-resume-editor?utm_source=github.com&utm_medium=referral&utm_content=StreakingMan/vue3-resume-editor&utm_campaign=Badge_Grade)
+
 ---
 
 ![resume-editor](src/assets/previews/app.png)
