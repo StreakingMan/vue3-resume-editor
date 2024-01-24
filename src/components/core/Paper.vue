@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { computed, ref, watch, watchEffect } from 'vue';
+import { computed, inject, ref, watch, watchEffect } from 'vue';
 import useMouseDragDynamic, { type MouseEvtInfo } from '@/composables/useMouseDragDynamic';
 import MaterialInstance from './MaterialInstance.vue';
 import { usePaper, useRuntime } from '@/composables/useApp';
 import { useElementBounding, useMagicKeys, useUrlSearchParams } from '@vueuse/core';
 import type { Material } from '@/classes/Material';
 import { vElementHover } from '@vueuse/components';
-import { PaperMode } from '@/classes/Paper';
+import { PaperMode, paperModeInjectionKey } from '@/classes/Paper';
 
 const runtime = useRuntime();
 const paper = usePaper();
 const paperRef = ref<HTMLDivElement | null>(null);
 
-const isEdit = computed(() => paper.mode === PaperMode.Edit);
+const isEdit = inject(paperModeInjectionKey, PaperMode.Edit) === PaperMode.Edit;
 
 const { x, y, width, height } = useElementBounding(paperRef);
 watch(
@@ -124,7 +124,7 @@ const showGrid = computed(() => runtime.showGrid);
 const materialList = computed(() => paper.materialList);
 
 const paperStyle = computed(() => [
-    paper.cellSize < 10 || !showGrid.value || !isEdit.value ? 'background-image: none' : '',
+    paper.cellSize < 10 || !showGrid.value || !isEdit ? 'background-image: none' : '',
     {
         width: paper.w + 'px',
         height: paper.h + 'px',
@@ -185,17 +185,19 @@ const insertPage = (index: number) => {
         ]"
     >
         <v-theme-provider theme="light">
-            <div
-                v-for="(g, i) in groupRects"
-                :key="i"
-                class="group-rect"
-                :style="{
-                    left: g.x + 'px',
-                    top: g.y + 'px',
-                    width: g.w + 'px',
-                    height: g.h + 'px',
-                }"
-            ></div>
+            <template v-if="isEdit">
+                <div
+                    v-for="(g, i) in groupRects"
+                    :key="i"
+                    class="group-rect"
+                    :style="{
+                        left: g.x + 'px',
+                        top: g.y + 'px',
+                        width: g.w + 'px',
+                        height: g.h + 'px',
+                    }"
+                ></div>
+            </template>
             <MaterialInstance
                 v-for="(m, i) in materialList"
                 :key="m.id"

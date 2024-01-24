@@ -1,7 +1,12 @@
 <script lang="ts" setup>
 import { computed, onMounted, provide, reactive, toRef, watch } from 'vue';
 import useMouseWheel from './composables/useMouseWheel';
-import { Paper as PaperClass, paperInjectionKey, PaperMode } from './classes/Paper';
+import {
+    Paper as PaperClass,
+    paperInjectionKey,
+    PaperMode,
+    paperModeInjectionKey,
+} from './classes/Paper';
 import Sketch from './components/core/Sketch.vue';
 import sketch from './components/core/Sketch.vue';
 import MaterialPrototype from './components/core/MaterialPrototype.vue';
@@ -14,6 +19,7 @@ import { SCALE_RANGE } from '@/components/core/config';
 import { useMagicKeys, whenever } from '@vueuse/core';
 import WebsiteInfo from '@/components/other/WebsiteInfo.vue';
 import Paper from '@/components/core/Paper.vue';
+import PreviewNavigator from '@/components/other/PreviewNavigator.vue';
 
 // 运行时
 const runtime = reactive(new Runtime());
@@ -99,6 +105,8 @@ watch(
         });
     },
 );
+
+provide(paperModeInjectionKey, PaperMode.Edit);
 </script>
 
 <template>
@@ -141,7 +149,6 @@ watch(
             <Sketch ref="sketch">
                 <Paper />
                 <v-btn
-                    v-if="paperInstance.mode === PaperMode.Edit"
                     block
                     size="x-large"
                     class="mt-4 text-white print-none"
@@ -153,6 +160,7 @@ watch(
                     新增页面
                 </v-btn>
             </Sketch>
+            <PreviewNavigator />
             <WebsiteInfo />
             <v-defaults-provider
                 :defaults="{

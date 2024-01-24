@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, provide, reactive, ref, toRef, watch } from 'vue';
+import { computed, inject, provide, reactive, ref, toRef, watch } from 'vue';
 import useMouseDragDynamic, { type MouseEvtInfo } from '../../composables/useMouseDragDynamic';
 import { CTRL_DOT_SIZE, UNIT_SIZE } from './config';
 import { Material, materialInjectionKey } from '@/classes/Material';
@@ -7,6 +7,7 @@ import { usePaper, useRuntime } from '@/composables/useApp';
 import { componentMap, prototypeMap } from '../materials/prototypes';
 import { type CtrlDotType } from '../materials/config';
 import { useMagicKeys } from '@vueuse/core';
+import { PaperMode, paperModeInjectionKey, paperShowPageNumInjectionKey } from '@/classes/Paper';
 
 const styleMap: Record<CtrlDotType, string> = {
     tl: `top: 0px;left: 0px;cursor: nw-resize;transform-origin: top left;`,
@@ -154,6 +155,17 @@ const hover = toRef(material, 'hover');
 const active = toRef(material, 'active');
 const instance = toRef(material, 'instance');
 const scale = toRef(runtime.scale, 'value');
+
+const isEdit = inject(paperModeInjectionKey, PaperMode.Edit) === PaperMode.Edit;
+
+const showPageNum = inject(paperShowPageNumInjectionKey, undefined);
+const realY = computed(() => {
+    if (showPageNum) {
+        return instance.value.y - (showPageNum - 1) * paper.h;
+    } else {
+        return instance.value.y;
+    }
+});
 </script>
 
 <template>
@@ -163,7 +175,7 @@ const scale = toRef(runtime.scale, 'value');
         :style="{
             backgroundColor: hover || active ? 'rgba(128,128,128,0.2)' : '',
             left: instance.x + 'px',
-            top: instance.y + 'px',
+            top: realY + 'px',
             zIndex: active ? paper.materialList.length + 1 : instance.z,
             width: instance.w + 'px',
             height: instance.h + 'px',
@@ -184,7 +196,7 @@ const scale = toRef(runtime.scale, 'value');
             }"
         >
             <component :is="componentMap[instance.componentName]">
-                <template #activator>
+                <template v-if="isEdit" #activator>
                     <!-- 复制 -->
                     <v-btn @mousedown.stop="() => paper.copyMaterial(instance.id)">
                         <v-icon>mdi-content-copy</v-icon>
@@ -245,20 +257,22 @@ const scale = toRef(runtime.scale, 'value');
             </component>
         </div>
 
-        <div
-            v-for="dot in ableCtrlDots"
-            :key="dot"
-            :style="[
-                `transform: scale(${1 / scale});${styleMap[dot]}`,
-                {
-                    opacity: (clickingDot && clickingDot !== dot) || !(active || hover) ? 0 : 1,
-                    width: CTRL_DOT_SIZE + 'px',
-                    height: CTRL_DOT_SIZE + 'px',
-                },
-            ]"
-            class="control-dot bg-primary"
-            @mousedown.stop.prevent="(clickingDot = dot) && onDotMousedown($event)"
-        ></div>
+        <template v-if="isEdit">
+            <div
+                v-for="dot in ableCtrlDots"
+                :key="dot"
+                :style="[
+                    `transform: scale(${1 / scale});${styleMap[dot]}`,
+                    {
+                        opacity: (clickingDot && clickingDot !== dot) || !(active || hover) ? 0 : 1,
+                        width: CTRL_DOT_SIZE + 'px',
+                        height: CTRL_DOT_SIZE + 'px',
+                    },
+                ]"
+                class="control-dot bg-primary"
+                @mousedown.stop.prevent="(clickingDot = dot) && onDotMousedown($event)"
+            ></div>
+        </template>
     </div>
 </template>
 

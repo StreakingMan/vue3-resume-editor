@@ -15,6 +15,9 @@ export const paperSizeMap = {
 };
 
 export const paperInjectionKey: InjectionKey<UnwrapNestedRefs<Paper>> = Symbol('Paper');
+export const paperShowPageNumInjectionKey: InjectionKey<number | null | undefined> =
+    Symbol('PaperShowPageNum');
+export const paperModeInjectionKey: InjectionKey<PaperMode> = Symbol('PaperMode');
 export enum PaperMode {
     Preview = 'preview',
     Edit = 'edit',
@@ -51,14 +54,6 @@ export class Paper {
     set pageCount(value: number) {
         if (value < 1) return;
         this._pageCount = value;
-    }
-    // 操作模式，该字段不做持久化
-    private _mode: PaperMode = PaperMode.Edit;
-    get mode(): PaperMode {
-        return this._mode;
-    }
-    set mode(value: PaperMode) {
-        this._mode = value;
     }
     // 当前z值map
     // 该访问器在同一批次的操作中应提前访问然后缓存

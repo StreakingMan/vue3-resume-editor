@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { computed, provide, ref } from 'vue';
-import { Paper as PaperClass, paperInjectionKey, PaperMode } from '@/classes/Paper';
+import {
+    Paper as PaperClass,
+    paperInjectionKey,
+    PaperMode,
+    paperModeInjectionKey,
+} from '@/classes/Paper';
 import { usePaper, useRuntime } from '@/composables/useApp';
 import Paper from '@/components/core/Paper.vue';
 
@@ -35,7 +40,7 @@ const transform = computed(() => {
 
 const paperInstance = new PaperClass({});
 paperInstance.loadData(props.template);
-paperInstance.mode = PaperMode.Preview;
+provide(paperModeInjectionKey, PaperMode.Preview);
 provide(paperInjectionKey, paperInstance);
 
 const runtime = useRuntime();
