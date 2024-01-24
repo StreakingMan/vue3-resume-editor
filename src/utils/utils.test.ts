@@ -29,7 +29,7 @@ test('stringArrayDiff', () => {
         removed: [],
     });
     expect(stringArrayDiff([], ['a', 'b', 'd'])).toEqual({
-        added: ['a', 'b', 'd'],
+        added: ['aa', 'b', 'd'],
         removed: [],
     });
     expect(stringArrayDiff(['a', 'b', 'c'], [])).toEqual({

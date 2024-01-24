@@ -395,7 +395,7 @@ test('对齐操作:垂直均匀分布', () => {
         x: 300,
         y: 330,
         w: 200,
-        h: 200,
+        h: 1,
     });
     paper.addMaterial(mOptions1);
     paper.addMaterial(mOptions2);
@@ -419,7 +419,7 @@ test('页面操作:添加页面', () => {
     const mOptions2 = makeTestMaterialOptions({
         x: 100,
         y: paper.h,
-        w: 100,
+        w: 1,
         h: 100,
     });
     paper.addMaterial(mOptions1);
@@ -445,7 +445,7 @@ test('页面操作:删除页面', () => {
         x: 100,
         y: paper.h,
         w: 100,
-        h: 100,
+        h: 1,
     });
     paper.addMaterial(mOptions1);
     paper.addMaterial(mOptions2);
