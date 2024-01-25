@@ -15,7 +15,7 @@ const paperRef = ref<HTMLDivElement | null>(null);
 
 const isEdit = inject(paperModeInjectionKey, PaperMode.Edit) === PaperMode.Edit;
 
-// paper边界信息记录
+// paper bounding 信息实时更新
 const { x, y, width, height } = useElementBounding(paperRef);
 watch(
     () => ({
@@ -26,19 +26,19 @@ watch(
     }),
     () => {
         runtime.paper.bounds = {
-            x: x.value,
-            y: y.value,
-            width: width.value,
-            height: height.value,
+            x: Math.ceil(x.value),
+            y: Math.ceil(y.value),
+            width: Math.ceil(width.value),
+            height: Math.ceil(height.value) * paper.pageCount,
         };
     },
 );
-// 缩放的是否不知道为啥宽高没有响应，主动根据缩放值计算下
+// 缩放的时候不知道为啥宽高没有根据，主动根据缩放值计算下
 watch(
     () => runtime.scale.value,
     (v) => {
         runtime.paper.bounds.width = Math.ceil(paper.w * v);
-        runtime.paper.bounds.height = Math.ceil(paper.h * v);
+        runtime.paper.bounds.height = Math.ceil(paper.h * v) * paper.pageCount;
     },
 );
 

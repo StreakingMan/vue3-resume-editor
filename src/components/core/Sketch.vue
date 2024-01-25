@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, watchEffect } from 'vue';
 import useMouseDragDynamic, { type MouseEvtInfo } from '@/composables/useMouseDragDynamic';
 import { usePaper, useRuntime } from '@/composables/useApp';
 import { useActiveElement, useDebounceFn, useMagicKeys, useWindowSize } from '@vueuse/core';
@@ -84,32 +84,28 @@ useMouseDragDynamic({
     bindElementRef: wrapperRef,
 });
 
-// 以鼠标为中心进行缩放
-// 计算依据：缩放前后，鼠标位置与页面的相对百分比位置不变
-// const mousePaperPercentX = computed(() => {
-//     return (runtime.scale.position.x - runtime.paper.bounds.x) / runtime.paper.bounds.width;
-// });
-// const mousePaperPercentY = computed(() => {
-//     return (runtime.scale.position.y - runtime.paper.bounds.y) / runtime.paper.bounds.height;
-// });
-// watch(
-//     () => ({
-//         mppx: mousePaperPercentX.value,
-//         mppy: mousePaperPercentY.value,
-//         scale: runtime.scale.value,
-//     }),
-//     (newInfo, oldInfo) => {
-//         // 单位偏移
-//         const unitOffsetX = paperInstance.w * (newInfo.mppx - oldInfo.mppx);
-//         const unitOffsetY = paperInstance.h * (newInfo.mppy - oldInfo.mppy);
-//         // 真实偏移
-//         const offsetX = unitOffsetX / newInfo.scale;
-//         const offsetY = unitOffsetY / newInfo.scale;
-//         // 补偿容器滚动
-//         wrapperRef.value.scrollLeft -= offsetX;
-//         wrapperRef.value.scrollTop -= offsetY;
-//     },
-// );
+// 补偿缩放中心点的偏移
+watchEffect(() => {
+    if (!runtime.scale.cache.scaling) return;
+    // 缩放中心起始点当前在屏幕的位置
+    const lastCenterNowX =
+        runtime.paper.bounds.x +
+        runtime.scale.cache.mousePaperPercent.x * runtime.paper.bounds.width;
+    const lastCenterNowY =
+        runtime.paper.bounds.y +
+        runtime.scale.cache.mousePaperPercent.y * runtime.paper.bounds.height;
+
+    // 缩放中心点偏移量
+    const offsetX = lastCenterNowX - runtime.scale.cache.mousePosition.x;
+    const offsetY = lastCenterNowY - runtime.scale.cache.mousePosition.y;
+
+    // 滚动
+    wrapperRef.value?.scrollTo({
+        left: runtime.scale.cache.containerScroll.left + offsetX,
+        top: runtime.scale.cache.containerScroll.top + offsetY,
+    });
+});
+// 监听鼠标滚轮事件
 useWindowMouseWheel({
     onWheel: (wheelDelta, { x, y }, e) => {
         if (!e.ctrlKey) {
@@ -123,12 +119,28 @@ useWindowMouseWheel({
         const scaleValue = runtime.scale.value + wheelDelta;
         // 缩放范围0.1~5
         if (SCALE_RANGE[0] < scaleValue && scaleValue < SCALE_RANGE[1]) {
-            runtime.scale.position.x = x;
-            runtime.scale.position.y = y;
             runtime.scale.value += wheelDelta;
+            if (!runtime.scale.cache.scaling) {
+                runtime.scale.cache.scaling = true;
+                // 记录开始时鼠标位置
+                runtime.scale.cache.mousePosition.x = x;
+                runtime.scale.cache.mousePosition.y = y;
+                // 记录开始时鼠标相对于paper的百分比位置
+                runtime.scale.cache.mousePaperPercent.x =
+                    (x - runtime.paper.bounds.x) / runtime.paper.bounds.width;
+                runtime.scale.cache.mousePaperPercent.y =
+                    (y - runtime.paper.bounds.y) / runtime.paper.bounds.height;
+                // 记录容器滚动条的位置
+                runtime.scale.cache.containerScroll.left = wrapperRef.value?.scrollLeft || 0;
+                runtime.scale.cache.containerScroll.top = wrapperRef.value?.scrollTop || 0;
+            }
         }
+        handleScrollStop();
     },
 });
+const handleScrollStop = useDebounceFn(() => {
+    runtime.scale.cache.scaling = false;
+}, 300);
 
 // 光标样式
 const cursor = computed(() => {

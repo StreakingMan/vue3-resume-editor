@@ -10,10 +10,21 @@ export class Runtime {
     public bottomDrawer = ref(false);
     // 辅助网格显示
     public showGrid = ref(true);
-    // 缩放值和缩放中心
+    // 缩放值相关
     public scale = reactive({
+        // 实时缩放值
         value: 1,
-        position: { x: 0, y: 0 },
+        // 在进行缩放操作时，记录缩放前的一些信息
+        cache: {
+            // 缩放中标记
+            scaling: false,
+            // 鼠标相对于画布的百分比
+            mousePaperPercent: { x: 0, y: 0 },
+            // 鼠标位置
+            mousePosition: { x: 0, y: 0 },
+            // 容器滚动位置
+            containerScroll: { left: 0, top: 0 },
+        },
     });
     // 激活元素集合
     public activeMaterialSet = ref<Set<Material<any>['id']>>(new Set());
