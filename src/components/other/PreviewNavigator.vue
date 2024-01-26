@@ -6,19 +6,27 @@ import { PaperMode, paperModeInjectionKey } from '@/classes/Paper';
 
 const paperInstance = usePaper();
 provide(paperModeInjectionKey, PaperMode.Preview);
+
+// 点击预览页滚动到对应页
+const onPreviewClick = (pageNum: number) => {
+    const pageEl = document.getElementById(`paper-page-${pageNum}`);
+    if (!pageEl) return;
+    pageEl.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+};
 </script>
 
 <template>
     <div class="container print-none">
-        <v-sheet
+        <div
             v-for="(num, idx) in paperInstance.pageCount"
             :key="idx"
-            class="preview"
-            :width="paperInstance.w"
-            :height="paperInstance.h"
+            class="page-wrapper"
+            @click="onPreviewClick(num)"
         >
-            <PreviewNavigatorPage :page-num="num" />
-        </v-sheet>
+            <v-sheet class="preview" :width="paperInstance.w" :height="paperInstance.h">
+                <PreviewNavigatorPage :page-num="num" />
+            </v-sheet>
+        </div>
     </div>
 </template>
 
@@ -29,6 +37,17 @@ provide(paperModeInjectionKey, PaperMode.Preview);
     gap: 4px;
     top: 100px;
     right: 0;
+}
+
+.page-wrapper {
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.3s;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.05);
+    }
 }
 
 .preview {

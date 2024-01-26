@@ -183,7 +183,7 @@ const insertPage = (index: number) => {
 
 <template>
     <div
-        :id="isEdit ? 'paper' : ''"
+        :id="isEdit ? 'paper-page-1' : ''"
         ref="paperRef"
         class="paper"
         :style="[
@@ -222,6 +222,7 @@ const insertPage = (index: number) => {
     <template v-if="!isPrintPage">
         <div
             v-for="pageIdx in paper.pageCount - 1"
+            :id="isEdit ? `paper-page-${pageIdx + 1}` : ''"
             :key="pageIdx"
             class="paper addon"
             :style="paperStyle"
