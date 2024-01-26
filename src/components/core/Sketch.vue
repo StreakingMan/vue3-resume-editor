@@ -36,11 +36,10 @@ onMounted(() => {
     // paper位置初始化
     runtime.scale.value = (window.innerHeight - 160) / paperSizeMap.a4.h;
     nextTick(() => {
-        if (!wrapperRef.value) return;
-        wrapperRef.value.scrollTo({
-            top: windowHeight.value / 2,
-            left: (wrapperRef.value.scrollWidth - windowWidth.value) / 2,
-        });
+        const firstPageEl = document.getElementById('paper-page-1');
+        if (firstPageEl) {
+            firstPageEl.scrollIntoView({ block: 'center', inline: 'center' });
+        }
     });
 
     wrapperRef.value.addEventListener('wheel', handleSketchWheel);
