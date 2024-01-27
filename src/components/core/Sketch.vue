@@ -14,20 +14,12 @@ const wrapperRef = ref<HTMLDivElement | null>(null);
 
 const grabbing = ref(false);
 
-const scrolling = ref(false);
-const setUnScrollingDebounce = useDebounceFn(() => {
-    scrolling.value = false;
-}, 300);
 // 优化Mac触控板滚动（屏蔽默认行为，重新赋值两个轴的偏移量）
 const handleSketchWheel = (e: WheelEvent) => {
     if (!wrapperRef.value || e.ctrlKey) return;
     e.preventDefault();
     wrapperRef.value.scrollLeft += e.deltaX;
     wrapperRef.value.scrollTop += e.deltaY;
-    scrolling.value = true;
-    setTimeout(() => {
-        setUnScrollingDebounce();
-    }, 300);
 };
 
 onMounted(() => {
@@ -166,14 +158,7 @@ const gapY = computed(() => {
 </script>
 
 <template>
-    <div
-        ref="wrapperRef"
-        class="sketch__wrapper"
-        :style="[
-            `--scroll-thumb-color: ${scrolling ? 'rgba(255,255,255,0.3)' : 'transparent'}`,
-            { cursor },
-        ]"
-    >
+    <div ref="wrapperRef" class="sketch__wrapper" :style="{ cursor }">
         <div
             class="sketch__inner"
             :style="{
@@ -212,7 +197,7 @@ const gapY = computed(() => {
         &::-webkit-scrollbar-thumb {
             transition: background-color 0.3s;
             border-radius: 6px;
-            background-color: var(--scroll-thumb-color);
+            background-color: #2a2a2a;
         }
     }
 
