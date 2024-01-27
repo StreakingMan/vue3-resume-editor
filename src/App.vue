@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onMounted, provide, reactive, toRef, watch } from 'vue';
+import { computed, defineAsyncComponent, onMounted, provide, reactive, toRef, watch } from 'vue';
 import {
     Paper as PaperClass,
     paperInjectionKey,
@@ -33,7 +33,6 @@ onMounted(() => {
     if (!paperInstance.loadFromStorage()) {
         paperInstance.loadData(template1);
     }
-    console.log(paperInstance);
 });
 
 // 复制粘贴
@@ -64,7 +63,6 @@ whenever(ctrl_a, () => {
 watch(
     () => [...runtime.activeMaterialSet],
     (nv, ov) => {
-        console.log('激活元素', nv, ov);
         if (!nv.length) {
             runtime.copyMaterialSet.clear();
         }
@@ -93,6 +91,9 @@ watch(
 );
 
 provide(paperModeInjectionKey, PaperMode.Edit);
+
+const DevPanel = defineAsyncComponent(() => import('./components/other/DevPanel.vue'));
+const isDev = import.meta.env.DEV;
 </script>
 
 <template>
@@ -177,6 +178,8 @@ provide(paperModeInjectionKey, PaperMode.Edit);
             {{ snackbar.text }}
         </v-snackbar>
     </v-app>
+
+    <DevPanel v-if="isDev" />
 </template>
 
 <style lang="scss" scoped>

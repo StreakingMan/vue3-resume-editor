@@ -19,6 +19,7 @@
     "dependencies": {
         "@mdi/font": "^7.4.47",
         "@types/lodash": "^4.14.168",
+        "@vueuse/components": "^10.7.2",
         "@vueuse/core": "^10.6.1",
         "animate.css": "^4.1.1",
         "roboto-fontface": "*",
@@ -40,7 +41,6 @@
         "@vue/eslint-config-typescript": "^12.0.0",
         "@vue/test-utils": "^2.4.3",
         "@vue/tsconfig": "^0.5.1",
-        "@vueuse/components": "^10.7.2",
         "eslint": "^8.52.0",
         "eslint-plugin-vue": "^9.18.1",
         "husky": "^8.0.3",
