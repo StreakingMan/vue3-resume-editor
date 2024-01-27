@@ -90,8 +90,21 @@ const transformList = computed(() => {
             }"
             @click="onPreviewClick(num)"
         >
-            <v-sheet class="preview" :width="paperInstance.w" :height="paperInstance.h">
-                <PreviewNavigatorPage :page-num="num" />
+            <v-sheet
+                class="position-relative"
+                width="145"
+                :height="145 * (paperInstance.h / paperInstance.w)"
+            >
+                <v-sheet
+                    class="preview"
+                    :width="paperInstance.w"
+                    :height="paperInstance.h"
+                    :style="{
+                        transform: `scale(${145 / paperInstance.w})`,
+                    }"
+                >
+                    <PreviewNavigatorPage :page-num="num" />
+                </v-sheet>
             </v-sheet>
         </div>
     </div>
@@ -138,8 +151,7 @@ const transformList = computed(() => {
 }
 
 .preview {
-    position: relative;
-    zoom: 0.18;
+    transform-origin: top left;
     overflow: hidden;
 }
 </style>
