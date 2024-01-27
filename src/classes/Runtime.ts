@@ -39,6 +39,7 @@ export class Runtime {
     public sketch = reactive({});
     // Paper组件信息
     public paper = reactive({
+        hoveringDeletePageNum: null as null | number,
         bounds: { x: 0, y: 0, width: 0, height: 0 },
     });
 }

@@ -163,6 +163,7 @@ watchEffect(() => {
         }));
 });
 const onHover = (state: boolean, type: 'insert' | 'delete', index: number) => {
+    runtime.paper.hoveringDeletePageNum = state ? index + 1 : null;
     pageOptionHover.value[index][type] = state;
 };
 

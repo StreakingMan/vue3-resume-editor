@@ -15,10 +15,11 @@ const paper = usePaper();
         storage-type="session"
         class="console-panel cursor-grab"
     >
-        <VExpansionPanels variant="popout">
+        <VExpansionPanels variant="popout" multiple :model-value="['Runtime', 'Paper']">
             <VExpansionPanel
                 v-for="(it, index) of [runtime, paper]"
                 :key="index"
+                :value="['Runtime', 'Paper'][index]"
                 :title="['Runtime', 'Paper'][index]"
             >
                 <VExpansionPanelText>
@@ -30,7 +31,7 @@ const paper = usePaper();
                             <br />{{ key }}: [{{ [...value].join(', ') }}],
                         </template>
                         <VExpansionPanels v-else>
-                            <VExpansionPanel :title="key">
+                            <VExpansionPanel :title="key" :value="true">
                                 <VExpansionPanelText>
                                     <template
                                         v-for="([k, v], i) of Object.entries(
