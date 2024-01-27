@@ -25,6 +25,7 @@ watch(
         height: height.value,
     }),
     () => {
+        if (!isEdit) return;
         runtime.paper.bounds = {
             x: Math.ceil(x.value),
             y: Math.ceil(y.value),
@@ -37,6 +38,7 @@ watch(
 watch(
     () => runtime.scale.value,
     (v) => {
+        if (!isEdit) return;
         runtime.paper.bounds.width = Math.ceil(paper.w * v);
         runtime.paper.bounds.height = Math.ceil(paper.h * v) * paper.pageCount;
     },
@@ -154,6 +156,7 @@ const pageOptionHover = ref<
     }[]
 >([]);
 watchEffect(() => {
+    if (!isEdit) return;
     deleteConfirmMenus.value = Array(paper.pageCount).fill(false);
     pageOptionHover.value = Array(paper.pageCount)
         .fill(0)
@@ -220,7 +223,7 @@ const insertPage = (index: number) => {
         <AddPageBtn v-if="paper.pageCount === 1" />
     </div>
     <!--分页 -->
-    <template v-if="!isPrintPage">
+    <template v-if="!isPrintPage && isEdit">
         <div
             v-for="pageIdx in paper.pageCount - 1"
             :id="isEdit ? `paper-page-${pageIdx + 1}` : ''"
