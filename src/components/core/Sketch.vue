@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import { computed, nextTick, onMounted, onUnmounted, ref, watchEffect } from 'vue';
 import useMouseDragDynamic, { type MouseEvtInfo } from '@/composables/useMouseDragDynamic';
-import { usePaper, useRuntime } from '@/composables/useApp';
+import { usePaper } from '@/composables/useApp';
 import { useActiveElement, useDebounceFn, useMagicKeys, useWindowSize } from '@vueuse/core';
 import { paperSizeMap } from '@/classes/Paper';
 import useWindowMouseWheel from '@/composables/useWindowMouseWheel';
 import { SCALE_RANGE } from '@/components/core/config';
+import { useRuntime } from '@/composables/useRuntime';
 
 const { height: windowHeight, width: windowWidth } = useWindowSize();
 

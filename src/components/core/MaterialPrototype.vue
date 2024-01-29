@@ -3,7 +3,8 @@ import { reactive, ref } from 'vue';
 import useMouseDragDynamic, { type MouseEvtInfo } from '../../composables/useMouseDragDynamic';
 import { prototypeMap } from '../materials/prototypes';
 import { MaterialNames } from '../materials/config';
-import { usePaper, useRuntime } from '@/composables/useApp';
+import { usePaper } from '@/composables/useApp';
+import { useRuntime } from '@/composables/useRuntime';
 
 const runtime = useRuntime();
 const paper = usePaper();
@@ -69,6 +70,7 @@ const { onMousedown: onProtoMousedown } = useMouseDragDynamic({
 .sheet {
     cursor: pointer;
 }
+
 .prototype-container {
     position: fixed;
     transition: 0.3s;
@@ -77,6 +79,7 @@ const { onMousedown: onProtoMousedown } = useMouseDragDynamic({
     top: 50vh;
     transform: translateY(-50%);
     flex-direction: column;
+
     &__toggle {
         position: absolute;
         right: 0;

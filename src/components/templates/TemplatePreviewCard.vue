@@ -6,8 +6,9 @@ import {
     PaperMode,
     paperModeInjectionKey,
 } from '@/classes/Paper';
-import { usePaper, useRuntime } from '@/composables/useApp';
+import { usePaper } from '@/composables/useApp';
 import Paper from '@/components/core/Paper.vue';
+import { useRuntime } from '@/composables/useRuntime';
 
 const props = defineProps<{
     template: any;

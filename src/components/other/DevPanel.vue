@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { usePaper, useRuntime } from '@/composables/useApp';
+import { usePaper } from '@/composables/useApp';
 import { UseDraggable } from '@vueuse/components';
+import { useRuntime } from '@/composables/useRuntime';
 
 console.log('Mode:', import.meta.env.MODE, ' DevPanel loaded.');
 

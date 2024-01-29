@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, defineAsyncComponent, onMounted, provide, reactive, toRef, watch } from 'vue';
+import { computed, defineAsyncComponent, onMounted, provide, reactive, toRefs, watch } from 'vue';
 import {
     Paper as PaperClass,
     paperInjectionKey,
@@ -11,20 +11,17 @@ import sketch from './components/core/Sketch.vue';
 import MaterialPrototype from './components/core/MaterialPrototype.vue';
 import Toolbar from './components/tools/Toolbar.vue';
 import { stringArrayDiff } from './utils/stringArrayDiff';
-import { Runtime, runtimeInjectionKey } from './classes/Runtime';
 import template1 from './components/templates/resume-template-1.json';
 import TemplateList from './components/templates/TemplateList.vue';
 import { useMagicKeys, whenever } from '@vueuse/core';
 import WebsiteInfo from '@/components/other/WebsiteInfo.vue';
 import Paper from '@/components/core/Paper.vue';
 import PreviewNavigator from '@/components/other/PreviewNavigator.vue';
+import { createAndInjectReactiveRuntime } from '@/composables/useRuntime';
 
 // 运行时
-const runtime = reactive(new Runtime());
-// const leftDrawer = toRef(runtime, 'leftDrawer');
-const bottomDrawer = toRef(runtime, 'bottomDrawer');
-const snackbar = computed(() => runtime.snackbar);
-provide(runtimeInjectionKey, runtime);
+const runtime = createAndInjectReactiveRuntime();
+const { copyMaterialSet, activeMaterialSet } = toRefs(runtime);
 
 // Paper实例
 const paperInstance = reactive(new PaperClass({}));
@@ -38,33 +35,34 @@ onMounted(() => {
 // 复制粘贴
 const { ctrl_c, ctrl_v } = useMagicKeys();
 whenever(ctrl_c, () => {
-    runtime.copyMaterialSet = new Set(runtime.activeMaterialSet);
+    copyMaterialSet.value = new Set(activeMaterialSet.value);
 });
 whenever(ctrl_v, () => {
-    paperInstance.copyMaterial([...runtime.copyMaterialSet]);
-    runtime.copyMaterialSet.clear();
+    paperInstance.copyMaterial([...copyMaterialSet.value]);
+    copyMaterialSet.value.clear();
 });
 
 // 按del键删除
 const { Delete } = useMagicKeys();
 whenever(Delete, () => {
-    paperInstance.removeMaterial([...runtime.activeMaterialSet]);
+    paperInstance.removeMaterial([...activeMaterialSet.value]);
 });
 
 // ctrl+a全选
 const { ctrl_a } = useMagicKeys();
 whenever(ctrl_a, () => {
     for (const m of paperInstance.materialList) {
-        runtime.activeMaterialSet.add(m.id);
+        activeMaterialSet.value.add(m.id);
     }
 });
 
 // 激活元素集合控制
 watch(
-    () => [...runtime.activeMaterialSet],
+    // TODO: 为什么直接监听 runtime.activeMaterialSet，nv和ov是一样的？
+    () => [...activeMaterialSet.value],
     (nv, ov) => {
-        if (!nv.length) {
-            runtime.copyMaterialSet.clear();
+        if (!nv.size) {
+            copyMaterialSet.value.clear();
         }
 
         // 激活列表增减时，同属分组元素一并操作
@@ -78,13 +76,13 @@ watch(
         needAddGroupIdSet.forEach((groupId) => {
             if (!groupId) return;
             paperInstance.queryGroupMaterials(groupId).forEach(({ id }) => {
-                runtime.activeMaterialSet.add(id);
+                activeMaterialSet.value.add(id);
             });
         });
         needRemoveGroupIdSet.forEach((groupId) => {
             if (!groupId) return;
             paperInstance.queryGroupMaterials(groupId).forEach(({ id }) => {
-                runtime.activeMaterialSet.delete(id);
+                activeMaterialSet.value.delete(id);
             });
         });
     },
@@ -110,7 +108,7 @@ const isDev = import.meta.env.DEV;
 
             <Toolbar />
         </v-app-bar>
-        <v-navigation-drawer v-model="bottomDrawer" temporary location="bottom">
+        <v-navigation-drawer v-model="runtime.bottomDrawer" temporary location="bottom">
             <TemplateList />
         </v-navigation-drawer>
         <v-navigation-drawer
@@ -159,7 +157,7 @@ const isDev = import.meta.env.DEV;
                 <v-btn
                     style="right: 24px; bottom: 48px"
                     color="#2196f3"
-                    @click="bottomDrawer = !bottomDrawer"
+                    @click="runtime.bottomDrawer = !runtime.bottomDrawer"
                 >
                     <v-icon>mdi-note-text-outline</v-icon>
                     <v-tooltip activator="parent" anchor="start"> 模板预设 </v-tooltip>
@@ -167,7 +165,7 @@ const isDev = import.meta.env.DEV;
             </v-defaults-provider>
         </v-main>
         <v-snackbar
-            v-model="snackbar.show"
+            v-model="runtime.snackbar.show"
             app
             top="72"
             right
@@ -175,7 +173,7 @@ const isDev = import.meta.env.DEV;
             color="grey-darken-3"
             transition="scroll-x-reverse-transition"
         >
-            {{ snackbar.text }}
+            {{ runtime.snackbar.text }}
         </v-snackbar>
     </v-app>
 

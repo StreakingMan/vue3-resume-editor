@@ -3,11 +3,12 @@ import { computed, inject, provide, reactive, ref, toRef, watch } from 'vue';
 import useMouseDragDynamic, { type MouseEvtInfo } from '../../composables/useMouseDragDynamic';
 import { CTRL_DOT_SIZE, UNIT_SIZE } from './config';
 import { Material, materialInjectionKey } from '@/classes/Material';
-import { usePaper, useRuntime } from '@/composables/useApp';
+import { usePaper } from '@/composables/useApp';
 import { componentMap, prototypeMap } from '../materials/prototypes';
 import { type CtrlDotType } from '../materials/config';
 import { useMagicKeys } from '@vueuse/core';
 import { PaperMode, paperModeInjectionKey, paperShowPageNumInjectionKey } from '@/classes/Paper';
+import { useRuntime } from '@/composables/useRuntime';
 
 const styleMap: Record<CtrlDotType, string> = {
     tl: `top: 0px;left: 0px;cursor: nw-resize;transform-origin: top left;`,
