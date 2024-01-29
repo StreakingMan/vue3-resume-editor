@@ -15,7 +15,7 @@ const runtime = useRuntime();
         :style="{
             transform: `translateX(-50%) scale(${1 / runtime.scale.value})`,
         }"
-        @click="paper.pageCount++"
+        @click.stop="paper.pageCount++"
     >
         新增页面
     </v-btn>

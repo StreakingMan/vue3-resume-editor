@@ -221,8 +221,6 @@ const insertPage = (index: number) => {
             ></MaterialInstance>
             <div v-if="selecting && !current.size" class="select-box" :style="selectorStyle"></div>
         </v-theme-provider>
-
-        <AddPageBtn v-if="paper.pageCount === 1" />
     </div>
     <!--分页 -->
     <template v-if="!isPrintPage && isEdit">
@@ -302,6 +300,8 @@ const insertPage = (index: number) => {
             <AddPageBtn v-if="isEdit && pageIdx === paper.pageCount - 1" />
         </div>
     </template>
+
+    <AddPageBtn />
 </template>
 
 <style lang="scss" scoped>
