@@ -148,7 +148,7 @@ import { type MaterialBaseConfig } from '@/classes/Material';
 import { type ProtoInfo } from './prototypes';
 import { fontWeightClass, MaterialNames, typographyClass } from './config';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
-import { useMaterial } from '@/composables/useApp';
+import { useMaterial } from '@/composables/useMaterial';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import Color from '../config-widgets/Color.vue';
 
@@ -288,6 +288,7 @@ export default defineComponent({
         position: absolute;
         width: 100%;
         z-index: 2;
+
         textarea {
             resize: none;
             word-break: break-word;
@@ -296,6 +297,7 @@ export default defineComponent({
             color: inherit;
         }
     }
+
     &.placeholder {
         white-space: pre-wrap;
         word-break: break-word;

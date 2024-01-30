@@ -54,7 +54,7 @@ import { defineComponent, nextTick, ref, toRef, watch } from 'vue';
 import { type MaterialBaseConfig } from '@/classes/Material';
 import { type ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
-import { useMaterial } from '@/composables/useApp';
+import { useMaterial } from '@/composables/useMaterial';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import Color from '../config-widgets/Color.vue';
 import { MaterialNames } from '@/components/materials/config';

@@ -3,8 +3,8 @@ import { reactive, ref } from 'vue';
 import useMouseDragDynamic, { type MouseEvtInfo } from '../../composables/useMouseDragDynamic';
 import { prototypeMap } from '../materials/prototypes';
 import { MaterialNames } from '../materials/config';
-import { usePaper } from '@/composables/useApp';
 import { useRuntime } from '@/composables/useRuntime';
+import { usePaper } from '@/composables/usePaper';
 
 const runtime = useRuntime();
 const paper = usePaper();

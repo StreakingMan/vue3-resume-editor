@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { usePaper } from '@/composables/useApp';
+import { usePaper } from '@/composables/usePaper';
 
 const paper = usePaper();
 const onPrintClick = async () => {

@@ -1,11 +1,6 @@
 <script lang="ts" setup>
-import { computed, defineAsyncComponent, onMounted, provide, reactive, toRefs, watch } from 'vue';
-import {
-    Paper as PaperClass,
-    paperInjectionKey,
-    PaperMode,
-    paperModeInjectionKey,
-} from './classes/Paper';
+import { defineAsyncComponent, onMounted, provide, toRefs, watch } from 'vue';
+import { PaperMode } from './classes/Paper';
 import Sketch from './components/core/Sketch.vue';
 import sketch from './components/core/Sketch.vue';
 import MaterialPrototype from './components/core/MaterialPrototype.vue';
@@ -18,15 +13,16 @@ import WebsiteInfo from '@/components/other/WebsiteInfo.vue';
 import Paper from '@/components/core/Paper.vue';
 import PreviewNavigator from '@/components/other/PreviewNavigator.vue';
 import { createAndInjectReactiveRuntime } from '@/composables/useRuntime';
+import { createAndInjectReactivePaper, paperModeInjectionKey } from '@/composables/usePaper';
 
 // 运行时
 const runtime = createAndInjectReactiveRuntime();
 const { copyMaterialSet, activeMaterialSet } = toRefs(runtime);
 
 // Paper实例
-const paperInstance = reactive(new PaperClass({}));
-provide(paperInjectionKey, paperInstance);
+const paperInstance = createAndInjectReactivePaper();
 onMounted(() => {
+    // 尝试从localStorage加载数据
     if (!paperInstance.loadFromStorage()) {
         paperInstance.loadData(template1);
     }
@@ -58,10 +54,11 @@ whenever(ctrl_a, () => {
 
 // 激活元素集合控制
 watch(
-    // TODO: 为什么直接监听 runtime.activeMaterialSet，nv和ov是一样的？
+    // 热知识：直接watch reactive对象的话，新旧值是一样的
+    // 所以这里使用表达式
     () => [...activeMaterialSet.value],
     (nv, ov) => {
-        if (!nv.size) {
+        if (!nv.length) {
             copyMaterialSet.value.clear();
         }
 

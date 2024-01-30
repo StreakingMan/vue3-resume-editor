@@ -53,7 +53,7 @@
 import { defineComponent, toRef, watch } from 'vue';
 import { type ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
-import { useMaterial } from '@/composables/useApp';
+import { useMaterial } from '@/composables/useMaterial';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import BorderStyle from '../config-widgets/BorderStyle.vue';
 import ConfigToggle from '../config-widgets/ConfigToggle.vue';
@@ -130,6 +130,7 @@ export default defineComponent({
             border-left: none;
             border-right: none;
         }
+
         &.vertical {
             width: 0;
             border-top: none;

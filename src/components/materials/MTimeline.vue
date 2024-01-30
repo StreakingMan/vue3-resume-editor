@@ -40,7 +40,7 @@ export default {
 
 <script setup lang="ts">
 import { computed, toRef, watch } from 'vue';
-import { useMaterial } from '@/composables/useApp';
+import { useMaterial } from '@/composables/useMaterial';
 import MaterialConfigPopover from '@/components/core/MaterialConfigPopover.vue';
 import ConfigToggle from '@/components/config-widgets/ConfigToggle.vue';
 import ConfigItem from '@/components/config-widgets/ConfigItem.vue';

@@ -89,13 +89,14 @@
 
 <script lang="ts">
 import { defineComponent, nextTick, ref, toRef } from 'vue';
-import { useMaterial, usePaper } from '@/composables/useApp';
+import { useMaterial } from '@/composables/useMaterial';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import BorderStyle from '../config-widgets/BorderStyle.vue';
 import Color from '../config-widgets/Color.vue';
 import useMouseDragDynamic, { type MouseEvtInfo } from '../../composables/useMouseDragDynamic';
 import { useMagicKeys } from '@vueuse/core';
 import { useRuntime } from '@/composables/useRuntime';
+import { usePaper } from '@/composables/usePaper';
 
 export default defineComponent({
     name: 'MaterialConfigPopover',

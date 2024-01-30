@@ -64,7 +64,7 @@
 import { defineComponent, nextTick, toRef, watch } from 'vue';
 import { type ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
-import { useMaterial } from '@/composables/useApp';
+import { useMaterial } from '@/composables/useMaterial';
 import ConfigItem from '../config-widgets/ConfigItem.vue';
 import ConfigToggle from '../config-widgets/ConfigToggle.vue';
 import ConfigToggleOption from '../config-widgets/ConfigToggleOption.vue';

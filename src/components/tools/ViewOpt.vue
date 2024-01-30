@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { toRef } from 'vue';
-import { usePaper } from '@/composables/useApp';
 import { SCALE_RANGE } from '@/components/core/config';
 import { useRuntime } from '@/composables/useRuntime';
+import { usePaper } from '@/composables/usePaper';
 
 const runtime = useRuntime();
 const paper = usePaper();

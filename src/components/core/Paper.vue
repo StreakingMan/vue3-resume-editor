@@ -2,13 +2,13 @@
 import { computed, inject, ref, watch, watchEffect } from 'vue';
 import useMouseDragDynamic, { type MouseEvtInfo } from '@/composables/useMouseDragDynamic';
 import MaterialInstance from './MaterialInstance.vue';
-import { usePaper } from '@/composables/useApp';
 import { useElementBounding, useMagicKeys, useUrlSearchParams } from '@vueuse/core';
 import type { Material } from '@/classes/Material';
 import { vElementHover } from '@vueuse/components';
-import { PaperMode, paperModeInjectionKey } from '@/classes/Paper';
+import { PaperMode } from '@/classes/Paper';
 import AddPageBtn from '@/components/other/AddPageBtn.vue';
 import { useRuntime } from '@/composables/useRuntime';
+import { paperModeInjectionKey, usePaper } from '@/composables/usePaper';
 
 const runtime = useRuntime();
 const paper = usePaper();

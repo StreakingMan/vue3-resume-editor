@@ -3,7 +3,7 @@ import { computed, defineComponent, nextTick, toRef, watch } from 'vue';
 import { type MaterialBaseConfig } from '@/classes/Material';
 import { type ProtoInfo } from '@/components/materials/prototypes';
 import { fontWeightClass, MaterialNames, typographyClass } from '@/components/materials/config';
-import { useMaterial } from '@/composables/useApp';
+import { useMaterial } from '@/composables/useMaterial';
 import MaterialConfigPopover from '@/components/core/MaterialConfigPopover.vue';
 import ConfigItem from '@/components/config-widgets/ConfigItem.vue';
 import BorderStyle from '@/components/config-widgets/BorderStyle.vue';
@@ -262,18 +262,21 @@ export default defineComponent({
     border-radius: 50%;
     position: relative;
 }
+
 .labels {
     width: 40%;
     position: absolute;
     right: 0;
     top: 0;
     padding-left: 0.5em;
+
     .label-item {
         display: flex;
         align-items: center;
         gap: 0.5em;
         word-break: break-all;
     }
+
     .color-block {
         width: 1em;
         min-width: 1em;

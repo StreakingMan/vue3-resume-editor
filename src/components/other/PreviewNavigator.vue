@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { usePaper } from '@/composables/useApp';
 import PreviewNavigatorPage from '@/components/other/PreviewNavigatorPage.vue';
 import { computed, provide, ref, watch } from 'vue';
-import { PaperMode, paperModeInjectionKey } from '@/classes/Paper';
+import { PaperMode } from '@/classes/Paper';
 import { vElementHover } from '@vueuse/components';
 import { useRuntime } from '@/composables/useRuntime';
+import { paperModeInjectionKey, usePaper } from '@/composables/usePaper';
 
 const runtime = useRuntime();
 const paperInstance = usePaper();

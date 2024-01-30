@@ -1,5 +1,4 @@
 import { uniqueString } from '@/utils/uniqueString';
-import type { InjectionKey, UnwrapNestedRefs } from 'vue';
 import { calcCellingValue } from '@/utils/calcCellingValue';
 import { MaterialNames } from '@/components/materials/config';
 
@@ -9,9 +8,6 @@ export interface MaterialInjection {
     hover: boolean;
     clicked: boolean;
 }
-
-export const materialInjectionKey: InjectionKey<UnwrapNestedRefs<MaterialInjection>> =
-    Symbol('Material');
 
 export interface MaterialBaseConfig {
     padding?: number;

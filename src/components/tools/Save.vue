@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { usePaper } from '@/composables/useApp';
 import { useRuntime } from '@/composables/useRuntime';
+import { usePaper } from '@/composables/usePaper';
 
 const runtime = useRuntime();
 const paper = usePaper();

@@ -37,7 +37,8 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { downloadJSON } from '../../utils/download';
-import { usePaper } from '../../composables/useApp';
+
+import { usePaper } from '@/composables/usePaper';
 
 export default defineComponent({
     name: 'ImportExport',

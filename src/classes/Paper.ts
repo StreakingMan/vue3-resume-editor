@@ -1,23 +1,17 @@
 import { Material, type MaterialOptions } from './Material';
 import { uniqueString } from '@/utils/uniqueString';
-import type { InjectionKey, UnwrapNestedRefs } from 'vue';
 import { easeInOut } from '@/utils/timeFunction';
 
 const LOCAL_STORAGE_KEY = 'paper_cache';
-
-const a4Ratio = 210 / 297;
+const A4_RATIO = 210 / 297;
 
 export const paperSizeMap = {
     a4: {
         w: 793,
-        h: Math.ceil(793 / a4Ratio),
+        h: Math.ceil(793 / A4_RATIO),
     },
 };
 
-export const paperInjectionKey: InjectionKey<UnwrapNestedRefs<Paper>> = Symbol('Paper');
-export const paperShowPageNumInjectionKey: InjectionKey<number | null | undefined> =
-    Symbol('PaperShowPageNum');
-export const paperModeInjectionKey: InjectionKey<PaperMode> = Symbol('PaperMode');
 export enum PaperMode {
     Preview = 'preview',
     Edit = 'edit',

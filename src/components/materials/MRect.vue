@@ -12,7 +12,7 @@ import { defineComponent, toRef } from 'vue';
 import { type MaterialBaseConfig } from '@/classes/Material';
 import { type ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
-import { useMaterial } from '@/composables/useApp';
+import { useMaterial } from '@/composables/useMaterial';
 import { MaterialNames } from '@/components/materials/config';
 
 const protoInfo: ProtoInfo<MaterialBaseConfig> = {

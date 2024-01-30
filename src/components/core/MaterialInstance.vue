@@ -1,14 +1,15 @@
 <script lang="ts" setup>
-import { computed, inject, provide, reactive, ref, toRef, watch } from 'vue';
+import { computed, inject, ref, toRefs, watch } from 'vue';
 import useMouseDragDynamic, { type MouseEvtInfo } from '../../composables/useMouseDragDynamic';
 import { CTRL_DOT_SIZE, UNIT_SIZE } from './config';
-import { Material, materialInjectionKey } from '@/classes/Material';
-import { usePaper } from '@/composables/useApp';
+import { Material } from '@/classes/Material';
 import { componentMap, prototypeMap } from '../materials/prototypes';
 import { type CtrlDotType } from '../materials/config';
 import { useMagicKeys } from '@vueuse/core';
-import { PaperMode, paperModeInjectionKey, paperShowPageNumInjectionKey } from '@/classes/Paper';
+import { PaperMode } from '@/classes/Paper';
 import { useRuntime } from '@/composables/useRuntime';
+import { paperShowPageNumInjectionKey, usePaper, usePaperMode } from '@/composables/usePaper';
+import { createAndInjectReactiveMaterial } from '@/composables/useMaterial';
 
 const styleMap: Record<CtrlDotType, string> = {
     tl: `top: 0px;left: 0px;cursor: nw-resize;transform-origin: top left;`,
@@ -35,41 +36,37 @@ const props = defineProps<{
 
 const runtime = useRuntime();
 const paper = usePaper();
+const material = createAndInjectReactiveMaterial(props.item);
+const { hover, active, clicked, instance } = toRefs(material);
+const { scale, activeMaterialSet } = toRefs(runtime);
+
 const { space, shift } = useMagicKeys();
 
-const material = reactive({
-    instance: props.item,
-    hover: false,
-    active: computed(() => runtime.activeMaterialSet.has(props.item.id)),
-    clicked: false,
+watch(active, (v) => {
+    if (v) clicked.value = false;
 });
-provide(materialInjectionKey, material);
-
 watch(
-    () => material.active,
+    () => [...activeMaterialSet.value],
     () => {
-        if (!material.active) material.clicked = false;
+        active.value = activeMaterialSet.value.has(material.instance.id);
     },
 );
 
 const focus = (e: MouseEvent) => {
-    material.clicked = true;
+    clicked.value = true;
     // 没按空格时阻止冒泡
     if (!space.value) e.stopPropagation();
 
     if (shift.value) {
         // 按住shift点击元素则切换选中状态
-        if (!runtime.activeMaterialSet.delete(material.instance.id)) {
-            runtime.activeMaterialSet.add(material.instance.id);
+        if (!activeMaterialSet.value.delete(material.instance.id)) {
+            activeMaterialSet.value.add(material.instance.id);
         }
     } else {
         // 否则重置为该元素
-        runtime.activeMaterialSet.clear();
-        runtime.activeMaterialSet.add(material.instance.id);
+        activeMaterialSet.value.clear();
+        activeMaterialSet.value.add(material.instance.id);
     }
-};
-const blur = () => {
-    runtime.activeMaterialSet.clear();
 };
 
 // 位置信息缓存
@@ -152,12 +149,7 @@ const removeMaterialInstance = () => {
     paper.removeMaterial(material.instance.id);
 };
 
-const hover = toRef(material, 'hover');
-const active = toRef(material, 'active');
-const instance = toRef(material, 'instance');
-const scale = toRef(runtime.scale, 'value');
-
-const isEdit = inject(paperModeInjectionKey, PaperMode.Edit) === PaperMode.Edit;
+const isEdit = usePaperMode() === PaperMode.Edit;
 
 const showPageNum = inject(paperShowPageNumInjectionKey, undefined);
 const realY = computed(() => {
@@ -263,7 +255,7 @@ const realY = computed(() => {
                 v-for="dot in ableCtrlDots"
                 :key="dot"
                 :style="[
-                    `transform: scale(${1 / scale});${styleMap[dot]}`,
+                    `transform: scale(${1 / scale.value});${styleMap[dot]}`,
                     {
                         opacity: (clickingDot && clickingDot !== dot) || !(active || hover) ? 0 : 1,
                         width: CTRL_DOT_SIZE + 'px',

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { usePaper } from '@/composables/useApp';
 import { useRuntime } from '@/composables/useRuntime';
+import { usePaper } from '@/composables/usePaper';
 
 const paper = usePaper();
 const runtime = useRuntime();

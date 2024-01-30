@@ -9,8 +9,8 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
-import { usePaper } from '@/composables/useApp';
 import { useRuntime } from '@/composables/useRuntime';
+import { usePaper } from '@/composables/usePaper';
 
 export default defineComponent({
     name: 'Group',
