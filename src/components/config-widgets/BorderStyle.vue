@@ -1,3 +1,27 @@
+<script setup lang="ts">
+import { computed } from 'vue';
+import ConfigToggle from './ConfigToggle.vue';
+import ConfigToggleOption from './ConfigToggleOption.vue';
+
+const props = withDefaults(
+    defineProps<{
+        modelValue: string;
+        hasNull?: boolean;
+    }>(),
+    {
+        modelValue: 'none',
+        hasNull: false,
+    },
+);
+
+const emits = defineEmits(['update:modelValue']);
+
+const value = computed({
+    get: () => props.modelValue,
+    set: (v: string) => emits('update:modelValue', v),
+});
+</script>
+
 <template>
     <ConfigToggle v-model="value">
         <ConfigToggleOption value="solid">
@@ -12,37 +36,3 @@
         <ConfigToggleOption v-if="hasNull" value="none" label="无" />
     </ConfigToggle>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue';
-import ConfigToggle from './ConfigToggle.vue';
-import ConfigToggleOption from './ConfigToggleOption.vue';
-
-export default defineComponent({
-    name: 'BorderStyle',
-    components: { ConfigToggleOption, ConfigToggle },
-    props: {
-        modelValue: {
-            type: String,
-            default: 'none',
-            required: true,
-        },
-        hasNull: {
-            type: Boolean,
-            default: false,
-            required: false,
-        },
-    },
-    emits: ['update:modelValue'],
-    computed: {
-        value: {
-            get() {
-                return this.modelValue;
-            },
-            set(value: string) {
-                this.$emit('update:modelValue', value);
-            },
-        },
-    },
-});
-</script>

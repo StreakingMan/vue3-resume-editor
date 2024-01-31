@@ -1,3 +1,25 @@
+<script setup lang="ts">
+import { computed } from 'vue';
+
+const props = withDefaults(
+    defineProps<{
+        modelValue: string;
+        noMargin?: boolean;
+    }>(),
+    {
+        modelValue: '',
+        noMargin: false,
+    },
+);
+
+const emits = defineEmits(['update:modelValue']);
+
+const value = computed({
+    get: () => props.modelValue,
+    set: (v: string) => emits('update:modelValue', v),
+});
+</script>
+
 <template>
     <v-sheet
         width="24"
@@ -13,36 +35,6 @@
         </v-menu>
     </v-sheet>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-    name: 'Color',
-    props: {
-        modelValue: {
-            type: String,
-            default: '',
-            required: true,
-        },
-        noMargin: {
-            type: Boolean,
-            default: false,
-        },
-    },
-    emits: ['update:modelValue'],
-    computed: {
-        value: {
-            get() {
-                return this.modelValue;
-            },
-            set(value: string) {
-                this.$emit('update:modelValue', value);
-            },
-        },
-    },
-});
-</script>
 
 <style scoped>
 .no-color {

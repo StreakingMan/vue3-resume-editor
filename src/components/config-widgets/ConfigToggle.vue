@@ -9,14 +9,10 @@ const props = withDefaults(
         modelValue: 'solid',
     },
 );
-const emit = defineEmits(['update:modelValue']);
+const emits = defineEmits(['update:modelValue']);
 const value = computed({
-    get() {
-        return props.modelValue;
-    },
-    set(value: string) {
-        emit('update:modelValue', value);
-    },
+    get: () => props.modelValue,
+    set: (v: string) => emits('update:modelValue', v),
 });
 </script>
 
