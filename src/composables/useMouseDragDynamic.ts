@@ -1,4 +1,4 @@
-import { onMounted, onUnmounted, ref, type Ref } from 'vue';
+import { type ComponentPublicInstance, onUnmounted, ref, type Ref, watchEffect } from 'vue';
 
 interface MouseDragCbs {
     onMousedown: (ev: MouseEvent) => void;
@@ -9,9 +9,10 @@ interface MouseDragOptions {
     onStart: MouseEvtCb;
     onDrag: MouseEvtCb;
     onFinish: MouseEvtCb;
-    bindElementRef?: Ref<HTMLElement> | Ref;
+    bindElementRef?: Ref<HTMLElement | ComponentPublicInstance | null>;
     stopPropagation?: boolean;
     preventDefault?: boolean;
+    enable?: boolean;
 }
 
 export interface MouseEvtInfo {
@@ -32,7 +33,22 @@ export interface MouseEvtCb {
 // 鼠标抬起时会自动移除监听
 export default function useMouseDragDynamic(options: MouseDragOptions): MouseDragCbs {
     const clicking = ref(false);
-    const { onStart, onDrag, onFinish, stopPropagation = true, preventDefault = true } = options;
+    const {
+        onStart,
+        onDrag,
+        onFinish,
+        stopPropagation = true,
+        preventDefault = true,
+        enable = true,
+    } = options;
+
+    if (!enable) {
+        return {
+            onMousedown: () => {},
+            clicking,
+        };
+    }
+
     let startX: number;
     let startY: number;
 
@@ -95,13 +111,16 @@ export default function useMouseDragDynamic(options: MouseDragOptions): MouseDra
         window.removeEventListener('mouseup', onMouseup);
     };
 
-    onMounted(() => {
+    watchEffect(() => {
+        // 研究下这里的类型推断，ref想同时支持HTMLElement和ComponentPublicInstance
+        // @ts-ignore 有可能是组件实例
         const target = options.bindElementRef?.value?.$el || options.bindElementRef?.value;
         if (!target) return;
         target.addEventListener('mousedown', onMousedown);
     });
 
     onUnmounted(() => {
+        // @ts-ignore 有可能是组件实例
         const target = options.bindElementRef?.value?.$el || options.bindElementRef?.value;
         if (!target) return;
         target.removeEventListener('mousedown', onMousedown);

@@ -86,6 +86,7 @@ const { clicking: selecting } = useMouseDragDynamic({
     onFinish: onSelectFinish,
     bindElementRef: paperRef,
     preventDefault: false,
+    enable: isEdit,
 });
 
 // 选择框实时bounding样式
