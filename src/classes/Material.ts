@@ -2,13 +2,6 @@ import { uniqueString } from '@/utils/uniqueString';
 import { calcCellingValue } from '@/utils/calcCellingValue';
 import { MaterialNames } from '@/components/materials/config';
 
-export interface MaterialInjection {
-    instance: Material<any>;
-    active: boolean;
-    hover: boolean;
-    clicked: boolean;
-}
-
 export interface MaterialBaseConfig {
     padding?: number;
     borderStyle?: 'solid' | 'dashed' | 'dotted' | 'none';

@@ -1,5 +1,5 @@
 <template>
-    <MaterialConfigPopover v-if="clicked">
+    <MaterialConfigPopover>
         <template #activator>
             <slot name="activator"></slot>
         </template>

@@ -16,7 +16,7 @@
             }"
         ></div>
     </div>
-    <MaterialConfigPopover v-if="clicked">
+    <MaterialConfigPopover>
         <template #activator>
             <slot name="activator"></slot>
         </template>
@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRef, watch } from 'vue';
+import { defineComponent, watch } from 'vue';
 import { type ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
 import { useMaterial } from '@/composables/useMaterial';
@@ -115,7 +115,6 @@ export default defineComponent({
 
         return {
             instance,
-            clicked: toRef(material, 'clicked'),
         };
     },
 });

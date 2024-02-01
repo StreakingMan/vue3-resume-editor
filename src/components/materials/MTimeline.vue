@@ -39,7 +39,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed, toRef, watch } from 'vue';
+import { computed, watch } from 'vue';
 import { useMaterial } from '@/composables/useMaterial';
 import MaterialConfigPopover from '@/components/core/MaterialConfigPopover.vue';
 import ConfigToggle from '@/components/config-widgets/ConfigToggle.vue';
@@ -49,7 +49,6 @@ import Color from '@/components/config-widgets/Color.vue';
 
 const material = useMaterial<MTimelineConfig>();
 const { instance } = material;
-const clicked = toRef(material, 'clicked');
 
 // 方向改变长宽对调
 watch(
@@ -96,7 +95,7 @@ const contentPixel = computed(() => {
         </v-timeline>
     </div>
 
-    <MaterialConfigPopover v-if="clicked">
+    <MaterialConfigPopover>
         <template #activator>
             <slot name="activator"></slot>
         </template>

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, nextTick, toRef, watch } from 'vue';
+import { computed, defineComponent, nextTick, watch } from 'vue';
 import { type MaterialBaseConfig } from '@/classes/Material';
 import { type ProtoInfo } from '@/components/materials/prototypes';
 import { fontWeightClass, MaterialNames, typographyClass } from '@/components/materials/config';
@@ -94,7 +94,6 @@ export default defineComponent({
             instance,
             background,
             totalValue,
-            clicked: toRef(material, 'clicked'),
         };
     },
     data: () => ({
@@ -133,7 +132,7 @@ export default defineComponent({
             {{ data.name }}
         </div>
     </div>
-    <MaterialConfigPopover v-if="clicked">
+    <MaterialConfigPopover>
         <template #activator>
             <slot name="activator"></slot>
         </template>

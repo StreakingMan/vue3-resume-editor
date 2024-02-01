@@ -47,7 +47,7 @@
             <div>{{ item }}</div>
         </div>
     </div>
-    <MaterialConfigPopover v-if="clicked">
+    <MaterialConfigPopover>
         <template #activator>
             <slot name="activator"></slot>
         </template>
@@ -143,7 +143,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, nextTick, onMounted, ref, toRef, watch } from 'vue';
+import { computed, defineComponent, nextTick, onMounted, ref, watch } from 'vue';
 import { type MaterialBaseConfig } from '@/classes/Material';
 import { type ProtoInfo } from './prototypes';
 import { fontWeightClass, MaterialNames, typographyClass } from './config';
@@ -271,7 +271,6 @@ export default defineComponent({
             itemHeights,
             classNames,
             instance,
-            clicked: toRef(material, 'clicked'),
         };
     },
     data: () => ({

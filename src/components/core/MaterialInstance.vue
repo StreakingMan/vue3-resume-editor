@@ -9,7 +9,7 @@ import { useMagicKeys } from '@vueuse/core';
 import { PaperMode } from '@/classes/Paper';
 import { useRuntime } from '@/composables/useRuntime';
 import { usePaper, usePaperMode, userPaperShowPageNum } from '@/composables/usePaper';
-import { createAndInjectReactiveMaterial } from '@/composables/useMaterial';
+import { createAndProvideReactiveMaterial } from '@/composables/useMaterial';
 
 const styleMap: Record<CtrlDotType, string> = {
     tl: `top: 0px;left: 0px;cursor: nw-resize;transform-origin: top left;`,
@@ -36,14 +36,14 @@ const props = defineProps<{
 
 const runtime = useRuntime();
 const paper = usePaper();
-const material = createAndInjectReactiveMaterial(props.item);
+const material = createAndProvideReactiveMaterial(props.item);
 const { hover, active, clicked, instance } = toRefs(material);
 const { scale, activeMaterialSet } = toRefs(runtime);
 
 const { space, shift } = useMagicKeys();
 
 watch(active, (v) => {
-    if (v) clicked.value = false;
+    if (!v) clicked.value = false;
 });
 watch(
     () => [...activeMaterialSet.value],
@@ -257,7 +257,8 @@ const realY = computed(() => {
                 :style="[
                     `transform: scale(${1 / scale.value});${styleMap[dot]}`,
                     {
-                        opacity: (clickingDot && clickingDot !== dot) || !(active || hover) ? 0 : 1,
+                        opacity:
+                            (clickingDot && clickingDot !== dot) || !(active || hover) ? 0 : 0.6,
                         width: CTRL_DOT_SIZE + 'px',
                         height: CTRL_DOT_SIZE + 'px',
                     },

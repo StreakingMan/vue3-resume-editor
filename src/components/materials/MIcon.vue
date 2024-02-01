@@ -2,7 +2,7 @@
     <v-icon :size="instance.config.size" :color="instance.config.color" style="vertical-align: top">
         mdi-{{ instance.config.icon }}
     </v-icon>
-    <MaterialConfigPopover v-if="clicked">
+    <MaterialConfigPopover>
         <template #activator>
             <slot name="activator"></slot>
         </template>
@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRef, watch } from 'vue';
+import { defineComponent, watch } from 'vue';
 import { type MaterialBaseConfig } from '@/classes/Material';
 import { type ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
@@ -118,7 +118,6 @@ export default defineComponent({
 
         return {
             instance,
-            clicked: toRef(material, 'clicked'),
         };
     },
     data: () => ({

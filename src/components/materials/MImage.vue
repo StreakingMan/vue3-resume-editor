@@ -9,7 +9,7 @@
     >
     </v-img>
 
-    <MaterialConfigPopover v-if="clicked">
+    <MaterialConfigPopover>
         <template #activator>
             <slot name="activator"></slot>
         </template>
@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, toRef, watch } from 'vue';
+import { defineComponent, nextTick, watch } from 'vue';
 import { type ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
 import { useMaterial } from '@/composables/useMaterial';
@@ -201,7 +201,6 @@ export default defineComponent({
             onFileChange,
             onUrlChange,
             instance,
-            clicked: toRef(material, 'clicked'),
         };
     },
     data: () => ({

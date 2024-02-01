@@ -9,7 +9,7 @@
             placeholder="请输入文本"
         />
     </div>
-    <MaterialConfigPopover v-if="clicked">
+    <MaterialConfigPopover>
         <template #activator>
             <slot name="activator"></slot>
         </template>
@@ -72,7 +72,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, nextTick, ref, toRef, watch } from 'vue';
+import { computed, defineComponent, nextTick, ref, watch } from 'vue';
 import { type ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
 import { fontWeightClass, MaterialNames, textAlignOptions, typographyClass } from './config';
@@ -160,7 +160,6 @@ export default defineComponent({
             classNames,
             instance,
             eleRef,
-            clicked: toRef(material, 'clicked'),
         };
     },
     data: () => ({
