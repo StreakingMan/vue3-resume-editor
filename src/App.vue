@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineAsyncComponent, onMounted, provide, toRefs, watch } from 'vue';
+import { defineAsyncComponent, onMounted, toRefs, watch } from 'vue';
 import { PaperMode } from './classes/Paper';
 import Sketch from './components/core/Sketch.vue';
 import sketch from './components/core/Sketch.vue';
@@ -12,15 +12,15 @@ import { useMagicKeys, whenever } from '@vueuse/core';
 import WebsiteInfo from '@/components/other/WebsiteInfo.vue';
 import Paper from '@/components/core/Paper.vue';
 import PreviewNavigator from '@/components/other/PreviewNavigator.vue';
-import { createAndInjectReactiveRuntime } from '@/composables/useRuntime';
-import { createAndInjectReactivePaper, paperModeInjectionKey } from '@/composables/usePaper';
+import { createAndProvideReactiveRuntime } from '@/composables/useRuntime';
+import { createAndProvideReactivePaper, usePaperMode } from '@/composables/usePaper';
 
 // 运行时
-const runtime = createAndInjectReactiveRuntime();
+const runtime = createAndProvideReactiveRuntime();
 const { copyMaterialSet, activeMaterialSet } = toRefs(runtime);
 
 // Paper实例
-const paperInstance = createAndInjectReactivePaper();
+const paperInstance = createAndProvideReactivePaper();
 onMounted(() => {
     // 尝试从localStorage加载数据
     if (!paperInstance.loadFromStorage()) {
@@ -85,7 +85,7 @@ watch(
     },
 );
 
-provide(paperModeInjectionKey, PaperMode.Edit);
+usePaperMode(PaperMode.Edit);
 
 const DevPanel = defineAsyncComponent(() => import('./components/other/DevPanel.vue'));
 const isDev = import.meta.env.DEV;

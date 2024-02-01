@@ -1,3 +1,63 @@
+<script setup lang="ts">
+import { nextTick, ref, toRefs } from 'vue';
+import { useMaterial } from '@/composables/useMaterial';
+import ConfigItem from '../config-widgets/ConfigItem.vue';
+import BorderStyle from '../config-widgets/BorderStyle.vue';
+import Color from '../config-widgets/Color.vue';
+import useMouseDragDynamic, { type MouseEvtInfo } from '../../composables/useMouseDragDynamic';
+import { useMagicKeys } from '@vueuse/core';
+import { useRuntime } from '@/composables/useRuntime';
+import { usePaper } from '@/composables/usePaper';
+
+const visible = ref(false);
+
+const runtime = useRuntime();
+const paper = usePaper();
+const { instance } = toRefs(useMaterial());
+const { space } = useMagicKeys();
+
+// 所有激活元素的位置缓存
+const posInfoCacheMap = new Map();
+// 元素移动
+const moveHandlerRef = ref(null);
+useMouseDragDynamic({
+    onStart() {
+        if (space.value) return false;
+        // 拖动非激活元素时，重置激活集合
+        if (!runtime.activeMaterialSet.has(instance.value.id)) {
+            runtime.activeMaterialSet.clear();
+            runtime.activeMaterialSet.add(instance.value.id);
+        }
+
+        nextTick().then(() => {
+            // 拖动的元素挂载了分组时，批量移动
+            for (const mId of runtime.activeMaterialSet) {
+                const mInstance = paper.queryMaterial(mId);
+                if (!mInstance) continue;
+                const { x, y } = mInstance;
+                posInfoCacheMap.set(mId, {
+                    itemStartX: x,
+                    itemStartY: y,
+                });
+            }
+        });
+    },
+    onDrag({ transX, transY }: MouseEvtInfo) {
+        for (const mId of runtime.activeMaterialSet) {
+            const mInstance = paper.queryMaterial(mId);
+            if (!mInstance) continue;
+            const posInfoCache = posInfoCacheMap.get(mId);
+            mInstance.x = posInfoCache.itemStartX + transX / runtime.scale.value;
+            mInstance.y = posInfoCache.itemStartY + transY / runtime.scale.value;
+        }
+    },
+    onFinish() {
+        posInfoCacheMap.clear();
+    },
+    bindElementRef: moveHandlerRef,
+});
+</script>
+
 <template>
     <v-menu v-model="visible" anchor="end" :close-on-content-click="false">
         <template #activator="{ props }">
@@ -6,7 +66,7 @@
                 rounded="pill"
                 border
                 :style="{
-                    transform: `translateY(-100%) scale(${1 / scale})`,
+                    transform: `translateY(-100%) scale(${1 / runtime.scale.value})`,
                 }"
             >
                 <v-defaults-provider
@@ -86,79 +146,6 @@
         </v-sheet>
     </v-menu>
 </template>
-
-<script lang="ts">
-import { defineComponent, nextTick, ref, toRef } from 'vue';
-import { useMaterial } from '@/composables/useMaterial';
-import ConfigItem from '../config-widgets/ConfigItem.vue';
-import BorderStyle from '../config-widgets/BorderStyle.vue';
-import Color from '../config-widgets/Color.vue';
-import useMouseDragDynamic, { type MouseEvtInfo } from '../../composables/useMouseDragDynamic';
-import { useMagicKeys } from '@vueuse/core';
-import { useRuntime } from '@/composables/useRuntime';
-import { usePaper } from '@/composables/usePaper';
-
-export default defineComponent({
-    name: 'MaterialConfigPopover',
-    components: { Color, BorderStyle, ConfigItem },
-    setup() {
-        const runtime = useRuntime();
-        const paper = usePaper();
-        const material = useMaterial();
-        const { space } = useMagicKeys();
-
-        // 所有激活元素的位置缓存
-        const posInfoCacheMap = new Map();
-        // 元素移动
-        const moveHandlerRef = ref(null);
-        useMouseDragDynamic({
-            onStart() {
-                if (space.value) return false;
-                // 拖动非激活元素时，重置激活集合
-                if (!runtime.activeMaterialSet.has(material.instance.id)) {
-                    runtime.activeMaterialSet.clear();
-                    runtime.activeMaterialSet.add(material.instance.id);
-                }
-
-                nextTick().then(() => {
-                    // 拖动的元素挂载了分组时，批量移动
-                    for (const mId of runtime.activeMaterialSet) {
-                        const mInstance = paper.queryMaterial(mId);
-                        if (!mInstance) continue;
-                        const { x, y } = mInstance;
-                        posInfoCacheMap.set(mId, {
-                            itemStartX: x,
-                            itemStartY: y,
-                        });
-                    }
-                });
-            },
-            onDrag({ transX, transY }: MouseEvtInfo) {
-                for (const mId of runtime.activeMaterialSet) {
-                    const mInstance = paper.queryMaterial(mId);
-                    if (!mInstance) continue;
-                    const posInfoCache = posInfoCacheMap.get(mId);
-                    mInstance.x = posInfoCache.itemStartX + transX / runtime.scale.value;
-                    mInstance.y = posInfoCache.itemStartY + transY / runtime.scale.value;
-                }
-            },
-            onFinish() {
-                posInfoCacheMap.clear();
-            },
-            bindElementRef: moveHandlerRef,
-        });
-
-        return {
-            scale: toRef(runtime.scale, 'value'),
-            moveHandlerRef,
-            instance: material.instance,
-        };
-    },
-    data: () => ({
-        visible: false,
-    }),
-});
-</script>
 
 <style scoped lang="scss">
 .activator {

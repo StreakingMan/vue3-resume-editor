@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, ref, toRefs, watch } from 'vue';
+import { computed, ref, toRefs, watch } from 'vue';
 import useMouseDragDynamic, { type MouseEvtInfo } from '../../composables/useMouseDragDynamic';
 import { CTRL_DOT_SIZE, UNIT_SIZE } from './config';
 import { Material } from '@/classes/Material';
@@ -8,7 +8,7 @@ import { type CtrlDotType } from '../materials/config';
 import { useMagicKeys } from '@vueuse/core';
 import { PaperMode } from '@/classes/Paper';
 import { useRuntime } from '@/composables/useRuntime';
-import { paperShowPageNumInjectionKey, usePaper, usePaperMode } from '@/composables/usePaper';
+import { usePaper, usePaperMode, userPaperShowPageNum } from '@/composables/usePaper';
 import { createAndInjectReactiveMaterial } from '@/composables/useMaterial';
 
 const styleMap: Record<CtrlDotType, string> = {
@@ -151,7 +151,7 @@ const removeMaterialInstance = () => {
 
 const isEdit = usePaperMode() === PaperMode.Edit;
 
-const showPageNum = inject(paperShowPageNumInjectionKey, undefined);
+const showPageNum = userPaperShowPageNum();
 const realY = computed(() => {
     if (showPageNum) {
         return instance.value.y - (showPageNum - 1) * paper.h;

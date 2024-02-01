@@ -1,14 +1,9 @@
 <script setup lang="ts">
-import { computed, provide, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { PaperMode } from '@/classes/Paper';
 import Paper from '@/components/core/Paper.vue';
 import { useRuntime } from '@/composables/useRuntime';
-import {
-    createAndInjectReactivePaper,
-    paperInjectionKey,
-    paperModeInjectionKey,
-    usePaper,
-} from '@/composables/usePaper';
+import { createAndProvideReactivePaper, usePaper, usePaperMode } from '@/composables/usePaper';
 
 const props = defineProps<{
     template: any;
@@ -39,10 +34,11 @@ const transform = computed(() => {
     return `matrix3d(${matrix.value.toString()})`;
 });
 
-const paperInstance = createAndInjectReactivePaper(props.template);
-paperInstance.loadData(props.template);
-provide(paperModeInjectionKey, PaperMode.Preview);
-provide(paperInjectionKey, paperInstance);
+const paperInstance = createAndProvideReactivePaper({
+    initData: props.template,
+});
+
+usePaperMode(PaperMode.Preview);
 
 const runtime = useRuntime();
 const realPaper = usePaper();

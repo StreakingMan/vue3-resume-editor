@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, ref, watch, watchEffect } from 'vue';
+import { computed, ref, watch, watchEffect } from 'vue';
 import useMouseDragDynamic, { type MouseEvtInfo } from '@/composables/useMouseDragDynamic';
 import MaterialInstance from './MaterialInstance.vue';
 import { useElementBounding, useMagicKeys, useUrlSearchParams } from '@vueuse/core';
@@ -8,13 +8,13 @@ import { vElementHover } from '@vueuse/components';
 import { PaperMode } from '@/classes/Paper';
 import AddPageBtn from '@/components/other/AddPageBtn.vue';
 import { useRuntime } from '@/composables/useRuntime';
-import { paperModeInjectionKey, usePaper } from '@/composables/usePaper';
+import { usePaper, usePaperMode } from '@/composables/usePaper';
 
 const runtime = useRuntime();
 const paper = usePaper();
 const paperRef = ref<HTMLDivElement | null>(null);
 
-const isEdit = inject(paperModeInjectionKey, PaperMode.Edit) === PaperMode.Edit;
+const isEdit = usePaperMode() === PaperMode.Edit;
 
 // paper bounding 信息实时更新
 const { x, y, width, height } = useElementBounding(paperRef);

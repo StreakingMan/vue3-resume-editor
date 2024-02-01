@@ -1,7 +1,6 @@
 import { inject, type InjectionKey, provide, reactive, type UnwrapNestedRefs } from 'vue';
 import type { MaterialBaseConfig, MaterialInjection } from '@/classes/Material';
 import { Material } from '@/classes/Material';
-import { MaterialNames } from '@/components/materials/config';
 
 const materialInjectionKey: InjectionKey<UnwrapNestedRefs<MaterialInjection>> = Symbol('Material');
 
@@ -27,19 +26,9 @@ export function useMaterial<T extends MaterialBaseConfig>(): UnwrapNestedRefs<{
     hover: boolean;
     clicked: boolean;
 }> {
-    return inject(
-        materialInjectionKey,
-        reactive(
-            wrapMaterialWithState(
-                new Material<T>({
-                    x: 0,
-                    y: 0,
-                    w: 0,
-                    h: 0,
-                    config: {} as T,
-                    componentName: MaterialNames.MText,
-                }),
-            ),
-        ),
-    );
+    const material = inject(materialInjectionKey);
+    if (!material) {
+        throw new Error('useMaterial must be used after createAndInjectReactiveMaterial');
+    }
+    return material;
 }

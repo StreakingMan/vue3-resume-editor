@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import Paper from '@/components/core/Paper.vue';
-import { onMounted, provide, reactive } from 'vue';
-import { Paper as PaperClass } from '@/classes/Paper';
+import { onMounted } from 'vue';
 
 import { useWindowScroll, useWindowSize } from '@vueuse/core';
 import { linear } from '@/utils/timeFunction';
-import { paperInjectionKey } from '@/composables/usePaper';
+import { createAndProvideReactivePaper, usePaperMode } from '@/composables/usePaper';
+import { PaperMode } from '@/classes/Paper';
 
 // Paper实例
-const paperInstance = reactive(new PaperClass({}));
-provide(paperInjectionKey, paperInstance);
+const paperInstance = createAndProvideReactivePaper();
+
+usePaperMode(PaperMode.Preview);
 
 const { y } = useWindowScroll({
     behavior: 'instant',
