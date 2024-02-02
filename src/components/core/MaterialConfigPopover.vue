@@ -5,7 +5,7 @@ import ConfigItem from '../config-widgets/ConfigItem.vue';
 import BorderStyle from '../config-widgets/BorderStyle.vue';
 import Color from '../config-widgets/Color.vue';
 import useMouseDragDynamic, { type MouseEvtInfo } from '../../composables/useMouseDragDynamic';
-import { useMagicKeys } from '@vueuse/core';
+import { useMagicKeys, whenever } from '@vueuse/core';
 import { useRuntime } from '@/composables/useRuntime';
 import { usePaper } from '@/composables/usePaper';
 
@@ -13,8 +13,13 @@ const visible = ref(false);
 
 const runtime = useRuntime();
 const paper = usePaper();
-const { instance, hover } = toRefs(useMaterial());
+const { instance, clicked } = toRefs(useMaterial());
 const { space } = useMagicKeys();
+
+whenever(
+    () => !clicked.value,
+    () => (visible.value = false),
+);
 
 // 所有激活元素的位置缓存
 const posInfoCacheMap = new Map();
@@ -59,7 +64,7 @@ useMouseDragDynamic({
 </script>
 
 <template>
-    <v-menu v-if="hover" v-model="visible" anchor="end" :close-on-content-click="false">
+    <v-menu v-if="clicked" v-model="visible" anchor="end" :close-on-content-click="false">
         <template #activator="{ props }">
             <v-sheet
                 class="activator text-blue-darken-3 bg-white"
@@ -151,7 +156,7 @@ useMouseDragDynamic({
 .activator {
     position: absolute;
     right: 0;
-    top: 0;
+    top: -4px;
     transform: translateY(-100%);
     transform-origin: right bottom;
     min-width: max-content;
