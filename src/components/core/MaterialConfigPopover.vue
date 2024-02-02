@@ -5,7 +5,7 @@ import ConfigItem from '../config-widgets/ConfigItem.vue';
 import BorderStyle from '../config-widgets/BorderStyle.vue';
 import Color from '../config-widgets/Color.vue';
 import useMouseDragDynamic, { type MouseEvtInfo } from '../../composables/useMouseDragDynamic';
-import { useMagicKeys } from '@vueuse/core';
+import { useMagicKeys, whenever } from '@vueuse/core';
 import { useRuntime } from '@/composables/useRuntime';
 import { usePaper } from '@/composables/usePaper';
 
@@ -15,6 +15,13 @@ const runtime = useRuntime();
 const paper = usePaper();
 const { instance, hover } = toRefs(useMaterial());
 const { space } = useMagicKeys();
+
+whenever(
+    () => !hover.value,
+    () => {
+        visible.value = false;
+    },
+);
 
 // 所有激活元素的位置缓存
 const posInfoCacheMap = new Map();
@@ -63,7 +70,6 @@ useMouseDragDynamic({
         <template #activator="{ props }">
             <v-sheet
                 class="activator text-blue-darken-3 bg-white"
-                rounded="pill"
                 border
                 :style="{
                     transform: `translateY(-100%) scale(${1 / runtime.scale.value})`,
@@ -156,5 +162,6 @@ useMouseDragDynamic({
     transform-origin: right bottom;
     min-width: max-content;
     background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 15px 15px 0 0;
 }
 </style>
