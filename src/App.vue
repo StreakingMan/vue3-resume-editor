@@ -8,12 +8,12 @@ import Toolbar from './components/tools/Toolbar.vue';
 import { stringArrayDiff } from './utils/stringArrayDiff';
 import template1 from './components/templates/resume-template-1.json';
 import TemplateList from './components/templates/TemplateList.vue';
-import { useMagicKeys, whenever } from '@vueuse/core';
 import WebsiteInfo from '@/components/other/WebsiteInfo.vue';
 import Paper from '@/components/core/Paper.vue';
 import PreviewNavigator from '@/components/other/PreviewNavigator.vue';
 import { createAndProvideReactiveRuntime } from '@/composables/useRuntime';
 import { createAndProvideReactivePaper, usePaperMode } from '@/composables/usePaper';
+import { useKeyboard } from '@/composables/useKeyboard';
 
 // 运行时
 const runtime = createAndProvideReactiveRuntime();
@@ -28,28 +28,10 @@ onMounted(() => {
     }
 });
 
-// 复制粘贴
-const { ctrl_c, ctrl_v } = useMagicKeys();
-whenever(ctrl_c, () => {
-    copyMaterialSet.value = new Set(activeMaterialSet.value);
-});
-whenever(ctrl_v, () => {
-    paperInstance.copyMaterial([...copyMaterialSet.value]);
-    copyMaterialSet.value.clear();
-});
-
-// 按del键删除
-const { Delete } = useMagicKeys();
-whenever(Delete, () => {
-    paperInstance.removeMaterial([...activeMaterialSet.value]);
-});
-
-// ctrl+a全选
-const { ctrl_a } = useMagicKeys();
-whenever(ctrl_a, () => {
-    for (const m of paperInstance.materialList) {
-        activeMaterialSet.value.add(m.id);
-    }
+// 键盘控制
+useKeyboard({
+    runtime,
+    paperInstance,
 });
 
 // 激活元素集合控制
