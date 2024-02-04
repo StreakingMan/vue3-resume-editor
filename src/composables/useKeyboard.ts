@@ -1,7 +1,7 @@
 import { useMagicKeys, whenever } from '@vueuse/core';
 import type { Runtime } from '@/classes/Runtime';
 import type { Paper } from '@/classes/Paper';
-import { toRefs, type UnwrapNestedRefs } from 'vue';
+import { type Ref, toRefs, type UnwrapNestedRefs } from 'vue';
 
 export const useKeyboard = (options: {
     runtime: UnwrapNestedRefs<Runtime>;
@@ -35,6 +35,16 @@ export const useKeyboard = (options: {
     });
 
     // 方向键移动
+    const onLongPress = (fn: () => void, control: Ref<Boolean>) => {
+        fn();
+        const repeat = () => {
+            if (control.value) {
+                fn();
+                requestAnimationFrame(repeat);
+            }
+        };
+        setTimeout(repeat, 500);
+    };
     const moveAllActiveMaterial = (distanceX: number, distanceY: number) => {
         for (const mId of activeMaterialSet.value) {
             const mInstance = paperInstance.queryMaterial(mId);
@@ -50,15 +60,15 @@ export const useKeyboard = (options: {
         },
     });
     whenever(arrowLeft, () => {
-        moveAllActiveMaterial(-paperInstance.cellSize, 0);
+        onLongPress(() => moveAllActiveMaterial(-paperInstance.cellSize, 0), arrowLeft);
     });
     whenever(arrowRight, () => {
-        moveAllActiveMaterial(paperInstance.cellSize, 0);
+        onLongPress(() => moveAllActiveMaterial(paperInstance.cellSize, 0), arrowRight);
     });
     whenever(arrowUp, () => {
-        moveAllActiveMaterial(0, -paperInstance.cellSize);
+        onLongPress(() => moveAllActiveMaterial(0, -paperInstance.cellSize), arrowUp);
     });
     whenever(arrowDown, () => {
-        moveAllActiveMaterial(0, paperInstance.cellSize);
+        onLongPress(() => moveAllActiveMaterial(0, paperInstance.cellSize), arrowDown);
     });
 };
