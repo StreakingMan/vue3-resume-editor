@@ -12,22 +12,22 @@ import { usePaper, usePaperMode, userPaperShowPageNum } from '@/composables/useP
 import { createAndProvideReactiveMaterial } from '@/composables/useMaterial';
 
 const styleMap: Record<CtrlDotType, string> = {
-    tl: `top: 0px;left: 0px;cursor: nw-resize;transform-origin: top left;`,
-    tm: `top: 0px;left: 50%;margin-left: -${
+    tl: `top: -${CTRL_DOT_SIZE}px;left: -${CTRL_DOT_SIZE}px;cursor: nw-resize;transform-origin: bottom right;`,
+    tm: `top: -${CTRL_DOT_SIZE}px;left: 50%;margin-left: -${
         CTRL_DOT_SIZE / 2
-    }px;cursor: n-resize;transform-origin: top center;`,
-    tr: `top: 0px;right: 0px;cursor: ne-resize;transform-origin: top right;`,
+    }px;cursor: n-resize;transform-origin: bottom center;`,
+    tr: `top: -${CTRL_DOT_SIZE}px;right: -${CTRL_DOT_SIZE}px;cursor: ne-resize;transform-origin: bottom left;`,
     mr: `top: 50%;margin-top: -${
         CTRL_DOT_SIZE / 2
-    }px;right: 0px;cursor: e-resize;transform-origin: center right;`,
-    br: `bottom: 0px;right: 0px;cursor: se-resize;transform-origin: bottom right;`,
-    bm: `bottom: 0px;left: 50%;margin-left: -${
+    }px;right: -${CTRL_DOT_SIZE}px;cursor: e-resize;transform-origin: center left;`,
+    br: `bottom: -${CTRL_DOT_SIZE}px;right: -${CTRL_DOT_SIZE}px;cursor: se-resize;transform-origin: top left;`,
+    bm: `bottom: -${CTRL_DOT_SIZE}px;left: 50%;margin-left: -${
         CTRL_DOT_SIZE / 2
-    }px;cursor: s-resize;transform-origin: bottom center;`,
-    bl: `bottom: 0px;left: 0px;cursor: sw-resize;transform-origin: bottom left;`,
+    }px;cursor: s-resize;transform-origin: top center;`,
+    bl: `bottom: -${CTRL_DOT_SIZE}px;left: -${CTRL_DOT_SIZE}px;cursor: sw-resize;transform-origin: top right;`,
     ml: `top: 50%;margin-top: -${
         CTRL_DOT_SIZE / 2
-    }px;left: 0px;cursor: w-resize;transform-origin: center left;`,
+    }px;left: -${CTRL_DOT_SIZE}px;cursor: w-resize;transform-origin: center right;`,
 };
 
 const props = defineProps<{

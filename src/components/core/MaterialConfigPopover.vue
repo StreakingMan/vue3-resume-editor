@@ -156,7 +156,7 @@ useMouseDragDynamic({
 .activator {
     position: absolute;
     right: 0;
-    top: -4px;
+    top: -10px;
     transform: translateY(-100%);
     transform-origin: right bottom;
     min-width: max-content;
