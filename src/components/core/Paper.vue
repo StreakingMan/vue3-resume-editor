@@ -370,12 +370,12 @@ const insertPage = (index: number) => {
 .page-divide-tip {
     background: #424242;
     width: calc(100% + 32px);
-    height: 36px;
+    height: 1px;
     transition:
+        height 0.1s,
         opacity 0.3s,
         clip-path 0.6s ease-out;
     user-select: none;
-    opacity: 0;
     position: absolute;
     left: 50%;
     top: 0;
@@ -384,8 +384,8 @@ const insertPage = (index: number) => {
     clip-path: polygon(0% 50%, 100% 0%, 100% 100%, 0% 50%);
 
     &.show {
-        opacity: 1;
         clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+        height: 36px;
     }
 
     @media print {
