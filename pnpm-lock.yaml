@@ -27,11 +27,11 @@ dependencies:
     specifier: ^3.4.10
     version: 3.4.15(typescript@5.3.3)
   vue-i18n:
-    specifier: ^9.1.6
-    version: 9.9.0(vue@3.4.15)
+    specifier: ^9.9.1
+    version: 9.9.1(vue@3.4.15)
   vuetify:
     specifier: ^3.5.2
-    version: 3.5.2(typescript@5.3.3)(vite-plugin-vuetify@2.0.1)(vue-i18n@9.9.0)(vue@3.4.15)
+    version: 3.5.2(typescript@5.3.3)(vite-plugin-vuetify@2.0.1)(vue-i18n@9.9.1)(vue@3.4.15)
   webfontloader:
     specifier: ^1.0.0
     version: 1.6.28
@@ -741,22 +741,22 @@ packages:
     engines: {node: '>=6.9.0'}
     dev: true
 
-  /@intlify/core-base@9.9.0:
-    resolution: {integrity: sha512-C7UXPymDIOlMGSNjAhNLtKgzITc/8BjINK5gNKXg8GiWCTwL6n3MWr55czksxn8RM5wTMz0qcLOFT+adtaVQaA==}
+  /@intlify/core-base@9.9.1:
+    resolution: {integrity: sha512-qsV15dg7jNX2faBRyKMgZS8UcFJViWEUPLdzZ9UR0kQZpFVeIpc0AG7ZOfeP7pX2T9SQ5jSiorq/tii9nkkafA==}
     engines: {node: '>= 16'}
     dependencies:
-      '@intlify/message-compiler': 9.9.0
-      '@intlify/shared': 9.9.0
+      '@intlify/message-compiler': 9.9.1
+      '@intlify/shared': 9.9.1
 
-  /@intlify/message-compiler@9.9.0:
-    resolution: {integrity: sha512-yDU/jdUm9KuhEzYfS+wuyja209yXgdl1XFhMlKtXEgSFTxz4COZQCRXXbbH8JrAjMsaJ7bdoPSLsKlY6mXG2iA==}
+  /@intlify/message-compiler@9.9.1:
+    resolution: {integrity: sha512-zTvP6X6HeumHOXuAE1CMMsV6tTX+opKMOxO1OHTCg5N5Sm/F7d8o2jdT6W6L5oHUsJ/vvkGefHIs7Q3hfowmsA==}
     engines: {node: '>= 16'}
     dependencies:
-      '@intlify/shared': 9.9.0
+      '@intlify/shared': 9.9.1
       source-map-js: 1.0.2
 
-  /@intlify/shared@9.9.0:
-    resolution: {integrity: sha512-1ECUyAHRrzOJbOizyGufYP2yukqGrWXtkmTu4PcswVnWbkcjzk3YQGmJ0bLkM7JZ0ZYAaohLGdYvBYnTOGYJ9g==}
+  /@intlify/shared@9.9.1:
+    resolution: {integrity: sha512-b3Pta1nwkz5rGq434v0psHwEwHGy1pYCttfcM22IE//K9owbpkEvFptx9VcuRAxjQdrO2If249cmDDjBu5wMDA==}
     engines: {node: '>= 16'}
 
   /@isaacs/cliui@8.0.2:
@@ -1428,7 +1428,7 @@ packages:
     dependencies:
       upath: 2.0.1
       vue: 3.4.15(typescript@5.3.3)
-      vuetify: 3.5.2(typescript@5.3.3)(vite-plugin-vuetify@2.0.1)(vue-i18n@9.9.0)(vue@3.4.15)
+      vuetify: 3.5.2(typescript@5.3.3)(vite-plugin-vuetify@2.0.1)(vue-i18n@9.9.1)(vue@3.4.15)
 
   /@vueuse/components@10.7.2(vue@3.4.15):
     resolution: {integrity: sha512-r39DLLtRo1hEKI/SQzVQjCts7yelwFyUrTxDFi821NdyU3EfQ9GCNNBcMirXcn3IQApFBRKrvTTtQ9cJGrb/+A==}
@@ -5270,7 +5270,7 @@ packages:
       upath: 2.0.1
       vite: 5.0.12(@types/node@20.11.5)(sass@1.70.0)
       vue: 3.4.15(typescript@5.3.3)
-      vuetify: 3.5.2(typescript@5.3.3)(vite-plugin-vuetify@2.0.1)(vue-i18n@9.9.0)(vue@3.4.15)
+      vuetify: 3.5.2(typescript@5.3.3)(vite-plugin-vuetify@2.0.1)(vue-i18n@9.9.1)(vue@3.4.15)
     transitivePeerDependencies:
       - supports-color
 
@@ -5405,14 +5405,14 @@ packages:
       - supports-color
     dev: true
 
-  /vue-i18n@9.9.0(vue@3.4.15):
-    resolution: {integrity: sha512-xQ5SxszUAqK5n84N+uUyHH/PiQl9xZ24FOxyAaNonmOQgXeN+rD9z/6DStOpOxNFQn4Cgcquot05gZc+CdOujA==}
+  /vue-i18n@9.9.1(vue@3.4.15):
+    resolution: {integrity: sha512-xyQ4VspLdNSPTKBFBPWa1tvtj+9HuockZwgFeD2OhxxXuC2CWeNvV4seu2o9+vbQOyQbhAM5Ez56oxUrrnTWdw==}
     engines: {node: '>= 16'}
     peerDependencies:
       vue: ^3.0.0
     dependencies:
-      '@intlify/core-base': 9.9.0
-      '@intlify/shared': 9.9.0
+      '@intlify/core-base': 9.9.1
+      '@intlify/shared': 9.9.1
       '@vue/devtools-api': 6.5.1
       vue: 3.4.15(typescript@5.3.3)
 
@@ -5450,7 +5450,7 @@ packages:
       '@vue/shared': 3.4.15
       typescript: 5.3.3
 
-  /vuetify@3.5.2(typescript@5.3.3)(vite-plugin-vuetify@2.0.1)(vue-i18n@9.9.0)(vue@3.4.15):
+  /vuetify@3.5.2(typescript@5.3.3)(vite-plugin-vuetify@2.0.1)(vue-i18n@9.9.1)(vue@3.4.15):
     resolution: {integrity: sha512-H/g9+8Loykt50qe9mruHkwWsAIgfQ8gO+SPTAV2uaCFmfYPSFRfu0aGcZ42iWu4bZ9ZkgswIIDaVsfnKINd8yg==}
     engines: {node: ^12.20 || >=14.13}
     peerDependencies:
@@ -5472,7 +5472,7 @@ packages:
       typescript: 5.3.3
       vite-plugin-vuetify: 2.0.1(vite@5.0.12)(vue@3.4.15)(vuetify@3.5.2)
       vue: 3.4.15(typescript@5.3.3)
-      vue-i18n: 9.9.0(vue@3.4.15)
+      vue-i18n: 9.9.1(vue@3.4.15)
 
   /w3c-xmlserializer@5.0.0:
     resolution: {integrity: sha512-o8qghlI8NZHU1lLPrpi2+Uq7abh4GGPpYANlalzWxyWteJOCsr/P+oPBA49TOLu5FTZO4d3F9MnWJfiMo4BkmA==}
