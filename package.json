@@ -47,7 +47,7 @@
         "jsdom": "^24.0.0",
         "lint-staged": "^15.2.0",
         "npm-run-all2": "^6.1.1",
-        "prettier": "^3.0.3",
+        "prettier": "^3.2.5",
         "sass": "^1.38.0",
         "standard-version": "^9.1.1",
         "stylelint": "^13.12.0",
