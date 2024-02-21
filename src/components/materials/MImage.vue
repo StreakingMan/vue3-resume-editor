@@ -1,3 +1,141 @@
+<script lang="ts">
+import type { MaterialBaseConfig } from '@/classes/Material';
+import type { ProtoInfo } from '@/components/materials/prototypes';
+import { MaterialNames } from '@/components/materials/config';
+
+interface MImageConfig extends MaterialBaseConfig {
+    url: string;
+    aspectRatio?: number;
+    type: 'local' | 'web';
+    cut: boolean;
+}
+
+const protoInfo: ProtoInfo<MImageConfig> = {
+    label: '图像',
+    icon: 'image',
+    dragHandlers: (config) =>
+        config.cut ? ['tl', 'tr', 'tm', 'ml', 'mr', 'bl', 'bm', 'br'] : ['br', 'mr', 'bl', 'ml'],
+    genInitOptions: ({ x, y }) => ({
+        componentName: MaterialNames.MImage,
+        x: x - 50,
+        y: y - 50,
+        w: 100,
+        h: 100,
+        config: {
+            url: `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=Bubba`,
+            type: 'web',
+            aspectRatio: 1,
+            cut: false,
+        },
+    }),
+};
+
+export default {
+    protoInfo,
+};
+</script>
+
+<script setup lang="ts">
+import { nextTick, watch } from 'vue';
+import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
+import { useMaterial } from '@/composables/useMaterial';
+import ConfigItem from '../config-widgets/ConfigItem.vue';
+import ConfigToggle from '../config-widgets/ConfigToggle.vue';
+import ConfigToggleOption from '../config-widgets/ConfigToggleOption.vue';
+
+const material = useMaterial<MImageConfig>();
+const { instance } = material;
+
+watch(
+    () => ({
+        w: instance.w,
+        url: instance.config.url,
+        cut: instance.config.cut,
+    }),
+    async () => {
+        await nextTick();
+        // 保持长宽比
+        const { aspectRatio, cut } = instance.config;
+        if (aspectRatio && !cut) {
+            instance.h = instance.w / aspectRatio;
+        }
+    },
+);
+
+const onUrlChange = async () => {
+    try {
+        const { width, height, ratio } = await getImageSizeInfo(instance.config.url);
+        instance.config.aspectRatio = ratio;
+        if (width > 200) {
+            instance.w = 200;
+            instance.h = 200 * ratio;
+        } else {
+            instance.w = width;
+            instance.h = height;
+        }
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+const onFileChange = (file: File) => {
+    if (!file) {
+        instance.config.url = '';
+        return;
+    }
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+        instance.config.url = reader.result as string;
+        try {
+            const { width, height, ratio } = await getImageSizeInfo(reader.result as string);
+            instance.config.aspectRatio = ratio;
+            if (width > 200) {
+                instance.w = 200;
+                instance.h = 200 * ratio;
+            } else {
+                instance.w = width;
+                instance.h = height;
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
+};
+
+const getImageSizeInfo = (url: string) => {
+    return new Promise<{
+        width: number;
+        height: number;
+        ratio: number;
+    }>((resolve, reject) => {
+        const image = new Image();
+        image.src = url;
+        image.onload = () => {
+            const { width, height } = image;
+            resolve({
+                width: width,
+                height: height,
+                ratio: width / height,
+            });
+        };
+        image.onerror = () => {
+            reject('图片加载失败');
+        };
+    });
+};
+
+const clickFileInput = () => {
+    document.getElementById(instance.id + 'fileInput')?.click();
+};
+
+const fileRules = [
+    (value: string | any[]) => {
+        return !value || !value.length || value[0].size < 1000000 || '图片大小最大 1 MB!';
+    },
+];
+</script>
+
 <template>
     <v-img
         :src="instance.config.url"
@@ -59,160 +197,3 @@
         </template>
     </MaterialConfigPopover>
 </template>
-
-<script lang="ts">
-import { defineComponent, nextTick, watch } from 'vue';
-import { type ProtoInfo } from './prototypes';
-import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
-import { useMaterial } from '@/composables/useMaterial';
-import ConfigItem from '../config-widgets/ConfigItem.vue';
-import ConfigToggle from '../config-widgets/ConfigToggle.vue';
-import ConfigToggleOption from '../config-widgets/ConfigToggleOption.vue';
-import { type MaterialBaseConfig } from '@/classes/Material';
-import { MaterialNames } from '@/components/materials/config';
-
-interface MImageConfig extends MaterialBaseConfig {
-    url: string;
-    aspectRatio?: number;
-    type: 'local' | 'web';
-    cut: boolean;
-}
-
-const protoInfo: ProtoInfo<MImageConfig> = {
-    label: '图像',
-    icon: 'image',
-    dragHandlers: (config) =>
-        config.cut ? ['tl', 'tr', 'tm', 'ml', 'mr', 'bl', 'bm', 'br'] : ['br', 'mr', 'bl', 'ml'],
-    genInitOptions: ({ x, y }) => ({
-        componentName: MaterialNames.MImage,
-        x: x - 50,
-        y: y - 50,
-        w: 100,
-        h: 100,
-        config: {
-            url: `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=Bubba`,
-            type: 'web',
-            aspectRatio: 1,
-            cut: false,
-        },
-    }),
-};
-
-export default defineComponent({
-    name: MaterialNames.MImage,
-    components: {
-        ConfigToggleOption,
-        ConfigToggle,
-        ConfigItem,
-        MaterialConfigPopover,
-    },
-    protoInfo,
-    setup() {
-        const material = useMaterial<MImageConfig>();
-        const { instance } = material;
-
-        watch(
-            () => ({
-                w: instance.w,
-                url: instance.config.url,
-                cut: instance.config.cut,
-            }),
-            async () => {
-                await nextTick();
-                // 保持长宽比
-                const { aspectRatio, cut } = instance.config;
-                if (aspectRatio && !cut) {
-                    instance.h = instance.w / aspectRatio;
-                }
-            },
-        );
-
-        const onUrlChange = async () => {
-            try {
-                const { width, height, ratio } = await getImageSizeInfo(instance.config.url);
-                instance.config.aspectRatio = ratio;
-                if (width > 200) {
-                    instance.w = 200;
-                    instance.h = 200 * ratio;
-                } else {
-                    instance.w = width;
-                    instance.h = height;
-                }
-            } catch (e) {
-                console.log(e);
-            }
-        };
-
-        const onFileChange = (file: File) => {
-            if (!file) {
-                instance.config.url = '';
-                return;
-            }
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = async () => {
-                instance.config.url = reader.result as string;
-                try {
-                    const { width, height, ratio } = await getImageSizeInfo(
-                        reader.result as string,
-                    );
-                    instance.config.aspectRatio = ratio;
-                    if (width > 200) {
-                        instance.w = 200;
-                        instance.h = 200 * ratio;
-                    } else {
-                        instance.w = width;
-                        instance.h = height;
-                    }
-                } catch (e) {
-                    console.log(e);
-                }
-            };
-        };
-
-        const getImageSizeInfo = (url: string) => {
-            return new Promise<{
-                width: number;
-                height: number;
-                ratio: number;
-            }>((resolve, reject) => {
-                const image = new Image();
-                image.src = url;
-                image.onload = () => {
-                    const { width, height } = image;
-                    resolve({
-                        width: width,
-                        height: height,
-                        ratio: width / height,
-                    });
-                };
-                image.onerror = () => {
-                    reject('图片加载失败');
-                };
-            });
-        };
-
-        const clickFileInput = () => {
-            document.getElementById(instance.id + 'fileInput')?.click();
-        };
-
-        return {
-            clickFileInput,
-            onFileChange,
-            onUrlChange,
-            instance,
-        };
-    },
-    data: () => ({
-        fileRules: [
-            (value: string | any[]) => {
-                return !value || !value.length || value[0].size < 1000000 || '图片大小最大 1 MB!';
-            },
-        ],
-    }),
-});
-</script>
-
-<style scoped lang="scss">
-//
-</style>
