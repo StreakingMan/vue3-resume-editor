@@ -19,7 +19,7 @@
     "dependencies": {
         "@mdi/font": "^7.4.47",
         "@types/lodash": "^4.14.168",
-        "@vueuse/components": "^10.8.0",
+        "@vueuse/components": "^10.9.0",
         "@vueuse/core": "^10.9.0",
         "animate.css": "^4.1.1",
         "roboto-fontface": "*",
