@@ -168,6 +168,7 @@ const fileRules = [
                     clearable
                     hide-details
                     @input="onUrlChange"
+                    @keydown.stop
                 ></v-text-field>
                 <template v-else>
                     <v-btn variant="outlined" color="primary" height="40" @click="clickFileInput">

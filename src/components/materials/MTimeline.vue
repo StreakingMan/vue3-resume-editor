@@ -120,6 +120,7 @@ const contentPixel = computed(() => {
                             variant="outlined"
                             hide-details
                             density="compact"
+                            @keydown.stop
                         ></v-text-field>
 
                         <Color v-model="dot.color" no-margin />

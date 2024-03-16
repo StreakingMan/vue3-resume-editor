@@ -150,6 +150,7 @@ export default defineComponent({
                             variant="outlined"
                             hide-details
                             density="compact"
+                            @keydown.stop
                         ></v-text-field>
                         <v-text-field
                             v-model.number="item.value"
@@ -157,6 +158,7 @@ export default defineComponent({
                             variant="outlined"
                             hide-details
                             density="compact"
+                            @keydown.stop
                         ></v-text-field>
                         <Color v-model="item.color" class="ml-1" />
 

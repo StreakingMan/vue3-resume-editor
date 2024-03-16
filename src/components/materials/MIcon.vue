@@ -17,6 +17,7 @@
                         density="compact"
                         clearable
                         hide-details
+                        @keydown.stop
                     ></v-text-field>
                     <div class="text-caption my-2">
                         更详细的图标信息->
@@ -60,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watch } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import { type MaterialBaseConfig } from '@/classes/Material';
 import { type ProtoInfo } from './prototypes';
 import MaterialConfigPopover from '../core/MaterialConfigPopover.vue';
