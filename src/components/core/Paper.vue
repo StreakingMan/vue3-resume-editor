@@ -303,7 +303,7 @@ const insertPage = (index: number) => {
         </div>
     </template>
 
-    <AddPageBtn />
+    <AddPageBtn v-if="!isPrintPage" />
 </template>
 
 <style lang="scss" scoped>
