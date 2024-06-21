@@ -78,11 +78,12 @@ const onUrlChange = async () => {
     }
 };
 
-const onFileChange = (file: File) => {
-    if (!file) {
+const onFileChange = (_file: File | File[]) => {
+    if (!_file) {
         instance.config.url = '';
         return;
     }
+    const file = Array.isArray(_file) ? _file[0] : _file;
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = async () => {
@@ -179,7 +180,7 @@ const fileRules = [
                         style="position: fixed; right: -1000px; bottom: 1000px"
                         :rules="fileRules"
                         accept="image/*"
-                        @update:model-value="(files) => onFileChange(files[0])"
+                        @update:model-value="onFileChange"
                     ></v-file-input>
                 </template>
             </ConfigItem>

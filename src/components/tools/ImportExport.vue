@@ -6,7 +6,7 @@
         id="importFileInput"
         style="position: fixed; right: -1000px; bottom: 1000px"
         accept="application/json"
-        @update:model-value="(files) => onImportFileChange(files[0])"
+        @update:model-value="onImportFileChange"
     ></v-file-input>
     <v-btn icon>
         <v-icon>mdi-export</v-icon>
@@ -54,7 +54,8 @@ export default defineComponent({
         const onImportClick = () => {
             document.getElementById('importFileInput')?.click();
         };
-        const onImportFileChange = (file: File) => {
+        const onImportFileChange = (_file: File | File[]) => {
+            const file = Array.isArray(_file) ? _file[0] : _file;
             const reader = new FileReader();
             reader.onloadend = (evt: ProgressEvent<FileReader>) => {
                 if (!evt.target) return;
