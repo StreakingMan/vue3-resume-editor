@@ -4,15 +4,7 @@
 
 <template>
     <div class="info text-grey-darken-1 text-caption">
-        <a
-            class="text-grey-darken-1 text-caption text-decoration-none"
-            href="https://beian.miit.gov.cn/"
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-        >
-            浙ICP备17007857号-2
-        </a>
-        | Powered by
+        Powered by
         <a
             class="text-grey-darken-1 text-caption text-decoration-none"
             href="https://vuejs.org/"
